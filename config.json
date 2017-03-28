@@ -18,8 +18,19 @@
 			"name": "Location Directory",
 			"locationDirectory": {
 				"levels": [
+					 "levels": [
+          				{
+					    "urlTemplate": "url.dir_808_country",
+					    "template": "desktop.directory.countryList",
+					    "field": "Country",
+					    "orderBy": {
+					      "field": "Country",
+					      "order": "ascending"
+					    },
+					    "limit": 0
+					},
 					{
-						"urlTemplate": "url.directoryStateList",
+						"urlTemplate": "url.dir_808_state",
 						"template": "desktop.directory.stateList",
 						"field": "State",
 						"orderBy": {
@@ -28,7 +39,7 @@
 						}
 					},
 					{
-						"urlTemplate": "url.directoryCityList",
+						"urlTemplate": "url.dir_808_city",
 						"template": "desktop.directory.cityList",
 						"field": "City",
 						"orderBy": {
@@ -37,7 +48,7 @@
 						}
 					},
 					{
-						"urlTemplate": "url.directoryLocationList",
+						"urlTemplate": "url.dir_808_locations",
 						"template": "desktop.directory.locationList",
 						"field": "Locations",
 						"orderBy": {
