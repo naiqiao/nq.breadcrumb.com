@@ -3,8 +3,8 @@
 	"deviceDetected": false,
 	"https": false,
 	"liveSite": false,
-	"locales": ["en"],
-	"templateVersion": 6,
+	"locales": ["en","es","pt"],
+	"templateVersion": 2,
 	"features": [
 		{
 			"name": "Locations",
