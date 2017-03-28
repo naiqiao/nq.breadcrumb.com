@@ -1,0 +1,79 @@
+{
+Error: Parse error on line 1:
+{namespace common.pri
+-^
+Expecting 'STRING', '}'
+namespace common.print_key_path}
+
+/*
+  {call common.print_key_path.for_obj}
+    {param keyPath: [ 'key1', 'key2' ] /}
+    {param object: /}
+  {/call}
+*/
+
+/**
+ * @param keyPath // array of strings that form a keypath, e.g ['customByName', 'CustomField'] or ['city']
+ * @param object
+ **/
+{template .for_obj}
+  {let $keyPathClass}
+    key-path-item-
+    {call .slugify_key_path data="all" /}
+  {/let}
+  {foreach $key in $keyPath}
+    {let $obj: isFirst($key) ? $object[$key] : $obj[$key] /}
+    {if isLast($key)}
+      <span class="key-path-item {$keyPathClass}">
+        {$obj ?: ''}
+      </span>
+    {/if}
+  {/foreach}
+{/template}
+
+/*
+  {call common.print_key_path.multiple_for_obj}
+    {param keyPaths: [[ 'key1', 'key2' ], ['key1']] /}
+    {param object: /}
+
+    {param separator: /}
+  {/call}
+*/
+
+/**
+ * @param keyPaths // array of key path arrays, e.g. [['customByName', 'CustomField'], ['city']]
+ * @param object
+ * @param? separator
+ **/
+{template .multiple_for_obj}
+  {foreach $keyPath in $keyPaths}
+    {call .for_obj data="all"}
+      {param keyPath: $keyPath /}
+    {/call}{if not isLast($keyPath)}
+      <span class="key-path-item-separator">
+        {$separator ?: ' '}
+      </span>
+    {/if}
+  {/foreach}
+{/template}
+
+/*
+  {call common.print_key_path.slugify_key_path}
+    {param keyPath: [ 'key1', 'key2' ] /}
+  {/call}
+*/
+
+/**
+ * @param keyPath
+ */
+{template .slugify_key_path}
+  {let $keyPathString}
+    {foreach $key in $keyPath}
+      {$key}
+      {if not isLast($key)}
+        ####
+      {/if}
+    {/foreach}
+  {/let}
+  {$keyPathString |slugify}
+{/template}
