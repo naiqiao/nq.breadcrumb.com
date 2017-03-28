@@ -1,0 +1,54 @@
+{
+	"configVersion": "1",
+	"deviceDetected": false,
+	"https": false,
+	"liveSite": false,
+	"locales": ["en"],
+	"templateVersion": 6,
+	"features": [
+		{
+			"name": "Locations",
+			"locationPageSet": {
+				"urlTemplate": "url.location",
+				"template": "desktop.location.default",
+				"outputFormat": ["Html", "Json"]
+			}
+		},
+		{
+			"name": "Location Directory",
+			"locationDirectory": {
+				"levels": [
+					{
+						"urlTemplate": "url.directoryStateList",
+						"template": "desktop.directory.stateList",
+						"field": "State",
+						"orderBy": {
+							"field": "State",
+							"order": "ascending"
+						}
+					},
+					{
+						"urlTemplate": "url.directoryCityList",
+						"template": "desktop.directory.cityList",
+						"field": "City",
+						"orderBy": {
+							"field": "City",
+							"order": "ascending"
+						}
+					},
+					{
+						"urlTemplate": "url.directoryLocationList",
+						"template": "desktop.directory.locationList",
+						"field": "Locations",
+						"orderBy": {
+							"field": "Locations",
+							"order": "ascending"
+						}
+					}
+				],
+				"locationPageSet": "Locations",
+				"outputFormat": ["Html", "Json"]
+			}
+		}
+	]
+}

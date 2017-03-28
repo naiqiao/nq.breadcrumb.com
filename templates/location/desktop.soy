@@ -1,0 +1,284 @@
+{namespace desktop.location}
+
+/**
+ * @param name
+ * @param baseUrl
+ * @param address1 Contains the street address
+ * @param address2 Contains the second line of the street address
+ * @param city
+ * @param state The abbreviated format of a state
+ * @param postalCode
+ * @param country Abbreviated format of a country
+ * @param latitude
+ * @param longitude
+ * @param description
+ * @param hours
+ * @param phone
+ * @param logo
+ * @param twitterHandle
+ * @param facebookPageUrl
+ * @param services
+ * @param languages
+ * @param gallery
+ * @param specialOffer
+ * @param videos
+ * @param crumbNames
+ * @param crumbUrls
+ * @param posts
+ * @param productLists
+ * @param calendars
+ * @param bios
+ * @param nearbyLocations
+ * @param? listings
+ */
+{template .default}
+<!doctype html>
+<html>
+  <head>
+    {call helpers.commonHeadTags data="all"/}
+    <link href="//fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+    <link href="//fotorama.s3.amazonaws.com/4.5.0/fotorama.css" rel="stylesheet"> <!-- 2 KB -->
+    <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+    <link rel="stylesheet" type="text/css" href="{$baseUrl}css/location/default.css">
+  </head>
+  <body>
+    {call helpers.header data="all" /}
+    <div class="wide-wrapper">
+      <div id="cover-photo" {if length($gallery) > 0}style="background:url({$gallery[0].sizes[0].url}) no-repeat; background-size: cover;"{/if}>
+        <div class="inner-wrapper">
+          <span class="address-label">{$address1|stripnum:true}</span>
+        </div>
+      </div>
+    </div>
+    <div class="inner-wrapper">
+      <section id="location-info">
+        <article id="contact-info">
+          <h1>{$name}</h1>
+          {call helpers.address data="all"}
+            {param includeCountry: 'non-us' /}
+            {param stateAbbr: true /}
+            {param schemaOrg: true /}
+          {/call}
+          {if $phone}
+            <div class="phone-number">
+              {$phone}
+            </div>
+          {/if}
+          <div class="social-media">
+            {if $facebookPageUrl}
+              <a href="{$facebookPageUrl}" class="social-icn" target="_blank">
+                <i class="social-icn fb-icn">&nbsp;</i>
+              </a>
+            {/if}
+            {if $twitterHandle}
+              <a href="http://twitter.com/{$twitterHandle}" class="social-icn" target="_blank">
+                <i class="social-icn twitter-icn">&nbsp;</i>
+              </a>
+            {/if}
+            {if $listings}
+              {if $listings.foursquare}
+                <a href="{$listings.foursquare.url}" class="social-icn" target="_blank">
+                  <i class="social-icn foursquare-icn">&nbsp;</i>
+                </a>
+              {/if}
+              {if $listings.yelp}
+                <a href="{$listings.yelp.url}" class="social-icn" target="_blank">
+                  <i class="social-icn yelp-icn">&nbsp;</i>
+                </a>
+              {/if}
+            {/if}
+            <!-- TODO(billy) Implement when ready
+              <i class="social-icn google-icn">&nbsp;</i>
+              <i class="social-icn more-icn">&nbsp;</i>
+            -->
+          </div>
+        </article>
+        {if $specialOffer}
+          <div id="feature-message">
+            {$specialOffer.description}
+          </div>
+        {/if}
+        {if $description}
+          <article id="description">
+            {$description}
+          </article>
+        {/if}
+        {if $hours and length($hours.days) > 0}
+          <article id="operation-hours">
+            <h2>Hours of Operation</h2>
+            {call helpers.hours data="$hours"}
+              {param format: 'table' /}
+              {param todayOnly: true /}
+              {param collapseDays: true /}
+              {param schemaOrg: true /}
+            {/call}
+            <span class="hours-toggle js-hours-toggle">
+              <i class="icn expand-icn"></i>
+              <span class="hours-toggle-label"></span>
+            </span>
+            <div class="hours-expanded" style="display: none;">
+              {call helpers.hours data="$hours"}
+                {param format: 'table' /}
+                {param todayOnly: false /}
+                {param collapseDays: true /}
+                {param schemaOrg: false /}
+              {/call}
+            </div>
+          </article>
+        {/if}
+        {if length($services) > 0}
+          <article id="services" class="list-wrap">
+            <h2>Services</h2>
+            <ul>
+              {foreach $service in $services}
+                <li>{$service}</li>
+              {/foreach}
+            </ul>
+          </article>
+        {/if}
+        {if length($languages) > 0}
+          <article id="languages" class="list-wrap">
+            <h2>Languages</h2>
+            <ul>
+              {foreach $language in $languages}
+                <li>{$language}</li>
+              {/foreach}
+            </ul>
+          </article>
+        {/if}
+        {if $productLists and length($productLists) > 0}
+          {call helpers.desktop.location.productLists data="all" /}
+        {/if}
+        {call helpers.desktop.location.bios data="all" /}
+      </section>
+      <aside id="right-col">
+        <div id="map">
+          {call helpers.location.map data="all"}
+            {param mapType: 'road' /}
+            {param schemaOrgMapTag: true /}
+            {param schemaOrgGeoTag: true /}
+            {param width: 260 /}
+            {param height: 262 /}
+          {/call}
+        </div>
+        {call helpers.desktop.location.nearby data="all" /}
+        {if $videos}
+          <article id="youtube-video" class="divider-top">
+            {foreach $video in $videos}
+              <iframe width="262" height="171" src="//www.youtube.com/embed/{$video.youtubeId}" frameborder="0" allowfullscreen></iframe>
+            {/foreach}
+          </article>
+        {/if}
+        {if length($posts) > 0}
+          <article id="posts" class="divider-top">
+            {literal}
+              <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+              <script>
+                $(document).ready(function(){
+                  $('.post-date').each(function(){
+                    var $self = $(this);
+                    var time = new Date($self.data('date') * 1000),
+                        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        hours = time.getHours(),
+                        minutes = time.getMinutes(),
+                        ampm = hours >= 12 && hours <= 23 ? 'PM' : 'AM';
+
+                    minutes = (minutes < 10 ? '0' : '') + minutes;
+                    hours = 12 - (24 - hours) % 12;
+
+                    $self.find('.post-day').html(time.getDate());
+                    $self.find('.post-month').html(months[time.getMonth()]);
+                    $self.find('.post-hour').html(hours);
+                    $self.find('.post-minute').html(minutes);
+                    $self.find('.post-ampm').html(ampm);
+                  });
+                });
+              </script>
+            {/literal}
+            {foreach $post in $posts}
+              <div class="post">
+                {call helpers.desktop.location.post data="$post" /}
+              </div>
+            {/foreach}
+          </article>
+        {/if}
+        {if $calendars and length($calendars) > 0}
+          {call helpers.desktop.location.calendars data="all" /}
+        {/if}
+      </aside>
+    </div>
+  </body>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="{$baseUrl}js/lib/jquery-jcarousel.0.3.0.min.js"></script>
+  <script src="//fotorama.s3.amazonaws.com/4.5.0/fotorama.js"></script> <!-- 9 KB -->
+  <script type="text/javascript">
+    {literal}
+      $(function() {
+        // Handle toggling between expanded and collapsed hours
+        $('.js-hours-toggle').on('click', function() {
+          $(this)
+            .toggleClass('less')
+            .closest('#operation-hours')
+              .find('.hours-expanded').toggle();
+        });
+
+        // Handle toggling more and less bios
+        var $extraBios = $('.js-staff-bio:gt(1)'),
+            $expandBtn = $('.js-expand-bios');
+
+        $expandBtn.on('click', function() {
+          var $self = $(this)
+
+          // Toggle visibility of the bios
+          $expandBtn.toggleClass('less');
+          $extraBios.toggle();
+        });
+
+        // Handle the nearby locations and
+        // products carousel interaction
+        $('.carousel').jcarousel();
+
+        $('.carousel-wrap').each(function() {
+          updatePaginate($(this));
+        });
+
+        $('.paginate').on('click', function() {
+          var $self = $(this),
+              $carousel = $self.closest('.carousel-wrap').find('.carousel').data('jcarousel');
+
+          if ($self.data('dir') === 'left') {
+            $carousel.scroll('-=1');
+          } else {
+            $carousel.scroll('+=1');
+          }
+
+          updatePaginate($self.closest('.carousel-wrap'));
+        });
+
+        function updatePaginate($carouselWrap) {
+          var first = $carouselWrap.find('.carousel').jcarousel('first').index(),
+              last = $carouselWrap.find('.carousel').jcarousel('last').index(),
+              length = $carouselWrap.find('ul li').length;
+
+          var $arrows = $([]);
+
+          $carouselWrap.find('.left, .right').removeAttr('style');
+
+          if (first == 0) {
+            $arrows = $arrows.add($carouselWrap.find('.left'));
+          }
+
+          if (last == length - 1) {
+            $arrows = $arrows.add($carouselWrap.find('.right'));
+          }
+
+          $arrows.css({
+            'opacity': 0,
+            'cursor': 'auto'
+          });
+        };
+      });
+    {/literal}
+  </script>
+</html>
+{/template}

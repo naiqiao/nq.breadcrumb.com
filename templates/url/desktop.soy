@@ -1,0 +1,90 @@
+{namespace url}
+
+/**
+ */
+{template .xmlSitemap}
+  sitemap.xml
+{/template}
+
+/**
+ */
+{template .htmlSitemap}
+  sitemap.html
+{/template}
+
+/**
+ * @param state
+ * @param city
+ * @param locale
+ * @param id
+ * @param corporateCode
+ * @param postalCode
+ * @param? isCollision
+ */
+{template .location}
+  {call .urlWithLocale data="all"}
+    {param url}
+      {$city|noAutoescape}-
+      {$state|noAutoescape}-
+      {$postalCode}-
+      {$corporateCode}
+      {if $isCollision}-{$id}{/if}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * @param locale
+ */
+{template .directoryStateList}
+  {call .urlWithLocale data="all"}
+    {param url: 'index.html' /}
+  {/call}
+{/template}
+
+/**
+ * @param state
+ * @param locale
+ */
+{template .directoryCityList}
+  {call .urlWithLocale data="all"}
+    {param url}
+      {$state|noAutoescape}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * @param city
+ * @param state
+ * @param locale
+ */
+{template .directoryLocationList}
+  {call .urlWithLocale data="all"}
+    {param url}
+      {$city|noAutoescape}-
+      {$state|noAutoescape}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * @param locale
+ */
+{template .search}
+  {call .urlWithLocale data="all"}
+    {param url: 'search.html' /}
+  {/call}
+{/template}
+
+/**
+ * Helper template to insert locale for international pages
+ * @param url
+ * @param locale
+ */
+{template .urlWithLocale}
+  {if $locale != 'en'}
+    {$locale|casing:'lower'}/
+  {/if}
+  {$url|noAutoescape}
+{/template}

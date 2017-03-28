@@ -1,0 +1,380 @@
+{namespace helpers.directory}
+
+/**
+ * @param baseUrl
+ * @param logo
+ */
+{template .mobileHeader}
+  {call helpers.header data="all"}
+    {param baseUrl: $baseUrl /}
+    {param mobile: true /}
+  {/call}
+{/template}
+
+/**
+ * @param keys
+ * @param baseUrl
+ * @param locationCount
+ * @param crumbNames
+ * @param crumbUrls
+ * @param? showNumLocs show number of locations in the current directory if true
+ * @param? showBack show back button that directs to the previous level if true
+ */
+{template .listDirectory}
+<div class="dir-list">
+  {call .listHeader data="all" /}
+  <div class="dir-content-wrapper">
+    <ul class="dir-content">
+      {foreach $key in $keys}
+        {if length($keys) > 20 and index($key) == round(length($keys) / 2) and not isFirst($key)}
+          </ul>
+          <ul class="dir-content">
+        {/if}
+        <li>
+          <a class="dir-next-level" href="{$baseUrl}{$key.url}">{$key.key|abbr:false}</a>
+          {if $showNumLocs} ({$key.count}){/if}
+        </li>
+      {/foreach}
+    </ul>
+  </div>
+</div>
+{/template}
+
+/**
+ * @param baseUrl
+ * @param locationCount
+ * @param crumbNames
+ * @param crumbUrls
+ * @param? showNumLocs show number of locations in the current directory if true
+ * @param? showBack show back button that directs to the previous level if true
+ */
+{template .listHeader}
+  <div class="dir-header">
+    {if $showBack and length($crumbUrls) >= 2}
+      <a class="back-link" href="{$baseUrl}{$crumbUrls[length($crumbUrls)-2]}">
+        <img id="back-button" src="{$baseUrl}images/back_img_MOB.png"></img>
+      </a>
+    {/if}
+    <span>
+      {if $showNumLocs}
+        {$locationCount} Locations in {$crumbNames[length($crumbNames)-1]|abbr:false}
+      {else}
+        All Locations
+      {/if}
+    </span>
+  </div>
+{/template}
+
+/**
+ * A generic template for displaying a list of keys.
+ * This template attempts to split the keys into even groups and place them in columns until
+ * all columns are under 20 items in length.
+ *
+ * @param keys
+ */
+{template .genericList}
+  <div class="generic-list">
+    {let $numCols: ceiling(length($keys)/20) /}
+    {let $remainder: length($keys)%$numCols /}
+    {let $colLength: floor(length($keys)/$numCols) /} /* length of the shorter column */
+    {for $i in range($numCols-$remainder)}
+      <ul class="list-column">
+        {for $j in range($colLength)}
+          {let $key: $keys[($i*$colLength) + $j] /}
+          <li><a class="list-next-level" href="{$key.url}">{$key.key}</a></li>
+        {/for}
+      </ul>
+    {/for}
+    {for $i in range($remainder)}
+      <ul class="list-column">
+        {for $j in range($colLength+1)}
+          {let $key: $keys[(($numCols-$remainder)*($colLength)) + ($i*($colLength+1)) + $j]/}
+          <li><a class="list-next-level" href="{$key.url}">{$key.key}</a></li>
+        {/for}
+      </ul>
+    {/for}
+  </div>
+{/template}
+
+/**
+ * @param keys
+ * @param baseUrl
+ * @param locationCount
+ * @param? crumbNames
+ * @param? crumbUrls
+ * @param? showNumLocs show number of locations in the current directory if true
+ * @param? showBack show back button that directs to the previous level if true
+ * @param? currentPage
+ * @param? resultsPerPage
+ * @param? query
+ * @param? queryLocation
+ */
+{template .locationList}
+<div class="dir-list">
+  {if $crumbNames}
+    {call .listHeader data="all" /}
+  {/if}
+  <div class="dir-content-wrapper">
+    {if $query}
+      <h3 class="search-query-result">{$locationCount} Results for {if $queryLocation.geolocated}Current Location ({$queryLocation.city}, {$queryLocation.state}){else}"{$query}"{/if} </h3>
+    {/if}
+    <ul>
+      {foreach $k in $keys}
+        <li class="location location-{index($k)}">
+          <a href="{$baseUrl}{$k.url}">
+            {let $l : $k.loc /}
+            <div class="location-status">
+              <div class="open-label" style="display:none">OPEN</div>
+              <div class="closed-label" style="display:none">CLOSED</div>
+            </div>
+            <div class="business-info">
+              <div class="business-name">
+              {$l.name}
+              </div>
+              <div class="address">
+                {call helpers.address data="$l"}
+                  {param includeCountry: 'no' /}
+                  {param stateAbbr: true /}
+                  {param schemaOrg: true /}
+                {/call}
+              </div>
+              <div class="phone">
+                {$l.phone}
+              </div>
+            </div>
+            {if $l.hours and length($l.hours.days) > 0}
+              <div class="hours">
+                <img src="{$baseUrl}images/hours_img.png" height="20px">
+                <div class="hours-content">
+                  {call helpers.hours data="$l.hours"}
+                    {param format: 'table' /}
+                    {param collapseDays: true /}
+                    {param todayOnly: true /}
+                    {param schemaOrg: false /}
+                  {/call}
+                </div>
+              </div>
+            {/if}
+          </a>
+        </li>
+      {/foreach}
+    </ul>
+    {if $currentPage}
+      <div id="paginate-wrap">
+        {if $currentPage > 1}
+          <span class="paginate previous js-paginate" data-paginate="-1">Previous</span>
+        {/if}
+        {if $currentPage * $resultsPerPage < $locationCount}
+          <span class="paginate next js-paginate" data-paginate="1">Next</span>
+        {/if}
+      </div>
+    {/if}
+  </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+{if $currentPage}
+  <script type="text/javascript">
+    $('.js-paginate').on('click', function() {lb}
+      var dir = $(this).data('paginate');
+      {if $query}
+        $('#search-query').val('{$query}');
+      {/if}
+      $('#search-page').val({$currentPage} + dir);
+      $('#search').submit();
+    {rb});
+  </script>
+{/if}
+<script src="{$baseUrl}js/lib/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="{$baseUrl}js/lib/jquery-jvectormap-us-aea-en.js"></script>
+{literal}
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.location').each(function() {
+      var $self = $(this),
+          $hours = $self.find('.today-hours');
+      var hourString = $hours.html();
+      if ($hours.length > 1) { // holiday
+        hourString = $hours.eq(1).html();
+      }
+      if (!hourString) {
+        return;
+      }
+      if (hourString == 'Open 24 hours') {
+        $self.find('.open-label').show();
+        return;
+      }
+      else if (hourString == 'Closed') {
+        $self.find('.closed-label').show();
+        return;
+      }
+      else {
+        /*
+         * A today-hours is something like "9:30Am-1pm<br> and 5pm-9:30pm<br>"
+         * Here we remove the trailing <br>  by slice (0, -4), and split by "<br> and "
+         * Intervals are ["9:30am-1pm", "5pm-9:30pm"]
+         */
+        intervals = hourString.slice(0, -4).split('<br> and ');
+        for (var i = 0; i < intervals.length; i++) {
+          if (!intervals[i]) {
+            continue;
+          }
+          var start = buildTime(intervals[i].split('-')[0]),
+              end = buildTime(intervals[i].split('-')[1]),
+              now = new Date();
+
+          if (start < now && now < end) {
+            $self.find('.open-label').show();
+            return
+          }
+        }
+        $self.find('.closed-label').show();
+        return;
+      }
+    });
+  });
+
+  /*
+   * A helper function that convert 9:30PM to a javascript date object,
+   * whose date is today and time is 21:30.
+   */
+  function buildTime(time) {
+    var ampm = time.slice(-2),
+        hour = time.slice(0, -2).split(':')[0] % 12,
+        minute = time.slice(0,-2).split(':')[1];
+
+    minute = minute ? minute : 0;
+    hour += ampm == 'AM' ? 0 : 12;
+
+    var timeObj = new Date();
+    timeObj.setHours(hour, minute);
+    return timeObj;
+  }
+</script>
+{/literal}
+{/template}
+
+/**
+ * @param baseUrl
+ */
+{template .loadMapJs}
+{literal}
+<script type="text/javascript">
+$(document).on('mapLoaded', function(e, m) {
+  var $list = $('.dir-list li');
+  $list.hover(
+    function() {
+      var pin = m.entities.get(0).get($list.index($(this)));
+      pin.setOptions({visible:false});
+      pin.setOptions({
+        icon: '{/literal}{$baseUrl}{literal}images/pushpin_large.png',
+        height: '55px',
+        width: '39px',
+        anchor: new Microsoft.Maps.Point(19.5, 55),
+        visible: true
+      });
+    },
+    function() {
+      var pin = m.entities.get(0).get($list.index($(this)));
+      pin.setOptions({visible:false});
+      pin.setOptions({
+        icon: '{/literal}{$baseUrl}{literal}images/pushpin_small.png',
+        height: '37px',
+        width: '26px',
+        anchor: new Microsoft.Maps.Point(13, 37),
+        visible: true
+      });
+    }
+  );
+});
+</script>
+{/literal}
+{/template}
+
+/**
+ * @param keys
+ * @param baseUrl
+ * @param zoom
+ * @param? source
+ */
+{template .mapSetup}
+  <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+  <script type="text/javascript">
+    var pinInfobox,
+        pin,
+        loc,
+        infoboxLayer = new Microsoft.Maps.EntityCollection(),
+        pinLayer = new Microsoft.Maps.EntityCollection();
+
+    $(document).ready(function() {lb}
+      var map = new Microsoft.Maps.Map(document.getElementById("dir-map"), {lb}
+            credentials: "AmDo0rpmCQPle6u8ExBc_GoPR39_mEuPMXnzyHs9z89SXcfBvKojMFlKF2eDH5dY",
+            center: new Microsoft.Maps.Location({$keys[0].loc.latitude}, {$keys[0].loc.longitude}),
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            zoom: {$zoom}
+          {rb});
+
+      pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {lb} visible: false {rb});
+      infoboxLayer.push(pinInfobox);
+
+      var options = map.getOptions();
+      {foreach $k in $keys}
+        {let $l : $k.loc /}
+        loc = new Microsoft.Maps.Location({$l.latitude}, {$l.longitude});
+        pin = new Microsoft.Maps.Pushpin(loc, {lb}
+          icon: '{$baseUrl}images/pushpin_small.png',
+          height: '37px',
+          width: '26px',
+          anchor: new Microsoft.Maps.Point(13, 37)
+        {rb});
+
+        pinLayer.push(pin);
+
+        Microsoft.Maps.Events.addHandler(pin, 'click', function(e) {lb}
+          if (e.targetType == 'pushpin') {lb}
+            {if $source == 'locationlist'}
+              options.center = e.target.getLocation();
+              map.setView(options);
+              displayInfobox(e, {index($k)});
+              $('.location').removeClass('hover');
+              $('.location-'+{index($k)}).addClass('hover');
+              $('.dir-content-wrapper').animate({lb}
+                scrollTop: $('.location-'+{index($k)}).offset().top - $('.location-0').offset().top{rb},
+                'slow');
+            {else}
+              window.location.href = '{$baseUrl}{$k.url}';
+            {/if}
+          {rb} else {lb}
+            hideInfobox(e);
+          {rb}
+        {rb});
+      {/foreach}
+
+      Microsoft.Maps.Events.addHandler(map, 'click', function(e) {lb}
+        if (e.targetType != 'pushpin') {lb}
+          $('.location').removeClass('hover');
+          hideInfobox(e);
+        {rb}
+      {rb});
+      map.entities.push(pinLayer);
+      map.entities.push(infoboxLayer);
+
+      $(document).trigger('mapLoaded', map);
+    {rb});
+
+    function displayInfobox(e, id) {lb}
+      pinInfobox.setLocation(e.target.getLocation());
+      pinInfobox.setHtmlContent("<div class='location'>" +
+        $('.location-'+id).html() +
+        "</div><span class='infobox-arrow-down'></span><span class='infobox-arrow-down-border'></span>");
+      pinInfobox.setOptions({lb}
+        visible: true,
+        offset: new Microsoft.Maps.Point(-150, 42)
+      {rb});
+    {rb}
+
+    function hideInfobox(e) {lb}
+        pinInfobox.setOptions({lb} visible: false {rb});
+    {rb}
+  </script>
+  {call .loadMapJs data="all" /}
+{/template}

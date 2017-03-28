@@ -1,0 +1,36 @@
+{namespace mobile.search}
+
+/**
+ * @param logo
+ * @param baseUrl
+ * @param resultCount
+ * @param locations
+ */
+{template .default}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all"/}
+      <meta name="viewport" content="width=device-width, user-scalable=no">
+      <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/search/default.css">
+    </head>
+    <body>
+      {call helpers.header data="all"}
+        {param baseUrl: $baseUrl /}
+      {/call}
+      {if $resultCount == 0}
+        <h1>No Results Found</h1>
+      {else}
+        <div class="dir-container">
+          {call helpers.directory.locationList data="all"}
+            {param keys: $locations /}
+            {param locationCount: $resultCount /}
+            {param showNumLocs: false /}
+          {/call}
+        </div>
+      {/if}
+    </body>
+  </html>
+{/template}

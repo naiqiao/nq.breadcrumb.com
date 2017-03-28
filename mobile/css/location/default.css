@@ -1,0 +1,360 @@
+html,
+body {
+  font-family: Lato, Arial, "Sans Serif";
+  font-weight: 300;
+  font-size: 14px;
+  color: #393939;
+}
+
+h1,
+h2 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 18px;
+  color: #ff3925;
+}
+
+h2 {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: normal;
+}
+
+header {
+  height: 50px;
+  border-bottom: 6px #48413c solid;
+  background: #eaeaea; /* Old browsers */
+  background: -moz-linear-gradient(top,  #eaeaea 0%, #f4f4f4 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eaeaea), color-stop(100%,#f4f4f4)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #eaeaea 0%,#f4f4f4 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
+}
+
+.swipe {
+  overflow-x: auto;
+}
+
+#company-logo {
+  padding: 10px;
+}
+
+#company-logo img {
+  height: 30px;
+}
+
+#cover-photo {
+  position: relative;
+  height: 147px;
+}
+
+.location-status {
+  position: absolute;
+  width: 60px;
+  height: 19px;
+  line-height: 19px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #fff;
+  bottom: 20px;
+  right: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.location-status.open {
+  background-color: #68eb94;
+}
+
+.location-status.closed {
+  background-color: #ff0000;
+}
+
+#location-info {
+  margin: 0 10px;
+}
+
+#contact-info {
+  margin: 21px 0;
+}
+
+#contact-info h1 {
+  margin: 0 0 21px;
+  font-family: "Georgia";
+  text-transform: uppercase;
+}
+
+#contact-info .address,
+#contact-info .phone-number {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+#contact-info .phone-number {
+  text-decoration: none;
+}
+
+#feature-message {
+  font-size: 13px;
+  background-color: #ff3925;
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+  margin: 21px 0;
+  padding: 0 10px;
+}
+
+#hours-today {
+  height: 30px;
+  line-height: 30px;
+  background-color: #48413c;
+  color: #fff;
+  margin: 21px 0 5px;
+  padding: 0 10px;
+}
+
+.hours {
+  width: 100%;
+}
+
+.hours td {
+  width: 50%;
+  text-align: left;
+}
+
+.hours td.hours {
+  text-align: right;
+}
+
+.cross-line {
+  text-decoration: line-through;
+}
+
+.holiday {
+  color: #EE0000;
+}
+
+#hours-today .hours {
+  text-align: right;
+}
+
+.map-wrapper img {
+  width: 100%;
+  height: 147px;
+}
+
+.map-wrapper .get-directions {
+  margin: 18px 0 21px;
+}
+
+.collapsible {
+  border-bottom: 1px #ddd solid;
+  margin-bottom: 5px;
+}
+
+.collapsible h2 {
+  padding: 15px 12px 20px;
+  background-color: #f3f3f3;
+  font-size: 17px;
+}
+
+.collapsible .toggle-state {
+  font-size: 25px;
+  float: right;
+  font-weight: bold;
+}
+
+.collapsible .toggle-state:before {
+  content: '+';
+}
+
+.collapsible .toggle-state.less:before {
+  content: '-';
+}
+
+.expanded-content {
+  border-left: 1px #ddd solid;
+  border-right: 1px #ddd solid;
+  padding: 20px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+#nearby li {
+  line-height: 20px;
+  overflow: auto;
+  padding: 21px 10px;
+  border: 1px solid #f3f3f3;
+}
+
+#nearby li:hover {
+  background: #f1f1f1;
+}
+
+#nearby a,
+#nearby a:visited {
+  text-decoration: none;
+  color: #393939;
+}
+
+#nearby .name,
+#nearby .distance {
+  font-weight: 700;
+}
+
+#nearby .distance{
+  float: right;
+}
+
+#nearby .hours img {
+  float: left;
+  height: 20px;
+}
+
+#nearby .hours-content {
+  margin-left: 30px;
+}
+
+#nearby .hours img,
+#nearby .hours-content {
+  vertical-align: top;
+}
+
+.product-item {
+  display: inline-block;
+  line-height: 18px;
+  vertical-align: top;
+}
+
+.product-item img,
+.product-item h3 {
+  max-width: 125px;
+}
+
+.product-item h3 {
+  white-space: normal;
+}
+
+.product-list {
+  white-space: nowrap;
+}
+
+.product-img-crop {
+  width: 125px;
+  height: 125px;
+  overflow: hidden;
+  margin-bottom: 21px;
+}
+
+/** Calendars widget styling **/
+
+#calendars .expanded-content{
+  max-height: 800px;
+  overflow: scroll;
+  padding: 0 10px;
+  font-family: "Helvetica", sans-serif;
+}
+
+#calendars .event {
+  margin: 21px 0;
+}
+
+#calendars .event-date {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff3925;
+}
+
+#calendars .event-divider {
+  margin: 15px 0;
+  border-bottom: 1px solid #dddddd;
+}
+
+#calendars .event-time {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+#calendars .event-name {
+  color: #ff3925;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+#calendars .event-type {
+  margin: 10px 0;
+}
+
+#calendars .event-fotorama {
+  margin: 15px 0;
+}
+
+#calendars .event-description {
+  margin: 15px 0;
+  font-size: 13px;
+}
+
+#calendars .event-url-wrapper {
+  margin: 15px 0 5px 0;
+}
+
+#calendars .event-url-wrapper .event-url {
+  color: #d3d3d3;
+  text-decoration: none;
+  border-bottom: 1px dotted #363636;
+}
+
+.bios {
+  background: #48413c;
+}
+
+.bios-item {
+  clear: both;
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.bios-item .img-crop {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  float: left;
+}
+
+.bios-item .img-name-and-title {
+  position: relative;
+  overflow: hidden;
+}
+
+.bios-item .name-and-title {
+  margin-left: 160px;
+  position: absolute;
+  bottom: 0;
+}
+
+.bios li:not(:first-child) {
+  margin-top: 21px;
+}
+
+.bios-item .description {
+  clear: both;
+  padding-top: 21px;
+}
+
+.bios-item .name {
+  font-weight: lighter;
+  padding-bottom: 4px;
+}
+
+#search input {
+  width: 95px;
+  float: right;
+  margin-top: 16px;
+  margin-right: 5px;
+}

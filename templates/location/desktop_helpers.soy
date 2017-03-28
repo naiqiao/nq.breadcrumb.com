@@ -1,0 +1,256 @@
+{namespace helpers.desktop.location}
+
+/**
+ * @param productLists
+ */
+{template .productLists}
+  {foreach $list in $productLists}
+    <article class="products-wrapper carousel-wrap">
+      <h2 class="products-title">{$list.name}</h2>
+      <span class="paginate left" data-dir="left">&lt;</span>
+      <span class="paginate right" data-dir="right">&gt;</span>
+      <div class="carousel">
+        {let $items: listItems($list.sections) /}
+        <ul class="products">
+          {foreach $item in $items}
+            <li class="product-item">
+              <div class="product-img-crop">
+                {if length($item.gallery) > 0 and length($item.gallery[0].sizes) > 0}
+                  <img src="{$item.gallery[0].sizes[0].url}" class="product-img">
+                {/if}
+              </div>
+              <h3 class="product-label">{$item.name}</h3>
+            </li>
+          {/foreach}
+        </ul>
+      </div>
+    </article>
+  {/foreach}
+{/template}
+
+/**
+ * @param bios
+ */
+{template .bios}
+  {foreach $list in $bios}
+    <article class="bios-wrapper">
+      <h2 class="bios-title">{$list.name}</h2>
+      <ul class="bios">
+        {let $items: listItems($list.sections) /}
+        {foreach $item in $items}
+          <li class="staff-bio js-staff-bio" {if index($item) > 1}style="display: none;"{/if}>
+            {if $item.photo and $item.photo.sizes?[0]?.url}
+              <div class="bio-photo">
+                 {let $height: $item.photo.sizes[0].height /}
+                 {let $width: $item.photo.sizes[0].width /}
+                 {let $isWide: $width > $height /}
+                 {let $margin: ($width - $height) / 2 /}
+                 <img
+                   src="{$item.photo.sizes[0].url}"
+                   class="bio-img"
+                   style="{if $isWide}
+                           margin-left: -{$margin/$height*106}px;
+                           height: 100%;
+                         {else}
+                           margin-top: {$margin/$width*106}px;
+                           width: 100%;
+                         {/if}">
+              </div>
+              <div class="bio-details">
+            {else}
+              <div class="bio-details bio-no-photo">
+            {/if}
+              <h3 class="bio-name">{$item.name}</h3>
+              <h4 class="bio-title">{$item.title}</h4>
+              <div class="bio-description">
+                {$item.description}
+              </div>
+            </div>
+          </li>
+        {/foreach}
+      </ul>
+      <div class="bios-expand-wrapper js-expand-bios" {if length($items) <= 2}style="display: none;"{/if}>
+        <i class="icn expand-icn bios-expand-icn"></i>
+        <span class="bios-toggle-label"></span>
+      </div>
+    </article>
+  {/foreach}
+{/template}
+
+/**
+ * @param datePosted
+ * @param message
+ * @param photoUrl
+ * @param link
+ */
+{template .post}
+  <div class="post-date" data-date="{$datePosted}">
+    <div class="post-day"></div>
+    <div class="post-month"></div>
+    <div class="post-time">
+      <span class="post-hour"></span>:
+      <span class="post-minute"></span>
+      <span class="post-ampm"></span>
+    </div>
+  </div>
+  <div class="post-content">
+    {if $message}
+      <div class="post-message">
+        {$message|changeNewlineToBr}
+      </div>
+    {/if}
+
+    {if $link?.url}
+    <div class="post-embed">
+      <div class="post-embed-title"><a href="{$link.url}">{$link.title}</a></div>
+      <div class="post-embed-subtitle url-color">{$link.subtitle}</div>
+      <div class="post-embed-message">
+        {$link.summary}
+      </div>
+    </div>
+    {/if}
+
+    {if $photoUrl}
+      <div class="post-media">
+        <img class="post-image" src="{$photoUrl}" alt="" />
+      </div>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Displays the calendar widget
+ * @param calendars
+ */
+{template .calendars}
+  <article id="calendars" class="collapsible divider-top">
+    <h2>Calendar<span class="toggle-state"></span></h2>
+    <div class="expanded-content">
+      {foreach $calendar in $calendars}
+        <div class="calendar">
+          {foreach $section in $calendar.sections}
+            {foreach $event in $section.items}
+              {call .calendarEvent data="$event" /}
+            {/foreach}
+          {/foreach}
+        </div>
+      {/foreach}
+    </div>
+  </article>
+{/template}
+
+/**
+ * Displays one calendar event.
+ * @param type
+ * @param start
+ * @param end
+ * @param gallery
+ * @param videoUrl
+ * @param url
+ * @param name
+ * @param description
+ */
+{template .calendarEvent}
+  <div class="event">
+    {call .startEndTime data="all" /}
+    <div class="event-name">
+      {$name}
+    </div>
+    <div class="event-type">
+      {$type}
+    </div>
+    {if length($gallery) > 0 or $videoUrl}
+      <div class="event-fotorama fotorama">
+        {foreach $image in $gallery}
+          {if length($image.sizes) > 0}
+            <img src="{$image.sizes[0].url}">
+          {/if}
+        {/foreach}
+        {if $videoUrl}
+          <a href="{$videoUrl}">Error loading video</a>
+        {/if}
+      </div>
+    {/if}
+    <div class="event-description">
+      {$description}
+    </div>
+    {if $url}
+      <div class="event-url-wrapper">
+        <a class="event-url" href="{$url}">More info</a>
+      </div>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Makes the date header for calendar events. Changes based on the start and end time.
+ * @param start
+ * @param end
+ */
+{template .startEndTime}
+  <div class="event-date">
+    {if not $end or sameDay($start, $end)}
+      {timestampf('Jan 2, 2006', $start)}
+    {elseif sameYear($start, $end)}
+      {timestampf('Jan 2', $start)} - {timestampf('Jan 2, 2006', $end)}
+    {else}
+      {timestampf('Jan 2, 2006', $start)} - {timestampf('Jan 2, 2006', $end)}
+    {/if}
+  </div>
+  <div class="event-divider"></div>
+  <div class="event-time">
+    {if not $end}
+      {timestampf('3:04PM', $start)}
+    {elseif sameDay($start, $end)}
+      {timestampf('3:04PM', $start)} - {timestampf('3:04PM', $end)}
+    {else}
+      {timestampf('01/02/2006', $start)} {timestampf('3:04PM', $start)} -{sp}
+      {timestampf('01/02/2006', $end)} {timestampf('3:04PM', $end)}
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Create nearby locations section.
+ *
+ * @param nearbyLocations
+ * @param baseUrl
+ */
+{template .nearby}
+  {if $nearbyLocations and length($nearbyLocations) > 0}
+    <article id="nearby-locations" class="carousel-wrap">
+      <h2>Other Nearby Locations</h2>
+      <span class="paginate left" data-dir="left">&lt;</span>
+      <span class="paginate right" data-dir="right">&gt;</span>
+      <div class="carousel">
+        <ul>
+          {for $i in range(0, length($nearbyLocations), 2)}
+            <li class="nearby-location-wrap">
+            {let $loc: $nearbyLocations[$i] /}
+              <a href="{$baseUrl}{$loc.url}">
+                <h3>{$loc.name}</h3>
+                <div class="nearby-location-details">
+                  Distance: {$loc.distance} miles <br>
+                  {$loc.address1}<br>
+                  {$loc.city}, {$loc.state} {$loc.postalCode}<br>
+                  {$loc.phone}
+                </div>
+              </a>
+              {if $i + 1 < length($nearbyLocations)}
+                {let $loc: $nearbyLocations[$i+1] /}
+                <a href="{$baseUrl}{$loc.url}">
+                  <h3>{$loc.name}</h3>
+                  <div class="nearby-location-details">
+                    Distance: {$loc.distance} miles <br>
+                    {$loc.address1}<br>
+                    {$loc.city}, {$loc.state} {$loc.postalCode}<br>
+                    {$loc.phone}
+                  </div>
+                </a>
+              {/if}
+          {/for}
+        </ul>
+      </div>
+    </article>
+  {/if}
+{/template}

@@ -1,0 +1,21 @@
+{namespace helpers.sitemap}
+
+/**
+ * @param siteTree
+ */
+{template .showTree}
+  <a href="{$siteTree.url}">{$siteTree.name}</a>
+  {if length($siteTree.children) > 0}
+    <ul>
+      {foreach $child in $siteTree.children}
+        {if $child != null}
+          <li>
+            {call .showTree}
+              {param siteTree: $child /}
+            {/call}
+          </li>
+        {/if}
+      {/foreach}
+    </ul>
+  {/if}
+{/template}

@@ -1,0 +1,257 @@
+html,
+body {
+  font-family: Lato, Arial, "Sans Serif";
+  font-weight: 100;
+  font-size: 14px;
+  color: #393939;
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 18px;
+  color: #ff3925;
+}
+
+h2 {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: normal;
+}
+
+header {
+  height: 50px;
+  border-bottom: 6px #48413c solid;
+  background: #eaeaea; /* Old browsers */
+  background: -moz-linear-gradient(top,  #eaeaea 0%, #f4f4f4 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eaeaea), color-stop(100%,#f4f4f4)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #eaeaea 0%,#f4f4f4 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #eaeaea 0%,#f4f4f4 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
+}
+
+#company-logo {
+  padding: 10px;
+}
+
+#company-logo img {
+  height: 30px;
+}
+
+#back-button {
+  width: 15px;
+  vertical-align: middle;
+  margin-top: -3px;
+}
+
+.back-link {
+  padding-right: 10px;
+}
+
+.dir-container {
+  font-family: "Lato", Arial, sans-serif;
+  position: absolute;
+  overflow: hidden;
+  top: 55px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.dir-header {
+  padding: 15px 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #cccccc;
+  height: 18px;
+}
+
+.dir-content-wrapper {
+  position: absolute;
+  overflow: auto;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 10px 0 10px;
+}
+
+.dir-content {
+  float: left;
+  width: 50%;
+  box-sizing: border-box;
+  padding-right: 10px;
+}
+
+.dir-content li {
+  list-style-type: none;
+}
+
+.dir-list {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  float: left;
+  overflow: hidden;
+}
+
+a.dir-next-level,
+a.dir-next-level:visited {
+  text-decoration: none;
+  color: #0076a3;
+  line-height: 24px;
+}
+
+a.dir-next-level:hover {
+  text-decoration: none;
+  color: #0076a3;
+  line-height: 24px;
+}
+
+/** Location lists **/
+.locations-container {
+  overflow: auto;
+  height: 100%;
+  max-height: 928px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.location {
+  border-bottom: 1px solid #ddd;
+  padding: 18px 10px 18px 10px;
+  height: 108px;
+  font-size: 14px;
+}
+
+.location:hover,
+.location.hover {
+  background: #f1f1f1;
+}
+
+.business-name {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.address,
+.phone {
+  font-weight: 300;
+}
+
+div.hours {
+  margin-top: 18px;
+}
+
+.cross-line {
+  text-decoration: line-through;
+}
+
+.holiday {
+  color: #EE0000;
+}
+
+.open-label {
+  background-color: #68eb94;
+}
+
+.closed-label {
+  background-color: #ff0000;
+}
+
+.open-label,
+.closed-label {
+  text-align: center;
+  width: 60px;
+  height: 18px;
+  color: #fff;
+}
+
+.location-status {
+  float: right;
+  margin-left: 20px;
+}
+
+.business-info {
+  margin-right: 90px;
+  height: 72px;
+}
+
+.hours img,
+.hours-content {
+  vertical-align: top;
+}
+
+.hours img {
+  float: left;
+  margin-top: 2px;
+}
+
+.hours-content {
+  margin-left: 30px;
+}
+
+.hours-content table.hours {
+  width: 100%;
+}
+
+.hours-content td.hours {
+  text-align: right;
+}
+
+.hours-content td {
+  font-size: 14px;
+}
+
+.map .location {
+  background: #fff;
+  width: 300px;
+  border: 1px solid #ff3926;
+}
+
+.location a,
+.location a:visited,
+.location a:active {
+  color: #393939;
+  text-decoration: none;
+}
+
+#search input {
+  width: 95px;
+  float: right;
+  margin-top: 16px;
+  margin-right: 5px;
+}
+
+.locale-switcher a,
+.locale-switcher a:visited {
+  text-decoration: none;
+  color: #0076a3;
+  margin-left: 10px;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+.locale-switcher a:hover {
+  text-decoration: underline;
+  color: #0076a3;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+.locale-switcher {
+  background: #fff;
+  color: #666666;
+  font-size: 14px;
+  width: 100%;
+  padding: 0 auto;
+}

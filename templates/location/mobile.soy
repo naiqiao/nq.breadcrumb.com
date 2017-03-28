@@ -1,0 +1,150 @@
+{namespace mobile.location}
+
+/**
+ * @param name
+ * @param baseUrl
+ * @param address1 Contains the street address
+ * @param address2 Contains the second line of the street address
+ * @param city
+ * @param state The abbreviated format of a state
+ * @param postalCode
+ * @param country Abbreviated format of a country
+ * @param latitude
+ * @param longitude
+ * @param hours
+ * @param phone
+ * @param logo
+ * @param services
+ * @param languages
+ * @param gallery
+ * @param specialOffer
+ * @param productLists
+ * @param calendars
+ * @param bios
+ * @param nearbyLocations
+ *  param custom
+ */
+{template .default}
+<!doctype html>
+<html>
+  <head>
+    {call helpers.commonHeadTags data="all" /}
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+    <link  href="//fotorama.s3.amazonaws.com/4.5.0/fotorama.css" rel="stylesheet"> <!-- 2 KB -->
+    <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+    <link rel="stylesheet" type="text/css" href="{$baseUrl}css/location/default.css">
+  </head>
+  <body>
+    {call helpers.header data="all"}
+      {param mobile: true /}
+    {/call}
+    <div id="cover-photo" {if length($gallery) > 0}style="background:url({$gallery[0].sizes[0].url}) no-repeat; background-size: cover;"{/if}>
+      <span class="location-status open">open</span>
+    </div>
+    <section id="location-info">
+      <article id="contact-info">
+        <h1>{$name}</h1>
+        {call helpers.address data="all"}
+          {param includeCountry: 'non-us' /}
+          {param stateAbbr: true /}
+          {param schemaOrg: true /}
+        {/call}
+        {if $phone}
+          <a class="phone-number" href="tel://{stripOutPhoneDigits($phone)}">
+            {$phone}
+          </a>
+        {/if}
+      </article>
+      {if $specialOffer}
+        <div id="feature-message">
+          {$specialOffer.description}
+        </div>
+      {/if}
+      {if $hours and length($hours.days) > 0}
+        <div id="hours-today">
+          {call helpers.hours data="$hours"}
+            {param format: 'table' /}
+            {param todayOnly: true /}
+            {param collapseDays: true /}
+            {param schemaOrg: false /}
+          {/call}
+        </div>
+      {/if}
+      <div id="map">
+        {call helpers.location.map data="all"}
+          {param mapType: 'road' /}
+          {param schemaOrgMapTag: true /}
+          {param schemaOrgGeoTag: true /}
+          {param width: 300 /}
+          {param height: 150 /}
+        {/call}
+      </div>
+      {if $nearbyLocations and length($nearbyLocations) > 0}
+        {call helpers.mobile.location.nearby data="all" /}
+      {/if}
+      {if $hours and length($hours.days) > 0}
+        <article id="operation-hours" class="collapsible">
+          <h2>Hours of Operation <span class="toggle-state"></span></h2>
+          <div class="expanded-content" style="display: none">
+            {call helpers.hours data="$hours"}
+              {param format: 'table' /}
+              {param todayOnly: false /}
+              {param collapseDays: true /}
+              {param schemaOrg: true /}
+            {/call}
+          </div>
+        </article>
+      {/if}
+      {if length($services) > 0}
+        <article id="services" class="collapsible">
+          <h2>Services <span class="toggle-state"></span></h2>
+          <div class="expanded-content" style="display: none">
+            <ul>
+              {foreach $service in $services}
+                <li>{$service}</li>
+              {/foreach}
+            </ul>
+          </div>
+        </article>
+      {/if}
+      {if length($languages) > 0}
+        <article id="languages" class="collapsible">
+          <h2>Languages <span class="toggle-state"></span></h2>
+          <div class="expanded-content" style="display: none;">
+            <ul>
+              {foreach $language in $languages}
+                <li>{$language}</li>
+              {/foreach}
+            </ul>
+          </div>
+        </article>
+      {/if}
+      {if $productLists and length($productLists) > 0}
+        {call helpers.mobile.location.productList data="all" /}
+      {/if}
+      {if $bios and length($bios) > 0}
+        {call helpers.mobile.location.bios data="all" /}
+      {/if}
+      {if $calendars and length($calendars)}
+        {call helpers.mobile.location.calendars data="all" /}
+      {/if}
+    </section>
+  </body>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="//fotorama.s3.amazonaws.com/4.5.0/fotorama.js"></script> <!-- 9 KB -->
+  <script type="text/javascript">
+    {literal}
+    $(document).ready(function() {
+      $('.collapsible').on('click', function() {
+        $(this)
+          .find('.toggle-state')
+            .toggleClass('less').end()
+          .find('.expanded-content')
+            .slideToggle();
+      });
+    });
+    {/literal}
+  </script>
+</html>
+{/template}

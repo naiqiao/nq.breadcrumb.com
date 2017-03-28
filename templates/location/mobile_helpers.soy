@@ -1,0 +1,216 @@
+{namespace helpers.mobile.location}
+
+/**
+ * @param productLists
+ */
+{template .productList}
+  {foreach $list in $productLists}
+    <article class="collapsible">
+      <h2>{$list.name ?: 'Products'} <span class="toggle-state"></span></h2>
+      <div class="expanded-content swipe product" style="display: none;">
+        <ul class="product-list">
+          {foreach $section in $list.sections}
+            {foreach $item in $section.items}
+              <li class="product-item">
+                <div class="product-img-crop">
+                  {if length($item.gallery) > 0 and length($item.gallery[0].sizes) > 0}
+                    <img src="{$item.gallery[0].sizes[0].url}">
+                  {/if}
+                </div>
+                <h3 class="product-label">{$item.name}</h3>
+              </li>
+            {/foreach}
+          {/foreach}
+        </ul>
+      </div>
+    </article>
+  {/foreach}
+{/template}
+
+/**
+ * @param bios
+ */
+{template .bios}
+  {foreach $list in $bios}
+    <article class="collapsible">
+      <h2>{$list.name ?: 'Staff Bios'} <span class="toggle-state"></span></h2>
+      <div class="expanded-content bios" style="display: none;">
+        <ul class="bios-list">
+          {foreach $section in $list.sections}
+            {foreach $item in $section.items}
+              <li class="bios-item">
+                <div class="img-name-and-title">
+                  <div class="img-crop">
+                    {if $item.photo and $item.photo.sizes?[0]?.url}
+                      {let $height: $item.photo.sizes[0].height /}
+                      {let $width: $item.photo.sizes[0].width /}
+                      {let $isWide: $width > $height /}
+                      {let $margin: ($width - $height) / 2 /}
+                      <img
+                        src="{$item.photo.sizes[0].url}"
+                        style="{if $isWide}
+                                margin-left: -{$margin/$height*150}px;
+                                height: 100%;
+                              {else}
+                                margin-top: {$margin/$width*150}px;
+                                width: 100%;
+                              {/if}">
+                    {/if}
+                  </div>
+                  <div class="name-and-title">
+                    <h3 class="name">{$item.name}</h3>
+                    <h3 class="title">{$item.title}</h3>
+                  </div>
+                </div>
+                <div class="description">{$item.description}</div>
+              </li>
+            {/foreach}
+          {/foreach}
+        </ul>
+      </div>
+    </article>
+  {/foreach}
+{/template}
+
+/**
+ * Displays the calendar widget
+ * @param calendars
+ */
+{template .calendars}
+  <article id="calendars" class="collapsible">
+    <h2>Calendar<span class="toggle-state"></span></h2>
+    <div class="expanded-content" style="display: none;">
+      {foreach $calendar in $calendars}
+        <div class="calendar">
+          {foreach $section in $calendar.sections}
+            {foreach $event in $section.items}
+              {call .calendarEvent data="$event" /}
+            {/foreach}
+          {/foreach}
+        </div>
+      {/foreach}
+    </div>
+  </article>
+{/template}
+
+/**
+ * Displays one calendar event.
+ * @param type
+ * @param start
+ * @param end
+ * @param gallery
+ * @param videoUrl
+ * @param url
+ * @param name
+ * @param description
+ */
+{template .calendarEvent}
+  <div class="event">
+    {call .startEndTime data="all" /}
+    <div class="event-name">
+      {$name}
+    </div>
+    <div class="event-type">
+      {$type}
+    </div>
+    {if length($gallery) > 0 or $videoUrl}
+      <div class="event-fotorama fotorama">
+        {foreach $image in $gallery}
+          {if length($image.sizes) > 0}
+            <img src="{$image.sizes[0].url}">
+          {/if}
+        {/foreach}
+        {if $videoUrl}
+          <a href="{$videoUrl}">Error loading video</a>
+        {/if}
+      </div>
+    {/if}
+    <div class="event-description">
+      {$description}
+    </div>
+    {if $url}
+      <div class="event-url-wrapper">
+        <a class="event-url" href="{$url}">More info</a>
+      </div>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Makes the date header for calendar events. Changes based on the start and end time.
+ * @param start
+ * @param end
+ */
+{template .startEndTime}
+  <div class="event-date">
+    {if not $end or sameDay($start, $end)}
+      {timestampf('Jan 2, 2006', $start)}
+    {elseif sameYear($start, $end)}
+      {timestampf('Jan 2', $start)} - {timestampf('Jan 2, 2006', $end)}
+    {else}
+      {timestampf('Jan 2, 2006', $start)} - {timestampf('Jan 2, 2006', $end)}
+    {/if}
+  </div>
+  <div class="event-divider"></div>
+  <div class="event-time">
+    {if not $end}
+      {timestampf('3:04PM', $start)}
+    {elseif sameDay($start, $end)}
+      {timestampf('3:04PM', $start)} - {timestampf('3:04PM', $end)}
+    {else}
+      {timestampf('01/02/2006', $start)} {timestampf('3:04PM', $start)} -{sp}
+      {timestampf('01/02/2006', $end)} {timestampf('3:04PM', $end)}
+    {/if}
+  </div>
+{/template}
+
+/**
+ * @param nearbyLocations
+ * @param baseUrl
+ */
+{template .nearby}
+   <article id="nearby" class="collapsible">
+    <h2>Nearby Locations<span class="toggle-state"></span></h2>
+    <div class="expanded-content" style="display: none;">
+      <ul>
+        {foreach $l in $nearbyLocations}
+          <li>
+            <a href="{$baseUrl}{$l.url}">
+              <div class="distance">
+                {$l.distance} miles
+              </div>
+              <div class="info">
+                <div class="name">
+                  {$l.name}
+                </div>
+                <div class="address">
+                  {call helpers.address data="$l"}
+                    {param includeCountry: 'no' /}
+                    {param stateAbbr: true /}
+                    {param schemaOrg: true /}
+                  {/call}
+                </div>
+                <div class="phone">
+                  {$l.phone}
+                </div>
+              </div>
+              {if $l.hours and length($l.hours.days) > 0}
+                <div class="hours">
+                  <img src="{$baseUrl}images/hours_img.png">
+                  <div class="hours-content">
+                    {call helpers.hours data="$l.hours"}
+                      {param format: 'table' /}
+                      {param collapseDays: true /}
+                      {param todayOnly: true /}
+                      {param schemaOrg: false /}
+                    {/call}
+                  </div>
+                </div>
+              {/if}
+            </a>
+          </li>
+        {/foreach}
+      </ul>
+    </div>
+  </article>
+{/template}

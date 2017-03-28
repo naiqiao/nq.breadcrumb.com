@@ -1,0 +1,157 @@
+{namespace mobile.directory}
+
+/**
+ * Template that displays all keys in the directory in a list view
+ * @param baseUrl String the base url of current directory page
+ * @param locationCount Number of locations in current directory
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of location in this directory level)}
+ * @param crumbNames Sorted list of breadcrumb names
+ * @param crumbUrls Sorted list of breadcrumb urls
+ */
+{template .stateList}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all" /}
+      <meta name="viewport" content="width=device-width, user-scalable=no">
+      <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/directory/default.css">
+    </head>
+    <body>
+      {call helpers.directory.mobileHeader data="all"}
+        {param logo: $keys[0].loc.logo /}
+      {/call}
+      <div class="dir-container">
+        {call helpers.directory.listDirectory data="all"}
+          {param showNumLocs: false /}
+          {param showBack: false /}
+        {/call}
+      </div>
+    </body>
+  </html>
+{/template}
+
+/**
+ * Template that displays all keys in the directory in a list view
+ * @param baseUrl String the base url of current directory page
+ * @param locationCount Number of locations in current directory
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of location in this directory level)}
+ * @param crumbNames Sorted list of breadcrumb names
+ * @param crumbUrls Sorted list of breadcrumb urls
+ */
+{template .cityList}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all" /}
+      <meta name="viewport" content="width=device-width, user-scalable=no">
+      <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/directory/default.css">
+    </head>
+    <body>
+      {call helpers.directory.mobileHeader data="all"}
+        {param logo: $keys[0].loc.logo /}
+      {/call}
+      <div class="dir-container">
+        {call helpers.directory.listDirectory data="all"}
+          {param showNumLocs: true /}
+          {param showBack: true /}
+        {/call}
+      </div>
+    </body>
+  </html>
+{/template}
+
+/**
+ * Template that displays all locations in the directory in a list view
+ * @param baseUrl String the base url of current directory page
+ * @param locationCount Number of locations in current directory
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of location in this directory level)}
+ * @param crumbNames Sorted list of breadcrumb names
+ * @param crumbUrls Sorted list of breadcrumb urls
+ */
+{template .locationList}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all" /}
+      <meta name="viewport" content="width=device-width, user-scalable=no">
+      <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/directory/default.css">
+    </head>
+    <body>
+      {call helpers.directory.mobileHeader data="all"}
+        {param logo: $keys[0].loc.logo /}
+      {/call}
+      <div class="dir-container">
+        {call helpers.directory.locationList data="all"}
+          {param showNumLocs: true /}
+          {param showBack: true /}
+        {/call}
+      </div>
+    </body>
+  </html>
+{/template}
+
+/**
+ * Template that displays all keys in the directory in a list view
+ * @param baseUrl String the base url of current directory page
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of location in this directory level)}
+ * @param crumbUrls Sorted list of breadcrumb urls
+ * @param crumbNames Sorted list of breadcrumb names
+ */
+{template .genericList}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all" /}
+      <meta name="viewport" content="width=device-width, user-scalable=no">
+      <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/3.14.1/build/cssreset/cssreset-min.css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/directory/default.css">
+    </head>
+    <body>
+      {call helpers.directory.mobileHeader data="all"}
+        {param logo: $keys[0].loc.logo /}
+      {/call}
+      <div class="dir-header">
+        {if length($crumbUrls) >= 2}
+          <a class="back-link" href="{$baseUrl}{$crumbUrls[length($crumbUrls)-2]}">
+            <img id="back-button" src="{$baseUrl}images/back_img_MOB.png"></img>
+          </a>
+        {/if}
+        <span>
+          {$crumbNames[length($crumbNames)-1]}
+        </span>
+      </div>
+      <div class="dir-content-wrapper">
+        <ul class="dir-content">
+          {foreach $key in $keys}
+            {if length($keys) > 20 and index($key) == round(length($keys) / 2) and not isFirst($key)}
+              </ul>
+              <ul class="dir-content">
+            {/if}
+            <li>
+              <a class="dir-next-level" href="{$baseUrl}{$key.url}">{$key.key}</a>
+            </li>
+          {/foreach}
+        </ul>
+      </div>
+    </body>
+  </html>
+{/template}

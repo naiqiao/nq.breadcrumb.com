@@ -1,0 +1,25 @@
+{namespace desktop.sitemap}
+
+/**
+ * Template used to generate our locations HTML map
+ *
+ * @param logo The business logo that is displayed in the header
+ * @param baseUrl the base url of current directory page
+ * @param siteTree
+ */
+{template .default}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call helpers.commonHeadTags data="all"/}
+      <link rel="stylesheet" href="{$baseUrl}css/lib/reset.css" type="text/css">
+      <link rel="stylesheet" type="text/css" href="{$baseUrl}css/directory/default.css">
+    </head>
+    <body>
+      {call helpers.header data="all" /}
+      <div id="content" class="dir-container inner-wrap generic-wrapper">
+        {call helpers.sitemap.showTree data="all" /}
+      </div>
+    </body>
+  </html>
+{/template}
