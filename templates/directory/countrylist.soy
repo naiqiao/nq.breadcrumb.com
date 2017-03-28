@@ -1,0 +1,129 @@
+{
+Error: Parse error on line 1:
+{namespace desktop.di
+-^
+Expecting 'STRING', '}'
+namespace desktop.directory}
+
+/**
+ * Template that displays all states in the directory in a list view with a map of the united states.
+// * @param logo The business logo that is displayed in the header
+ * @param base Object: {url (the base url of current directory page),
+ *                      count (number of locations on the current directory page)}
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of locations in this directory level)}
+ * @param crumbNames Sorted list of breadcrumb names
+ * @param crumbUrls Sorted list of breadcrumb urls
+ * @param? isStaging
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param directoryId Passthrough
+ * @param siteDomain Passthrough
+ * @param locale
+ * @param directoryHierarchy
+ * @param customByName
+ */
+{template .countryList}
+
+  {let $title}
+    {msg desc="The title for the page that displays locations."}
+      Browse All School of Rock Locations
+    {/msg}
+  {/let}
+  {call .layout data="all"}
+    {param pageTitle: $title /}
+    {param metaDescription: $title /}  // TODO: These should be customized
+    {param metaKeywords}
+      {call common.helpers.keywords /}
+    {/param}
+    {param country : 'US' /}
+
+    {param pageContent}
+      <div class="country-list-wrapper">
+        <h1 class="country-list-title">
+          {msg desc=""}Locations by Country{/msg}
+        </h1>
+        {let $countriesByContinent: groupListByKeyMap($keys, 'loc.customByName.Continent') /}
+        // North America should be first
+        {call .countries_by_continent data="all"}
+          {param countriesByContinent: [ 'North America': $countriesByContinent['North America'] ?: []] /}
+        {/call}
+        {call .countries_by_continent data="all"}
+          {param countriesByContinent: $countriesByContinent /}
+          {param skipNA: true /}
+        {/call}
+      </div>
+    {/param}
+
+    {param useminFooter}
+      {call usemin.stateList_js data="all" /}
+    {/param}
+    {param pageLevel: 'all' /}
+  {/call}
+{/template}
+
+/**
+ * @param countriesByContinent
+ * @param directoryHierarchy
+ * @param base
+ * @param? skipNA
+ */
+{template .countries_by_continent}
+  {foreach $continent in sortList(keys($countriesByContinent))}
+    {if $continent != 'North America' or not $skipNA}
+      <h2 class="continent-title">
+      {if $continent == 'North America'}
+        {msg desc=""}North America{/msg}
+      {elseif $continent == 'Africa'}
+        {msg desc=""}Africa{/msg}
+      {elseif $continent == 'Asia Pacific'}
+        {msg desc=""}Asia Pacific{/msg}
+      {elseif $continent == 'South America'}
+        {msg desc=""}South America{/msg}
+      {/if}
+      </h2>
+      <ul class="country-list country-list-{$continent |slugify}">
+        // USA FTW
+        {if $continent == 'North America'}
+          {let $naKeysByCountry: groupListByKeyMap($countriesByContinent[$continent], 'loc.country') /}
+          {call .countries_in_continent data="all"}
+            {param keys: $naKeysByCountry['US'] ?: [] /}
+          {/call}
+        {/if}
+        {call .countries_in_continent data="all"}
+          {param keys: $countriesByContinent[$continent] /}
+          {param skipUS: true /}
+        {/call}
+      </ul>
+    {/if}
+  {/foreach}
+{/template}
+
+/**
+ * @param keys
+ * @param directoryHierarchy
+ * @param base
+ * @param? skipUS
+ */
+{template .countries_in_continent}
+  {foreach $key in $keys}
+    {let $fullCountryName: lcountryName('en_US', $key.key) /}
+    {let $nameMap: ['name': $fullCountryName, 'key': $key] /}
+    {let $namesToKeys: $key.key != 'US' or not $skipUS ? augmentList($namesToKeys ?: [], [$nameMap]) : $namesToKeys ?: [] /}
+    {if isLast($key)}
+      {let $sortedKeys: sortListByKeys($namesToKeys, ['name']) /}
+      {foreach $nm in $sortedKeys}
+        <li class="country-list-item">
+          <a href="{$base.url}{call components.url_for_key data="all"}{param key: $nm.key /}{/call}"
+             class="country-list-link">
+            {call common.helpers.country_names}
+              {param country: $nm.name /}
+            {/call}
+          </a>
+        </li>
+      {/foreach}
+    {/if}
+  {/foreach}
+{/template}
