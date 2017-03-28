@@ -1,0 +1,282 @@
+{
+Error: Parse error on line 1:
+{namespace common}/
+-^
+Expecting 'STRING', '}'
+namespace common}
+
+/**
+ * @param baseUrl
+ * @param crumbNames
+ * @param crumbUrls
+ * @param? isStaging
+ * @param locale
+ * @param siteDomain
+ // content params:
+ * @param pageTitle
+ * @param metaDescription
+ * @param metaKeywords
+ * @param? useminHeader
+ * @param pageContent
+ * @param? useminFooter
+ * @param analytics
+ * @param? schemaScope
+ * @param? showBackToTop
+ * @param? hideBreadcrumbs
+ * @param? modalContent
+ * @param? addFormThankYou
+ * @param? phones
+ // passthrough to head includes:
+ * @param? latitude
+ * @param? longitude
+ // passthrough to header
+ * @param? campUrl
+ // passthrough to footer
+ * @param? footerInfo
+ // passthrough to Google Analytics
+ * @param customByName
+ * @param pageLevel
+ * @param? address1
+ * @param? city
+ * @param? state
+ * @param? postalCode
+ * @param? country
+ * @param? isLocationPage
+ * @param? isCompanyLocation
+ * @param? corporateCode
+ */
+{template .layout}
+  <!DOCTYPE html>
+  <html lang="{$locale}">
+    <head>
+      {call common.head_includes data="all"}
+        {param logo}
+          {$baseUrl}images/logo-lrg.png
+        {/param}
+        {param title: $pageTitle /}
+        {param keywords: $metaKeywords /}
+        {param description: $metaDescription /}
+      {/call}
+
+      {$useminHeader ?: '' |noAutoescape}
+
+      {if $isCompanyLocation}
+        {call common.helpers.google_tag_manager}
+          {param tag: 'GTM-TLGJDK' /}
+        {/call}
+      {/if}
+
+      {if $corporateCode and $corporateCode == '374'}
+        {call common.helpers.google_tag_manager}
+          {param tag: 'GTM-M3MMH5' /}
+        {/call}
+      {/if}
+
+      {if $corporateCode and $corporateCode == '266'}
+        {call common.helpers.google_tag_manager}
+          {param tag: 'GTM-NTB975' /}
+        {/call}
+      {/if}
+
+      {if $corporateCode and $corporateCode == '271'}
+        {call common.helpers.google_tag_manager}
+          {param tag: 'GTM-PX2WMG' /}
+        {/call}
+      {/if}
+
+      {let $bingUetStores:
+        [
+          '35', '25', '32', '132', '31', '54', '123', '133', '122', '45', '111', '38', '82', '27', '16', '295'
+        ]
+      /}
+
+      {let $isBingUetStore}
+        {foreach $storeID in $bingUetStores}
+          {if $corporateCode and $corporateCode == $storeID}
+            true
+          {/if}
+        {/foreach}
+      {/let}
+
+      {call components.util.data_for_js}
+        {param id: 'isBingUetStore' /}
+        {param content}
+          {lb} "isBingUetStore":
+          {if $isBingUetStore}
+            true
+          {else}
+            false
+          {/if}
+          {rb}
+        {/param}
+      {/call}
+
+      {if $isLocationPage and $isBingUetStore}
+        {call common.helpers.bing_uet /}
+
+        {let $nameOfLocalSchool}
+          {call common.helpers.geomodifier data="all"/}
+        {/let}
+
+        {call components.util.data_for_js}
+          {param id: 'nameOfLocalSchool' /}
+          {param content}
+            {lb} "nameOfLocalSchool": "{$nameOfLocalSchool}" {rb}
+          {/param}
+        {/call}
+      {/if}
+
+      {if $isLocationPage and isNonnull($customByName['TwitterPixelID'])}
+        {call components.util.data_for_js}
+          {param id: 'twitterID' /}
+          {param content}
+            {lb} "twitterID": "{$customByName['TwitterPixelID']}" {rb}
+          {/param}
+        {/call}
+      {/if}
+
+    </head>
+    <body>
+      <div class="container content-container">
+        <a href="#main" class="sr-only sr-only-focusable">
+          Skip to content
+        </a>
+        {call common.header data="all" /}
+
+        <main id="main" role="main" class="site-main yext-main" {$schemaScope ?: '' |noAutoescape}>
+
+          {if not $hideBreadcrumbs}
+            <div class="bread-crumbs-container">
+              {call common.helpers.breadCrumbs data="all" /}
+            </div>
+          {/if}
+
+          {$pageContent |noAutoescape}
+
+
+          {if $showBackToTop}
+            <div class="container back-to-top-container">
+              <a class="back-to-top"
+                 href="#main">
+                Back to top <i class="icon-up-big"></i>
+              </a>
+            </div>
+          {/if}
+
+        </main>
+
+        {call common.footer data="all" /}
+      </div>
+      {call common.helpers.set_baseUrl data="all" /}
+      {$useminFooter ?: '' |noAutoescape}
+      {$analytics |noAutoescape}
+      {if $modalContent}
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-title">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <button type="button"
+                      class="close modal-close" data-dismiss="modal"
+                      aria-label="Close">
+                <img src="{$baseUrl}images/x@2x.png" alt="Close Modal">
+              </button>
+              <div class="modal-body">
+                {$modalContent |noAutoescape}
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+      {if $addFormThankYou}
+        <div class="form-thankyou modal fade"
+             id="form-thankyou"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="form-thankyou-title"
+             data-storeid="{$corporateCode}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <button type="button"
+                      class="close modal-close form-thankyou-close" data-dismiss="modal"
+                      aria-label="Close">
+                <img src="{$baseUrl}images/x@2x.png" alt="Close Modal">
+              </button>
+              <div class="modal-body">
+                <div class="form-thankyou-title"
+                     id="form-thankyou-title">
+                  Thank you for your interest in School of Rock
+                </div>
+                <div class="form-thankyou-body">
+                  We'll be in touch shortly<br>to get you or your kid ready to rock.
+                </div>
+                <div class="form-thankyou-footer">
+                  <span class="form-thankyou-footer-top">
+                    If you have any questions in the meantime,
+                  </span>
+                  {sp}
+                  <span class="form-thankyou-footer-bottom">
+                    please call us at
+                    <strong class="form-thankyou-phone">
+                      {call desktop.location.phone_number_parser data="all"}
+                        {param spanClass: 'form-thankyou-phone-number' /}
+                      {/call}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+      {call components.google_analytics.main data="all"}
+        {param analyticsId: 'UA-3303058-1' /}
+        {param preventAutoSend: true /}
+      {/call}
+      <script>
+        ga('require', 'linker');
+        ga('linker:autoLink', ['locations.schoolofrock.com'] );
+        ga('send', 'pageview');
+      </script>
+      {call common.helpers.lightBoxScript data="all" /}
+
+      //Head Includes stuff for certain locations.
+      {if $city == 'Fort Wayne'}
+        <script async src="https://i.simpli.fi/dpx.js?cid=42494&action=100&segment=ftwayneschoolofrock&m=1&sifi_tuid=20954"></script>
+      {elseif $city == 'Downingtown'}
+        <!-- Facebook Pixel Code -->
+          {literal}
+            <script>
+              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+              n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+              document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+              fbq('init', '498772516981830');
+              fbq('track', "PageView");
+              fbq('track', 'Lead');
+            </script>
+            <noscript>
+              <img height="1" width="1" style="display:none"
+              src="https://www.facebook.com/tr?id=498772516981830&ev=PageView&noscript=1"/>
+            </noscript>
+          {/literal}
+        <!-- End Facebook Pixel Code -->
+      {/if}
+
+      {literal}
+        <script>
+          !function(e,n,u,a){e.twq||(a=e.twq=function()
+          {a.exe?a.exe.apply(a,arguments): a.queue.push(arguments);}
+          ,a.version='1',a.queue=[],t=n.createElement(u),
+          t.async=!0,t.src='//static.ads-twitter.com/uwt.js',s=n.getElementsByTagName(u)[0],
+          s.parentNode.insertBefore(t,s))}(window,document,'script');
+
+          twq('init','nv9v0');
+          twq('track','PageView');
+        </script>
+        <!-- End Twitter universal website tag code -->
+      {/literal}
+
+    </body>
+  </html>
+{/template}
