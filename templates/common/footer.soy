@@ -1,0 +1,139 @@
+{
+Error: Parse error on line 1:
+{namespace common}/
+-^
+Expecting 'STRING', '}'
+namespace common}
+
+/**
+ * @param? footerInfo
+ * @param baseUrl
+ * @param? country
+ */
+{template .footer }
+  {let $brand_url}
+    {call common.helpers.brand_url /}
+  {/let}
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-logo-wrapper">
+        <a class="footer-logo-link"
+           href="{$brand_url}">
+          <img src="{$baseUrl}images/logo-footer.png"
+               class="footer-logo"
+               alt="School of Rock (logo)">
+        </a>
+      </div>
+      <div class="footer-info-wrapper">
+        {$footerInfo ?: '<div class="footer-title">Learn to Rock Your World</div>' |noAutoescape}
+      </div>
+      <div class="footer-social-wrapper">
+        {call common.helpers.social_links /}
+      </div>
+    </div>
+    <nav class="footer-nav">
+      {let $company_msg}
+        {msg desc=""}Company{/msg}
+      {/let}
+      {let $partners_msg}
+        {msg desc=""}Partners{/msg}
+      {/let}
+      {let $careers_msg}
+        {msg desc=""}Careers{/msg}
+      {/let}
+      {let $franchising_msg}
+        {msg desc=""}Franchising{/msg}
+      {/let}
+      {let $press_msg}
+        {msg desc=""}Press{/msg}
+      {/let}
+      {let $contact_msg}
+        {msg desc=""}Contact{/msg}
+      {/let}
+      {let $privacy_msg}
+        {msg desc=""}Privacy{/msg}
+      {/let}
+      {let $my_safe_school_msg}
+        {msg desc=""}My Safe School{/msg}
+      {/let}
+
+      {let $footerLinks: [
+          [
+            'url': 'http://www.schoolofrock.com/company',
+            'title': $company_msg
+          ],
+          [
+            'url': 'http://www.schoolofrock.com/partners',
+            'title': $partners_msg
+          ],
+          [
+            'url': 'https://www.surveygizmo.com/s3/923677/Careers',
+            'title': $careers_msg
+          ],
+          [
+            'url': 'http://franchising.schoolofrock.com/',
+            'title': $franchising_msg
+          ],
+          [
+            'url': 'http://www.schoolofrock.com/press',
+            'title': $press_msg
+          ],
+          [
+            'url': 'http://www.schoolofrock.com/contact-us',
+            'title': $contact_msg
+          ],
+          [
+            'url': 'http://www.schoolofrock.com/privacy-policy',
+            'title': $privacy_msg
+          ],
+          [
+            'url': 'https://app.convercent.com/en-us/LandingPage/7f9549d9-3e78-e511-8120-00155d623368',
+            'title': $my_safe_school_msg
+          ],
+          [
+            'url': $brand_url,
+            'title': 'schoolofrock.com'
+          ]
+        ]
+      /}
+
+      <ul class="footer-nav-links">
+        {foreach $link in $footerLinks}
+          <li class="footer-nav-links-item">
+            <a href="{$link.url}" class="footer-nav-link">
+              {$link.title}
+            </a>
+          </li>
+        {/foreach}
+
+        {if $country == 'ZA' or $country == 'South Africa'}
+            {let $paia_msg}
+              {msg desc=""}Paia Manual{/msg}
+            {/let}
+            {let $formc_msg}
+              {msg desc=""}Form C{/msg}
+            {/let}
+            {let $SAfooterlinks: [
+                [
+                  'url': '../../downloads/PAIA.xls',
+                  'title': $paia_msg
+                ],
+                [
+                  'url': '../../downloads/FormC.doc',
+                  'title': $formc_msg
+                ]
+              ]
+            /}
+          {foreach $link in $SAfooterlinks}
+            <li class="footer-nav-links-item">
+              <a href="{$link.url}" class="footer-nav-link" download>
+                {$link.title}
+              </a>
+            </li>
+          {/foreach}
+        {/if}
+
+      </ul>
+    </nav>
+  </footer>
+{/template}
