@@ -1,0 +1,136 @@
+{
+Error: Parse error on line 1:
+{namespace common}/*
+-^
+Expecting 'STRING', '}'
+namespace common}
+/**
+* @param baseUrl
+* @param crumbNames
+* @param crumbUrls
+* @param logo
+* @param title
+* @param? description
+* @param? keywords
+* @param? isStaging
+* @param siteDomain
+* @param? latitude
+* @param? longitude
+*/
+{template .head_includes}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  {call .favicons }
+    {param baseUrl: $baseUrl /}
+  {/call}
+  <meta name="description"
+        content="{if $description} {$description}
+                 {else}
+                   {if length($crumbNames) > 1} in{sp}
+                     {foreach $crumb in $crumbNames}
+                       {$crumbNames[(length($crumbNames) - 1) - index($crumb)]}
+                       {if index($crumb) < length($crumbNames) - 2}, {/if}
+                     {/foreach}.
+                   {/if}
+                 {/if}">
+
+  <meta property="og:title" content="{$title |noAutoescape}">
+  <meta property="og:image" content="{$logo}">
+  <meta property="og:type" content="website">
+  <meta name="keywords" content="{if $keywords}{$keywords}{/if}">
+
+  {if $latitude and $longitude}
+    <meta name="geo.position" content="{$latitude};{$longitude}">
+    <meta name="icbm" content="{$latitude},{$longitude}">
+  {/if}
+
+  <meta property="og:url" content="{$baseUrl}{$crumbUrls[length($crumbUrls) - 1]}">
+  {call common.helpers.canonical_link data="all" /}
+
+  <title>
+    {$title |noAutoescape}
+  </title>
+
+  {if $isStaging}
+    <script type="text/javascript">
+      {literal}
+        data = {
+          "messageType" : "pages:bubbleClick",
+          "destination" : window.location.href
+        }
+        window.parent.postMessage(data, "*");
+      {/literal}
+    </script>
+  {/if}
+{/template}
+
+/**
+ * @param baseUrl
+ * @param? windowsTileBackgroundColor
+ * @param? useGeneratedFavicons
+ */
+{template .favicons}
+  {if $useGeneratedFavicons}
+    <meta name="msapplication-square70x70logo" content="{$baseUrl}images/windows-tile-70x70.png">
+    <meta name="msapplication-square150x150logo" content="{$baseUrl}images/windows-tile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="{$baseUrl}images/windows-tile-310x310.png">
+    <meta name="msapplication-TileImage" content="{$baseUrl}images/windows-tile-144x144.png">
+    {if $windowsTileBackgroundColor}
+      <meta name="msapplication-TileColor" content="{$windowsTileBackgroundColor}">
+    {/if}
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{$baseUrl}images/apple-touch-icon-152x152-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{$baseUrl}images/apple-touch-icon-120x120-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{$baseUrl}images/apple-touch-icon-76x76-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="{$baseUrl}images/apple-touch-icon-60x60-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{$baseUrl}images/apple-touch-icon-144x144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{$baseUrl}images/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{$baseUrl}images/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="{$baseUrl}images/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" value="yes">
+    <link rel="icon" sizes="196x196" href="{$baseUrl}images/homescreen-196x196.png">
+    <link rel="shortcut icon" href="{$baseUrl}images/favicon.ico">
+    <link rel="icon" type="image/png" sizes="64x64" href="{$baseUrl}images/favicon.png">
+  {else}
+    <link rel="shortcut icon" href="{$baseUrl}favicon.ico">
+  {/if}
+{/template}
+
+
+
+/**
+ * This will automatically work for Apple in iOS 6+. Android still does not
+ * have support. To get iOS 4 & 5 and Android support, you need to install
+ * the jquery.smartbanner bower component
+ * @param? apple_app_id (required for Apple app) The Apple app's unique identifier
+ * @param? apple_affiliate_data (optional) Your iTunes affiliate string
+ * @param? apple_app_argument (optional) A URL that provides context to your native app. If you include this, and the user has your app installed, she can jump from your website to the corresponding position in your iOS app
+ * @param? android_app_id (required for Android app) The Android app's unique identifier
+ */
+ {template .app_metadata}
+  {if isNonnull($apple_app_id)}
+  {call .apple_app_metadata data="all" /}
+  {/if}
+  {if isNonnull($android_app_id)}
+  {call .android_app_metadata data="all" /}
+  {/if}
+{/template}
+
+/**
+ * This will automatically work for Apple in iOS 6+. To get iOS 4 & 5 support,
+ * you need to install the jquery.smartbanner bower component
+ * @param? apple_app_id (required for Apple app) The Apple app's unique identifier
+ * @param? apple_affiliate_data (optional) Your iTunes affiliate string
+ * @param? apple_app_argument (optional) A URL that provides context to your native app. If you include this, and the user has your app installed, she can jump from your website to the corresponding position in your iOS app
+ */
+ {template .apple_app_metadata}
+  <meta name="apple-itunes-app" content="app-id={$apple_app_id}, {if isNonnull($apple_affiliate_data)}, affiliate-data={$apple_affiliate_data}{/if}{if isNonnull($apple_app_argument)}, app-argument={$apple_app_argument}{/if}">
+{/template}
+
+/**
+ * To get Android support, you need to install the jquery.smartbanner bower component
+ * @param? android_app_id (required for Android app) The Android app's unique identifier
+ */
+ {template .android_app_metadata}
+  <meta name="google-play-app" content="app-id={$android_app_id}">
+{/template}
