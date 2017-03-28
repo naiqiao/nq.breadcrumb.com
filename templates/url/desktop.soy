@@ -1,80 +1,58 @@
 {namespace url}
-
 /**
- */
-{template .xmlSitemap}
-  sitemap.xml
-{/template}
-
-/**
- */
-{template .htmlSitemap}
-  sitemap.html
-{/template}
-
-/**
- * @param state
- * @param city
  * @param locale
+ * @param custom
+ * @param isCollision
  * @param id
- * @param corporateCode
- * @param postalCode
- * @param? isCollision
  */
-{template .location}
-  {call .urlWithLocale data="all"}
-    {param url}
-      {$city|noAutoescape}-
-      {$state|noAutoescape}-
-      {$postalCode}-
-      {$corporateCode}
-      {if $isCollision}-{$id}{/if}
-    {/param}
-  {/call}
+{template .locations}
+{call url.urlWithLocale data="all"}{param url}{$custom['5032']|casing:'lower'|latin:true|spaces:'-'|other:'-'}{if $isCollision}-{$id}{/if}{/param}{/call}
 {/template}
 
 /**
  * @param locale
  */
-{template .directoryStateList}
-  {call .urlWithLocale data="all"}
-    {param url: 'index.html' /}
-  {/call}
+{template .dir_808_country}
+{call url.urlWithLocale data="all"}{param url}index.html{/param}{/call}
 {/template}
 
 /**
+ * @param locale
+ * @param country
+ */
+{template .dir_808_state}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ * @param country
  * @param state
- * @param locale
  */
-{template .directoryCityList}
-  {call .urlWithLocale data="all"}
-    {param url}
-      {$state|noAutoescape}
-    {/param}
-  {/call}
+{template .dir_808_city}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$state|abbr:true|fullRegion:true,$country|casing:'lower'|latin:true|spaces:'-'|other:'-'}.html{/param}{/call}
 {/template}
 
 /**
+ * @param locale
+ * @param country
+ * @param state
  * @param city
- * @param state
- * @param locale
  */
-{template .directoryLocationList}
-  {call .urlWithLocale data="all"}
-    {param url}
-      {$city|noAutoescape}-
-      {$state|noAutoescape}
-    {/param}
-  {/call}
+{template .dir_808_locations}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$state|abbr:true|fullRegion:true,$country|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$city|casing:'lower'|latin:true|spaces:'-'|other:'-'}.html{/param}{/call}
 {/template}
 
 /**
  * @param locale
  */
-{template .search}
-  {call .urlWithLocale data="all"}
-    {param url: 'search.html' /}
-  {/call}
+{template .store_locator}
+{call url.urlWithLocale data="all"}{param url}search.html{/param}{/call}
+{/template}
+
+/** */
+{template .xml_sitemap}
+sitemap.xml
 {/template}
 
 /**
@@ -83,8 +61,8 @@
  * @param locale
  */
 {template .urlWithLocale}
-  {if $locale != 'en'}
-    {$locale|casing:'lower'}/
-  {/if}
-  {$url|noAutoescape}
+	{if $locale != 'en'}
+		{$locale|casing:'lower'}/
+	{/if}
+	{$url |noAutoescape}
 {/template}
