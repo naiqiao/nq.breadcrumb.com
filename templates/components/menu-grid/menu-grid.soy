@@ -1,0 +1,84 @@
+{namespace components}
+
+/*
+{call components.menu_grid}
+  {param menus: /}
+  {param menuName: /}
+  {param bootstrapColumnClass: /}
+
+  {param sectionsToDisplay: /}
+  {param numberOfItemsPerSection: /}
+{/call}
+*/
+
+/**
+ * Menu grid component
+ * @param menus
+ * @param menuName
+ * @param bootstrapColumnClass The bootstrap column class to use on the wrapping div
+ * @param? sectionsToDisplay Array of section names to display, ordered
+ * @param? numberOfItemsPerSection Number of menu items to display per section
+ */
+{template .menu_grid}
+  {foreach $menu in $menus}
+    {if $menu.name == $menuName and length($menu.sections) > 0}
+      <div class="row c-menu-grid">
+        {foreach $sectionToDisplay in $sectionsToDisplay ?: []}
+          {foreach $section in $menu.sections}
+            {if $sectionToDisplay == '_all' or $sectionToDisplay == $section.name}
+              {call components.menu_grid_section}
+                {param section: $section /}
+                {param bootstrapColumnClass: $bootstrapColumnClass /}
+                {param numberOfItemsPerSection: $numberOfItemsPerSection/}
+              {/call}
+            {/if}
+          {/foreach}
+        {ifempty}
+          {foreach $section in $menu.sections}
+            {call components.menu_grid_section}
+              {param section: $section /}
+              {param bootstrapColumnClass: $bootstrapColumnClass /}
+              {param numberOfItemsPerSection: $numberOfItemsPerSection /}
+            {/call}
+          {/foreach}
+        {/foreach}
+      </div>
+    {/if}
+  {/foreach}
+{/template}
+
+/*
+{call components.menu_grid_section}
+  {param section: /}
+  {param bootstrapColumnClass: /}
+
+  {param numberOfItemsPerSection: /}
+{/call}
+*/
+
+/**
+ * Menu grid content component
+ * @param section
+ * @param bootstrapColumnClass The bootstrap column class to use on the wrapping div
+ * @param? numberOfItemsPerSection Number of menu items to display per section
+ */
+{template .menu_grid_section}
+  <div class="{$bootstrapColumnClass} c-menu-grid-section c-menu-grid-section-{$section.name |id}">
+    <div class="c-menu-grid-item-header">
+      <p class="c-menu-grid-item-header-text">
+        {$section.name}
+      </p>
+    </div>
+    {for $i in range(0, min(length($section.items), $numberOfItemsPerSection ?: 999))}
+      {let $menuItem: $section.items[$i] /}
+      <div class="c-menu-grid-item">
+        <div class="c-menu-grid-item-name">
+          {$menuItem.name}
+        </div>
+        <p class="c-menu-grid-item-description">
+          {$menuItem.description}
+        </p>
+      </div>
+    {/for}
+  </div>
+{/template}

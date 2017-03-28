@@ -1,0 +1,174 @@
+{namespace components.util}
+
+/*
+  {call components.util.for_obj}
+    {param keyPath: [ 'key1', 'key2' ] /}
+    {param object: /}
+  {/call}
+*/
+
+/**
+ * @param keyPath // array of strings that form a keypath, e.g ['customByName', 'CustomField'] or ['city']
+ * @param object
+ **/
+{template .for_obj}
+  {let $keyPathClass}
+    key-path-item-
+    {call .slugify_key_path data="all" /}
+  {/let}
+  {foreach $key in $keyPath}
+    {let $obj: isFirst($key) ? $object[$key] : $obj[$key] /}
+    {if isLast($key)}
+      <span class="key-path-item {$keyPathClass}">
+        {$obj ?: ''}
+      </span>
+    {/if}
+  {/foreach}
+{/template}
+
+/*
+  {call components.util.multiple_for_obj}
+    {param keyPaths: [[ 'key1', 'key2' ], ['key1']] /}
+    {param object: /}
+
+    {param separator: /}
+  {/call}
+*/
+
+/**
+ * @param keyPaths // array of key path arrays, e.g. [['customByName', 'CustomField'], ['city']]
+ * @param object
+ * @param? separator
+ **/
+{template .multiple_for_obj}
+  {foreach $keyPath in $keyPaths}
+    {call .for_obj data="all"}
+      {param keyPath: $keyPath /}
+    {/call}{if not isLast($keyPath)}
+      <span class="key-path-item-separator">
+        {$separator ?: ' '}
+      </span>
+    {/if}
+  {/foreach}
+{/template}
+
+/*
+  {call components.util.slugify_key_path}
+    {param keyPath: [ 'key1', 'key2' ] /}
+  {/call}
+*/
+
+/**
+ * @param keyPath
+ */
+{template .slugify_key_path}
+  {let $keyPathString}
+    {foreach $key in $keyPath}
+      {$key}
+      {if not isLast($key)}
+        ####
+      {/if}
+    {/foreach}
+  {/let}
+  {$keyPathString |slugify}
+{/template}
+
+
+/*
+  {call components.util.h_level}
+    {param contents}
+      The Contents
+    {/param}
+    {param level: 3 /}
+    {param class: 'class-of-the-heading' /}
+  {/call}
+*/
+
+/**
+ * h_level
+ * @param contents
+ * @param level must be in [1,2,3,4,5,6]
+ * @param? class
+ */
+{template .h_level}
+  {if $level != 1 and $level != 2 and $level != 3 and $level != 4 and $level != 5 and $level != 6}
+    {log}
+      Level must be 1,2,3,4,5, or 6
+    {/log}
+    {let $error_invalid_h_level: null /}
+    {$error_invalid_h_level[0]}
+  {/if}
+  <h{$level}{if $class} class="{$class}"{/if} role="heading" aria-level="{$level}">
+    {$contents |noAutoescape}
+  </h{$level}>
+{/template}
+
+
+/*
+  {call components.util.data_for_js}
+    {param id}
+      the-id-for-js
+    {/param}
+    {param content}
+      [ 'foo': 'bar' ]
+    {/param}
+  {/call}
+*/
+
+/**
+ * data_for_js
+ * @param id
+ * @param content
+ * @param? class
+ */
+{template .data_for_js}
+  <script id="{$id}"
+          {if $class}
+            class="{$class}"
+          {/if}
+          type="text/data">
+    {$content |noAutoescape}
+  </script>
+{/template}
+
+/*
+  {call components.util.join}
+    {param list: ['a', 'b', 'c'] /}
+    {param delimiter: '|' /}
+  {/call}
+*/
+
+/**
+ * join
+ * @param list
+ * @param? delimiter
+ */
+{template .join}
+  {foreach $el in $list}
+    {$el |noAutoescape}{if not isLast($el)}{$delimiter ?: ', '}{/if}
+  {/foreach}
+{/template}
+
+/**
+ * Performs a soft redirect to a given URL
+ * @param url
+ */
+{template .soft_redirect_with_html}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      {call .soft_redirect data="all" /}
+    </head>
+  </html>
+{/template}
+
+/**
+ * Performs a soft redirect to a given URL
+ * @param url
+ */
+{template .soft_redirect}
+  <meta http-equiv="refresh" content="1;URL={$url}">
+  <script type="text/javascript">
+    window.location.href = "{$url}"
+  </script>
+{/template}

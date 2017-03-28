@@ -1,0 +1,99 @@
+{namespace components}
+
+/*
+{call components.social_posts}
+  {param posts: $posts /}
+
+  {param title: 'Social Updates from XXXX' /}
+  {param timeFormat: 'January 2' /}
+  {param numberOfPostsToDisplay: 2 /}
+  {param embedYouTube: /}
+  {param showYouTubeThumbnail: /}
+{/call}
+*/
+
+/**
+ * @param posts
+ * @param? title
+ * @param? dateFormat
+ * @param? timeFormat
+ * @param? numberOfPostsToDisplay default is 2
+ * @param? embedYouTube Passthrough
+ * @param? thumbnailIndex Passthrough
+ * @param? hideVideoControls Passthrough
+ * @param? showVideoTitle Passthrough
+ * @param? thumbnailIndex Passthrough
+ * @param? hideSchema Passthrough
+ */
+{template .social_posts}
+  {let $limit: $numberOfPostsToDisplay ?: 2 /}
+  <div class="c-social-posts-wrapper">
+    {if $title}
+      <h3 class="c-social-posts-title">
+        {$title}
+      </h3>
+    {/if}
+    {if length($posts) > 0}
+      {let $lastIndex: length($posts) > $limit ? $limit : length($posts) /}
+      {for $i in range(0, $lastIndex)}
+        {let $post: $posts[$i] /}
+        {let $hasYoutube: strlen($post.link.url) > 0 and strContains($post.link.url, 'youtube') /}
+        {let $hasImage: strlen($post.photoUrl) > 0 /}
+        {let $hasLink: strlen($post.link.url) > 0 /}
+        <div class="c-social-posts-item-wrapper">
+          <div class="c-social-posts-item{if $hasYoutube} has-video{/if}{if $hasImage} has-image{/if}">
+            <div class="c-social-posts-item-text-wrapper">
+              <div class="c-social-posts-item-day">
+                {let $dateFormatter: $dateFormat ?: 'January 2' /}
+                {let $timeFormatter: $timeFormat ?: '3:04 PM' /}
+                <div class="c-social-posts-item-day-date">{timestampf($dateFormatter, $post.datePosted)}</div>
+                <div class="c-social-posts-item-day-time">{timestampf($timeFormatter, $post.datePosted)}</div>
+              </div>
+            </div>
+            {if $hasYoutube}
+              {call components.youtube_embed data="all"}
+                {param video: $post.link.url /}
+
+              {/call}
+            {elseif $hasImage}
+              <img src="{$post.photoUrl}" class="c-social-posts-item-image" />
+            {/if}
+            <div class="c-social-posts-item-text-wrapper">
+              <div class="c-social-posts-item-message">
+                {let $message}
+                  {if $hasYoutube}
+                    {let $prettyYoutube}
+                      <a class="c-social-posts-item-pretty-youtube-link" href="{$post.link.url}">View on YouTube</a>
+                    {/let}
+                    {replace($post.message, $post.link.url, $prettyYoutube) |noAutoescape}
+                  {elseif $hasLink}
+                    {replace($post.message, $post.link.url, '') |noAutoescape}
+                  {else}
+                    {$post.message}
+                  {/if}
+                {/let}
+                {$message |noAutoescape }
+              </div>
+              {if $hasLink and not $hasYoutube}
+                <div class="c-social-posts-item-link-wrapper">
+                  <div class="c-social-posts-item-link-title">
+                    <a class="c-social-posts-item-link-link" href="{$post.link.url}" target="_blank">
+                      {strlen($post.link.title)>0 ? $post.link.title : 'Read More' }
+                    </a>
+                  </div>
+                  {if strlen($post.link.summary) > 0}
+                    <div class="c-social-posts-item-link-summary">
+                      {$post.link.summary}
+                    </div>
+                  {/if}
+                </div>
+              {/if}
+            </div>
+          </div>
+        </div>
+      {/for}
+    {else}
+      No posts available
+    {/if}
+  </div>
+{/template}

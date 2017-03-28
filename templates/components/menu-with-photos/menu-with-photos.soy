@@ -1,0 +1,61 @@
+{namespace components}
+
+/*
+{call components.menu_with_photos}
+  {param menus: /}
+  {param menuName: /}
+
+  {param menuTitle: /}
+  {param sectionName: /}
+  {param bootstrapColumnClass: /}
+  {param showName: /}
+  {param showDescription: /}
+{/call}
+*/
+
+/**
+ * Menu component
+ * @param menus
+ * @param menuName
+ * @param? menuTitle
+ * @param? sectionName
+ * @param? bootstrapColumnClass
+ * @param? showName
+ * @param? showDescription
+ */
+{template .menu_with_photos}
+<div class="row">
+  <div class="col-sm-12 c-menu-with-photos-title">
+    {$menuTitle ?: 'Menu' |noAutoescape}
+  </div>
+</div>
+{foreach $menu in $menus}
+  {if $menu.title == $menuName}
+    {foreach $section in $menu.sections}
+      {if ((not isNonnull($sectionName) and $section.name == '') or $section.name == $sectionName) and length($section.items) > 0}
+        <div class="row c-menu-with-photos">
+          {foreach $item in $section.items}
+            {if $item}
+              <div class="{if $bootstrapColumnClass}{$bootstrapColumnClass}{else}col-lg-2 col-md-4 col-sm-6{/if} c-menu-with-photos-item">
+                <div class="c-menu-with-photos-item-photo-wrapper">
+                  <img class="c-menu-with-photos-item-photo" src="{$item.photo.sizes[0].url}">
+                </div>
+                {if $showName}
+                  <div class="c-menu-with-photos-item-name">
+                    {$item.name}
+                  </div>
+                {/if}
+                {if $showDescription}
+                  <div class="c-menu-with-photos-item-description">
+                    {$item.description}
+                  </div>
+                {/if}
+              </div>
+            {/if}
+          {/foreach}
+        </div>
+      {/if}
+    {/foreach}
+  {/if}
+{/foreach}
+{/template}

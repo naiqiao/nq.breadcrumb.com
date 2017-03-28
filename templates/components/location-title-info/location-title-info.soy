@@ -1,0 +1,334 @@
+{namespace components}
+
+/*
+{call components.location_title_info}
+  {param title: /}
+  {param baseUrl: /}
+
+  {param storePhoto: /}
+  {param corpLink: /}
+  {param keywords: /}
+  {param searchConfig: /}
+  {param storePhotoBGLinearGradient: /}
+  {param wrapperClass: /}
+{/call}
+*/
+
+/**
+ * @param title
+ * @param baseUrl
+ * @param? storePhoto
+ * @param? corpLink
+ * @param? keywords
+ * @param? searchConfig // must be hash ['path' : 'relative path to searcher', 'queryParam' : 'query parameter, e.g. "q"']
+ * @param? storePhotoBGLinearGradient // e.g. linear-gradient(0, rgba(0,0,0,0.00) 0%, #1E1E1E 100%)
+ * @param? wrapperClass
+ */
+
+{template .location_title_info}
+
+  {let $cl: $wrapperClass ?: '.c-location-title-wrapper' /}
+  {let $class: (substring($cl, 0, 1) == '.') ? $cl : '.' + $cl /}
+
+  {call .bgPhotoWithGradient}
+    {param photo: $storePhoto /}
+    {param gradient: $storePhotoBGLinearGradient /}
+    {param wrapperClass: $class/}
+  {/call}
+
+  {if $searchConfig}
+    {call components.search.simple_search_bar}
+      {param baseUrl: $baseUrl /}
+      {param searcherPath: $searchConfig.path /}
+      {param queryParameter: $searchConfig.queryParam /}
+      {param formLabel: $searchConfig.label /}
+      {param placeHolder: $searchConfig.placeholder /}
+      {param submitLabel: $searchConfig.button /}
+    {/call}
+  {/if}
+
+  {call components.location_title}
+    {param name: $title /}
+  {/call}
+
+  {if $keywords and length($keywords) >0}
+    {call .keywords data="all"/}
+  {/if}
+
+  {if $corpLink and strlen($corpLink)}
+    {call .corp_link data="all" /}
+  {/if}
+
+{/template}
+
+/*
+{call components.bgPhotoWithGradient}
+  {param wrapperClass: /}
+
+  {param photo: /}
+  {param gradient: /}
+  {param mediaQuery: /}
+  {param showOnAllWidths: /}
+{/call}
+
+*/
+
+/**
+ * @param wrapperClass
+ * @param? photo
+ * @param? gradient
+ * @param? mediaQuery
+ * @param? showOnAllWidths
+ */
+
+{template .bgPhotoWithGradient}
+  {let $class: substring($wrapperClass, 0, 1) == '.' ? $wrapperClass : '.' + $wrapperClass /}
+  {if $photo or $gradient}
+    {let $prefixes: ['-o-', '-ms-', '-moz-', '-webkit-'] /}
+    <style>
+      {if not $showOnAllWidths}
+      {$mediaQuery ?: '@media(max-width: 767px)'}
+      {lb}
+      {/if}
+        {$class}
+        {lb}
+          {if $gradient}
+            {foreach $prefix in $prefixes}
+              background-image: {$prefix}linear-gradient({$gradient}){if $photo and $gradient}, {/if}{if $photo}url({$photo |noAutoescape}){/if};
+            {/foreach}
+          {/if}
+
+          background-image: {if $gradient}linear-gradient({$gradient}){/if}{if $photo and $gradient}, {/if}{if $photo}url({$photo |noAutoescape}){/if};
+
+          {if $photo}
+            background-size: cover;
+          {/if}
+        {rb}
+      {if not $showOnAllWidths}
+      {rb}
+      {/if}
+    </style>
+  {/if}
+{/template}
+
+/*
+{call components.keywords}
+  {param keywords: /}
+{/call}
+*/
+
+/**
+ * @param keywords
+ */
+{template .keywords}
+  <div class="keywords">
+    {foreach $keyword in $keywords}
+      {$keyword |noAutoescape}{if not isLast($keyword)},{sp}{/if}
+    {/foreach}
+  </div>
+{/template}
+
+/*
+{call components.corp_link}
+  {param corpLink: /}
+
+  {param corpLinkText: /}
+{/call}
+*/
+
+/**
+ * @param corpLink
+ * @param? corpLinkText
+ */
+{template .corp_link}
+  {let $text: $corpLinkText ?: $corpLink /}
+  <div class="corp-link">
+    <a href="{$corpLink}">{$text}</a>
+  </div>
+{/template}
+
+/*
+{call components.corp_link}
+  {param appId: /}
+
+  {param includeFBSDK: /}
+{/call}
+*/
+
+/**
+ * @param appId
+ * @param? includeFBSDK // Only include once on a page!
+ */
+{template .facebook_share_button}
+  <div class="social-share-button fb-share-button-wrapper">
+    <div class="fb-share-button" data-layout="button"></div>
+    {if $includeFBSDK}
+      {call .facebook_sdk data="all" /}
+    {/if}
+  </div>
+{/template}
+
+/*
+{call components.corp_link}
+  {param appId: /}
+
+  {param includeFBSDK: /}
+{/call}
+*/
+
+
+/**
+ * @param appId
+ * @param? includeFBSDK // Only include once on a page!
+ */
+{template .facebook_like_and_share_button}
+  <div class="social-share-button fb-like-wrapper">
+    <div class="fb-like" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+    {if $includeFBSDK}
+      {call .facebook_sdk data="all" /}
+    {/if}
+  </div>
+{/template}
+
+/*
+{call components.corp_link}
+  {param appId: /}
+{/call}
+*/
+
+/**
+ * @param appId
+ */
+{template .facebook_sdk}
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {lb}
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId={$appId}&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  {rb}(document, 'script', 'facebook-jssdk'));</script>
+{/template}
+
+{template .twitter_share_button}
+  <div class="social-share-button twitter-share-button-wrapper">
+    {literal}
+      <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-dnt="true">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+      </script>
+    {/literal}
+  </div>
+{/template}
+
+/**
+ * @param siteDomain
+ * @param imageLink // the current location page without the domain {$crumbUrls[length($crumbUrls) - 1]}
+ * @param imageUrl // the location's photo
+ * @param pinterestDescription
+ */
+{template .pinterest_pin_button}
+  <div class="social-share-button pinterest-pin-button-wrapper">
+    <a href="//www.pinterest.com/pin/create/button/?url={$siteDomain}/{$imageLink}&media={$imageUrl}&description={$pinterestDescription |escapeUri}" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
+    <!-- Please call pinit.js only once per page -->
+    <script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script>
+  </div>
+{/template}
+
+/*
+{call components.corp_link}
+  {param emailSubject: /}
+  {param emailBody: /}
+{/call}
+*/
+
+/**
+ * @param emailSubject
+ * @param emailBody
+ */
+{template .email_share_button}
+  <div class="social-share-button email-share-button-wrapper">
+    <a class="js-email-share-link email-share-button"
+       data-email-subject="{$emailSubject | noAutoescape}"
+       data-email-body="{$emailBody | noAutoescape}"
+       href=""><i class="fa fa-envelope"></i>
+       {msg desc="Share information via email."}
+         Share
+       {/msg}
+    </a>
+  </div>
+{/template}
+
+/*
+{call components.instagram_button}
+  {param instagramHandle: /}
+{/call}
+*/
+
+/**
+ * @param instagramHandle
+ */
+{template .instagram_button}
+  <div class="social-share-button instagram-share-button-wrapper">
+    <a class="instagram-share-button"
+       href="http://instagram.com/{$instagramHandle}"
+       target=_blank><i class="fa fa-instagram"></i>
+       {msg desc="Follow on Instagram."}
+         Follow
+       {/msg}
+    </a>
+  </div>
+{/template}
+
+/*
+{call components.share_this_location}
+  {param shareThisLabel: /}
+  {param emailSubject}
+    Check out {$name} in {$city}!
+  {/param}
+  {param emailBody}
+    I thought you would be interested in looking at {$name}’s page to find out about their hours.
+  {/param}
+  {param appId: 282934285250191 /}
+  {param includeFBSDK: true /}
+
+  {param imageUrl: /}
+  {param imageLink: /}
+  {param siteDomain: /}
+  {param pinterestDescription: /}
+  {param shareThisLabel: /}
+  {param instagramHandle: /}
+{/call}
+*/
+
+/**
+ * @param emailSubject
+ * @param emailBody
+ * @param appId
+ * @param includeFBSDK
+ * @param? imageUrl
+ * @param? imageLink
+ * @param? siteDomain
+ * @param? pinterestDescription
+ * @param? shareThisLabel
+ * @param? instagramHandle
+ */
+{template .share_this_location}
+  <div class="share-this">
+    <div class="share-this-label">
+      {if $shareThisLabel}
+        {$shareThisLabel |noAutoescape}
+      {else}
+        {msg desc=""}
+          Share This Location
+        {/msg}
+      {/if}
+    </div>
+    <div class="share-this-buttons">
+      {call components.email_share_button data="all"/}
+      {call components.twitter_share_button /}
+      {call components.facebook_like_and_share_button data="all" /}
+      {if $siteDomain and $imageUrl and $imageLink and $pinterestDescription}{call components.pinterest_pin_button data="all" /}{/if}
+      {if $instagramHandle}{call components.instagram_button data="all" /}{/if}
+    </div>
+  </div>
+  {/template}

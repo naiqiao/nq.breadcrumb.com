@@ -1,0 +1,182 @@
+{namespace components}
+
+/*
+
+/*
+{call components.social}
+  {param facebook_url: 'http://www.facebook.com' /}
+  {param twitter_url: 'http://www.twitter.com' /}
+  {param pinterest_url: 'http://www.pinterest.com' /}
+  {param google_plus_url: 'http://plus.google.com' /}
+  {param youtube_url: 'http://www.youtube.com' /}
+  {param instagram_url: 'http://www.instagram.com' /}
+  {param foursquare_url: 'http://www.foursquare.com' /}
+  {param icon_order: ['Facebook', 'Twitter', 'Pinterest', 'Google Plus', 'YouTube', 'Instagram', 'LinkedIn', 'Yelp', 'FourSquare'] /}
+  {param open_in_new_window: true /}
+  {param use_font_awesome: true /}
+{/call}
+*/
+
+/**
+ * Social component
+ * @param? facebook_url
+ * @param? twitter_url
+ * @param? pinterest_url
+ * @param? google_plus_url
+ * @param? youtube_url
+ * @param? instagram_url
+ * @param? linkedin_url
+ * @param? yelp_url
+ * @param? foursquare_url
+ * @param? rss_url
+ * @param? icon_order
+ * @param? open_in_new_window
+ * @param? use_font_awesome
+ * @param? use_square_icons
+ */
+{template .social}
+{let $fa: (isNonnull($use_font_awesome) ? $use_font_awesome : true) /}
+{let $icon_array: $icon_order ?: ['Facebook', 'Twitter', 'Pinterest', 'Google Plus', 'YouTube', 'Instagram', 'LinkedIn', 'Yelp', 'FourSquare', 'RSS'] /}
+{let $square}
+  {if $use_square_icons}
+    -square
+  {/if}
+{/let}
+
+<div class="c-social">
+  {foreach $icon in $icon_array}
+    {if ($icon == 'Facebook') and isNonnull($facebook_url) and strlen($facebook_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          facebook{$square}
+        {/param}
+        {param url: $facebook_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Twitter') and isNonnull($twitter_url) and strlen($twitter_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          twitter{$square}
+        {/param}
+        {param url: $twitter_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Pinterest') and isNonnull($pinterest_url) and strlen($pinterest_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          pinterest{$square}
+        {/param}
+        {param url: $pinterest_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Google Plus') and isNonnull($google_plus_url) and strlen($google_plus_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          google-plus{$square}
+        {/param}
+        {param url: $google_plus_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'YouTube') and isNonnull($youtube_url) and strlen($youtube_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          youtube{$square}
+        {/param}
+        {param url: $youtube_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Instagram') and isNonnull($instagram_url) and strlen($instagram_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          instagram
+        {/param}
+        {param url: $instagram_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'LinkedIn') and isNonnull($linkedin_url) and strlen($linkedin_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          linkedin{$square}
+        {/param}
+        {param url: $linkedin_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Yelp') and isNonnull($yelp_url) and strlen($yelp_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          yelp{$square}
+        {/param}
+        {param url: $yelp_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'Foursquare') and isNonnull($foursquare_url) and strlen($foursquare_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          foursquare{$square}
+        {/param}
+        {param url: $foursquare_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+    {if ($icon == 'RSS') and isNonnull($rss_url) and strlen($rss_url) > 0}
+      {call components.social_icon}
+        {param css_selector}
+          rss
+        {/param}
+        {param url: $rss_url /}
+        {param open_in_new_window:$open_in_new_window/}
+        {param use_font_awesome: $fa /}
+      {/call}
+    {/if}
+  {/foreach}
+</div>
+{/template}
+
+/*
+{call components.social_icon}
+  {param use_font_awesome:  /}
+  {param url:  /}
+  {param css_selector:  /}
+
+  {param open_in_new_window:  /}
+{/call}
+*/
+
+/**
+ * @param css_selector
+ * @param url
+ * @param? open_in_new_window
+ * @param use_font_awesome
+ */
+{template .social_icon}
+<div class="c-social-icon-wrapper">
+  {if $use_font_awesome}
+    <i class="c-social-icon fa fa-{$css_selector}"></i>
+  {else}
+    <div class="c-social-icon c-social-icon-{$css_selector}">
+    </div>
+  {/if}
+  <a class="c-social-icon-link"
+     href="{$url}"
+     {if isNonnull($open_in_new_window) and $open_in_new_window}target="_blank"{/if}
+     data-ga-category="Social Link Click"
+     ></a>
+</div>
+{/template}

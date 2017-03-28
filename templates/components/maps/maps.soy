@@ -1,0 +1,636 @@
+{namespace components.maps}
+
+/*
+{call components.maps.mapSetup}
+  {param keys: /}
+  {param base: /}
+  {param zoom: /}
+  {param siteDomain: /}
+
+  {param source: /}
+  {param disableMapControl: /}
+  {param mapID: /}
+  {param linkToGetDirections: /}
+  {param nearbyLocations: /}
+  {param maxNumberOfLocationsToDisplay: /}
+  {param provider: /}
+  {param providerApiKey: /}
+  {param mapboxMapIdentifier: /}
+  {param campaign: /}
+  {param pagesUrlCustomFieldName: /}
+{/call}
+*/
+
+/**
+ * @param keys
+ * @param base
+ * @param zoom
+ * @param siteDomain // formally channelId, replaced to enable simple passthrough
+ * @param? source
+ * @param? disableMapControl
+ * @param? mapID
+ * @param? linkToGetDirections
+ * @param? nearbyLocations
+ * @param? maxNumberOfLocationsToDisplay
+ * @param? provider
+ * @param? providerApiKey
+ * @param? mapboxMapIdentifier
+ * @param? campaign
+ * @param? pagesUrlCustomFieldName
+ */
+{template .mapSetup}
+  {call .map_markup data="all" /}
+  {call .map_setup_js data="all" /}
+
+{/template}
+
+/**
+ * @param? mapID
+ */
+{template .map_markup}
+  <div class="c-map-with-pins">
+    <div id="geo-border{if isNonnull($mapID)}-{$mapID}{/if}"></div>
+    <div id="dir-map{if isNonnull($mapID)}-{$mapID}{/if}" class="dir-map"></div>
+  </div>
+{/template}
+
+
+/**
+ * @param keys
+ * @param base
+ * @param zoom
+ * @param siteDomain // formally channelId, replaced to enable simple passthrough
+ * @param? source
+ * @param? disableMapControl
+ * @param? mapID
+ * @param? linkToGetDirections
+ * @param? nearbyLocations
+ * @param? maxNumberOfLocationsToDisplay
+ * @param? provider
+ * @param? providerApiKey
+ * @param? mapboxMapIdentifier
+ * @param? campaign
+ * @param? pagesUrlCustomFieldName
+ */
+{template .map_setup_js}
+
+  {let $apiID}
+    {if $provider == 'Bing'}
+      {$providerApiKey ?: 'AmDo0rpmCQPle6u8ExBc_GoPR39_mEuPMXnzyHs9z89SXcfBvKojMFlKF2eDH5dY'}
+    {elseif $provider == 'MapQuest'}
+      {$providerApiKey ?: 'Fmjtd%7Cluu829urnh%2Cbn%3Do5-9w1ghy'}
+    {elseif $provider == 'Mapbox'}
+      {$providerApiKey ?: 'pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw'}
+    {elseif $provider == 'Google-Free'}
+      {$providerApiKey}
+    {else}
+      {$providerApiKey ?: 'gme-yextinc'}
+    {/if}
+  {/let}
+
+  <script type="text/javascript">
+    (function(){lb}
+
+      var channelId = "{$siteDomain |noAutoescape}";
+
+      window.mapConfig = window.mapConfig || {lb}{rb};
+      window.mapConfig.channelId = window.mapConfig.channelId || channelId;
+      window.mapConfig.maps = window.mapConfig.maps || [];
+
+      var mc = {lb}{rb};
+
+      {call .build_js_locations data="all"}
+        {param baseUrl: $base.url /}
+      {/call}
+
+      mc.nearbyLocs = [
+        {if isNonnull($nearbyLocations) and length($nearbyLocations) > 0 and isNonnull($maxNumberOfLocationsToDisplay) and $maxNumberOfLocationsToDisplay > 0}
+          {for $i in range($maxNumberOfLocationsToDisplay)}
+            {if isNonnull($nearbyLocations[$i])}
+              {let $url}
+                {if $linkToGetDirections}
+                  {call .get_directions_url}
+                    {param address1: $nearbyLocations[$i].address1/}
+                    {param state: $nearbyLocations[$i].state/}
+                    {param city: $nearbyLocations[$i].city/}
+                    {param postalCode: $nearbyLocations[$i].postalCode/}
+                    {param country: $nearbyLocations[$i].country/}
+                    {param name: $nearbyLocations[$i].name/}
+                    {param provider: $provider /}
+                  {/call}
+                {else}
+                  {$nearbyLocations[$i].url}
+                {/if}
+              {/let}
+              {lb}
+                latitude:{$nearbyLocations[$i].latitude},
+                longitude:{$nearbyLocations[$i].longitude},
+                url:"{$url|escapeJsString}",
+                smallpin:"{$base.url}images/nearby_location_pushpin.png",
+                largepin:"{$base.url}images/nearby_location_pushpin.png"
+              {rb}{if not isLast($i)},{/if}
+            {/if}
+          {/for}
+        {/if}
+      ];
+
+      mc.baseUrl = "{$base.url}";
+      mc.source = "{$source ?: ''}";
+      mc.zoom = {$zoom};
+      mc.disableMapControl = {$disableMapControl ?: false};
+      mc.mapID = "dir-map{if isNonnull($mapID)}-{$mapID}{/if}";
+      mc.provider = "{$provider ?: 'Google'}";
+      mc.apiID = "{$apiID |noAutoescape}";
+      {if $provider == 'Mapbox'}
+      mc.mapboxMapIdentifier = "{$mapboxMapIdentifier ?: 'yext.af25bd17'}";
+      {/if}
+
+      window.mapConfig.maps.push(mc);
+
+    {rb})();
+
+  </script>
+{/template}
+
+/**
+ * @param baseUrl
+ * @param keys
+ * @param linkToGetDirections
+ * @param provider
+ * @param? campaign
+ * @param? pagesUrlCustomFieldName
+ */
+{template .build_js_locations}
+  mc.locs = [
+    {foreach $k in $keys}
+      {let $loc: $campaign ? $k : $k.loc /}
+      {let $url}
+        {if $linkToGetDirections}
+          {call .get_directions_url}
+            {param address1: $loc.address1/}
+            {param state: $loc.state/}
+            {param city: $loc.city/}
+            {param postalCode: $loc.postalCode/}
+            {param country: $loc.country/}
+            {param name: $loc.name/}
+            {param provider: $provider /}
+          {/call}
+        {else}
+          {if $campaign}
+            {let $pagesUrl: $pagesUrlCustomFieldName ?: 'Pages URL' /}
+            {$loc.customByName[$pagesUrl]}
+          {else}
+            {$k.url}
+          {/if}
+        {/if}
+      {/let}
+      {lb}
+        latitude:{$loc.latitude},
+        longitude:{$loc.longitude},
+        url:"{$url|escapeJsString}",
+        smallpin:"{$baseUrl}images/pushpin_small.png",
+        largepin:"{$baseUrl}images/pushpin_large.png"
+      {rb}{if not isLast($k)},{/if}
+    {/foreach}
+  ];
+{/template}
+
+/*
+{call components.maps.loadMapJs}
+  {param base: /}
+{/call}
+*/
+
+/**
+ * @param base
+ */
+{template .loadMapJs}
+  // TODO: MAKE THIS ACTUALLY WORK
+  // It's intended to toggle the map pins between large and small
+  // when you hover over the corresponding listing element
+  // currently it's hard coded to work with the old bank on us site
+  // and it only works for BING!
+  {literal}
+  <script type="text/javascript">
+  $(document).on('mapLoaded', function(e, m) {
+    var $list = $('.dir-list li');
+    $list.hover(
+      function() {
+        var pin = m.entities.get(0).get($list.index($(this)));
+        pin.setOptions({visible:false});
+        pin.setOptions({
+          icon: '{/literal}{$base.url}{literal}images/pushpin_large.png',
+          height: '55px',
+          width: '39px',
+          anchor: new Microsoft.Maps.Point(19.5, 55),
+          visible: true
+        });
+      },
+      function() {
+        var pin = m.entities.get(0).get($list.index($(this)));
+        pin.setOptions({visible:false});
+        pin.setOptions({
+          icon: '{/literal}{$base.url}{literal}images/pushpin_small.png',
+          height: '37px',
+          width: '26px',
+          anchor: new Microsoft.Maps.Point(13, 37),
+          visible: true
+        });
+      }
+    );
+  });
+  </script>
+  {/literal}
+{/template}
+
+/*
+{call components.maps.locationMap}
+  {param longitude: /}
+  {param latitude: /}
+  {param address1: /}
+  {param state: /}
+  {param city: /}
+  {param postalCode: /}
+  {param country: /}
+  {param name: /}
+  {param baseUrl: /}
+  {param zoom: /}
+
+  {param source: /}
+  {param disableMapControl: /}
+  {param provider: /}
+  {param mapID: /}
+  {param hideSchemaTags: /}
+  {param provider: /}
+  {param providerApiKey: /}
+  {param itemRefs: /}
+  {param mapboxMapIdentifier: /}
+  {param width: /}
+  {param height: /}
+{/call}
+*/
+
+/**
+* @param longitude
+* @param latitude
+* @param address1
+* @param state
+* @param city
+* @param postalCode
+* @param country
+* @param name
+* @param baseUrl
+* @param zoom Passthrough
+* @param siteDomain Passthrough
+* @param? source Passthrough
+* @param? disableMapControl Passthrough
+* @param? mapID Passthrough
+* @param? nearbyLocations Passthrough
+* @param? maxNumberOfLocationsToDisplay Passthrough
+* @param? linkToGetDirections Passthrough
+* @param? hideSchemaTags
+* @param? providerApiKey
+* @param? provider
+* @param? itemRefs space separated strings that reference IDs of schema elements, e.g. 'telephone address location-name storephoto'
+* @param? mapboxMapIdentifier
+* @param? width for Static Maps
+* @param? height for Static Maps
+*/
+{template .locationMap}
+  {let $base: ['url': $baseUrl] /}
+  {let $keys: [
+      [
+        'loc' : [
+                  'longitude' : $longitude,
+                  'latitude': $latitude,
+                  'address1' : $address1,
+                  'city' : $city,
+                  'state' : $state,
+                  'postalCode' : $postalCode,
+                  'country' : $country,
+                  'name' : $name
+                ],
+        'url' : ''
+      ]
+    ]
+  /}
+  {let $hideSchemas: $hideSchemaTags ?: false /}
+  {let $refs: $itemRefs ?: 'telephone address location-name storephoto' /}
+  <div class="location-map-wrapper" {if not $hideSchemas}id="schema-location" itemprop="location" itemscope itemtype="http://schema.org/Place" itemref="{$refs}"{/if}>
+    {if not $hideSchemas}
+      <span class="coordinates" itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+        <meta itemprop="latitude" content="{$latitude}">
+        <meta itemprop="longitude" content="{$longitude}">
+      </span>
+    {/if}
+    {let $staticMapUrl}
+      {call .static_map_url data="all" /}
+    {/let}
+    <meta itemprop="map" content="{$staticMapUrl |noAutoescape}">
+    {call .mapSetup data="all"}
+      {param base: $base /}
+      {param keys: $keys /}
+      {param zoom: $zoom /}
+      {param linkToGetDirections: $linkToGetDirections ?: true /}
+    {/call}
+  </div>
+{/template}
+
+/*
+{call components.maps.map}
+  {param address1: /}
+  {param city: /}
+  {param state: /}
+  {param postalCode: /}
+  {param width: /}
+  {param height: /}
+  {param mapType: /}
+  {param schemaOrgMapTag: /}
+  {param latitude: /}
+  {param longitude: /}
+{/call}
+*/
+
+/**
+ * Create a static map from our map API
+ *
+ * Location fields:
+ * @param address1
+ * @param city
+ * @param state
+ * @param postalCode
+ * @param latitude The geo latitude to use for the map
+ * @param longitude The geo longitude to use for the map
+ *
+ * @param? provider
+ * @param? providerApiKey
+ * @param? width
+ * @param? height
+ * @param? siteDomain
+ *
+ * Tag configuration:
+ * @param? mapType One of ('road', 'satellite')
+ * @param schemaOrgMapTag (true/false)
+ *
+ * @param? noTrack
+ * @param? gaCategory
+ */
+{template .map}
+  <div class="map-wrapper" itemscope itemtype="http://schema.org/Place">
+    <a href="{call .get_directions_url data="all" /}" target="_blank" {if $noTrack}data-ga-no-track="true"{/if} {if $gaCategory}data-ga-category="{$gaCategory}"{/if}>
+      <div id="geo-border"></div>
+      <img src='{call .static_map_url data="all" /}'
+          {if $schemaOrgMapTag}
+            itemprop="map"
+          {/if}>
+    </a>
+  </div>
+{/template}
+
+/**
+ * @param? mapType One of ('road', 'satellite')
+ * @param? siteDomain
+ * @param? provider
+ * @param? providerApiKey
+ * Location fields:
+ * @param latitude The geo latitude to use for the map
+ * @param longitude The geo longitude to use for the map
+ *
+ * @param? width
+ * @param? height
+ */
+{template .static_map_url}
+  {if $provider == 'Bing'}
+    {call .bing_static_map_url data="all"}
+      {param apiKey: $providerApiKey /}
+      {param width: $width ?: 350 /}
+      {param height: $height ?: 350 /}
+    {/call}
+  {elseif $provider == 'MapQuest'}
+    {call .mapquest_static_map_url data="all"}
+      {param apiKey: $providerApiKey /}
+      {param width: $width ?: 350 /}
+      {param height: $height ?: 350 /}
+    {/call}
+  {elseif $provider == 'Mapbox'}
+    {call .mapbox_static_map_url data="all"}
+      {param apiKey: $providerApiKey /}
+      {param width: $width ?: 350 /}
+      {param height: $height ?: 350 /}
+    {/call}
+  {else}
+    {call .google_static_map_url data="all"}
+      {param siteDomain: $siteDomain /}
+      {param mapType: $mapType ?: 'road' /}
+      {param width: $width ?: 350 /}
+      {param height: $height ?: 350 /}
+    {/call}
+  {/if}
+{/template}
+
+/**
+ * @param width
+ * @param height
+ * @param mapType One of ('road', 'satellite')
+ * @param siteDomain
+ * Location fields:
+ * @param latitude The geo latitude to use for the map
+ * @param longitude The geo longitude to use for the map
+ */
+{template .google_static_map_url}
+  {let $latlng : $latitude + ',' + $longitude /}
+  // TODO: Make the icon url not always lenscrafthers
+  {let $params: [
+    'center': $latlng,
+    'zoom': '13',
+    'size': $width + 'x' + $height,
+    'maptype': $mapType == 'road' ? 'roadmap' : 'satellite',
+    'markers': 'icon:http://s3.amazonaws.com/yextpages-staging/locationpage.jphelan.dev.lenscrafters.com/desktop/images/pushpin_small.png' + '|' + $latlng,
+    'sensor': 'false',
+    'channel' : $siteDomain
+  ]/}
+  // TODO: This needs to accept a client API key
+  {gmap('/maps/api/staticmap', $params) |noAutoescape}
+{/template}
+
+/*
+{call components.maps.bing_static_map_url}
+  {param apiKey: /}
+  {param latitude: /}
+  {param longitude: /}
+  {param width: /}
+  {param height: /}
+{/call}
+*/
+/**
+ * @param apiKey
+ * @param latitude
+ * @param longitude
+ * @param width
+ * @param height
+ */
+{template .bing_static_map_url}
+  {let $key: $apiKey ?: 'AmDo0rpmCQPle6u8ExBc_GoPR39_mEuPMXnzyHs9z89SXcfBvKojMFlKF2eDH5dY' /}
+  http://dev.virtualearth.net/REST/v1/Imagery/Map/road?{$width},{$height}&pushpin={$latitude},{$longitude}&key={$key}
+{/template}
+
+/*
+{call components.maps.mapquest_static_map_url}
+  {param apiKey: /}
+  {param latitude: /}
+  {param longitude: /}
+  {param width: /}
+  {param height: /}
+{/call}
+*/
+/**
+ * @param apiKey
+ * @param latitude
+ * @param longitude
+ * @param width
+ * @param height
+ */
+{template .mapquest_static_map_url}
+  {let $key: $apiKey ?: 'Fmjtd%7Cluu829urnh%2Cbn%3Do5-9w1ghy' /}
+  http://www.mapquestapi.com/staticmap/v4/getmap?key={$key}&size={$width},{$height}&zoom=10&center={$latitude},{$longitude}
+{/template}
+
+/*
+  {call components.maps.mapbox_static_map_url data="all"}
+    {param width: '360' /}
+    {param height: '100' /}
+    {param latitude: $location.latitude /}
+    {param longitude: $location.longitude  /}
+    {param options: [
+        'imageFormat': '@2x.png',
+        'zoom':10,
+        'pinSize':'pin-l',
+        'marker':'slaughterhouse',
+        'color':'FED565'
+      ] /}
+  {/call}
+*/
+/**
+ * @param? apiKey
+ * @param latitude
+ * @param longitude
+ * @param width
+ * @param height
+ * @param? options //This is a map
+ */
+{template .mapbox_static_map_url}
+  {let $key: $apiKey ?: 'pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw' /}
+  {let $format: $options?.imageFormat ?: '.png' /}
+  {let $zoomLevel: $options?.zoom ?: 15 /}
+  {let $mapIdentifier: $options?.mapboxMapIdentifier ?: 'yext.af25bd17' /}
+  {let $pinSize: $options?.pinSize ?: 'pin-m' /}
+  {let $marker}
+    {if isNonnull($options?.marker)}
+      -{$options?.marker}
+    {/if}
+  {/let}
+  {let $color}
+    {if isNonnull($options?.color)}
+      +{$options?.color}
+    {/if}
+  {/let}
+  {let $overlay}
+    {$pinSize}{$marker}{$color}({$longitude},{$latitude})
+  {/let}
+  http://api.tiles.mapbox.com/v4/{$mapIdentifier}/{$overlay}/{$longitude},{$latitude},{$zoomLevel}/{$width}x{$height}{$format}?access_token={$key}
+{/template}
+
+/*
+{call components.maps.get_directions}
+  {param address1: /}
+  {param address2: /}
+  {param state: /}
+  {param city: /}
+  {param postalCode: /}
+  {param country: /}
+  {param name: /}
+{/call}
+*/
+
+/**
+ * Get Directions component
+ * @param address1
+ * @param? address2
+ * @param state
+ * @param city
+ * @param postalCode
+ * @param country
+ * @param name
+ * @param? provider
+ * @param? buttonText
+ * @param? noTrack
+ * @param? gaCategory
+ */
+{template .get_directions}
+<div class="c-get-directions">
+  <div class="c-get-directions-button-wrapper">
+    <a class="c-get-directions-button"
+       target="_blank"
+       href='{call .get_directions_url data="all" /}'
+       data-ga-category="{$gaCategory ?: 'Get Directions'}"
+       {if $noTrack}data-ga-no-track="true"{/if}
+       >
+        {if $buttonText}
+          {$buttonText |noAutoescape}
+        {else}
+          {msg desc=""}
+            Get Directions
+          {/msg}
+        {/if}
+    </a>
+  </div>
+</div>
+{/template}
+
+
+/*
+{call components.maps.get_directions_url}
+  {param address1: /}
+  {param state: /}
+  {param city: /}
+  {param postalCode: /}
+  {param country: /}
+  {param name: /}
+
+  {param address2: /}
+  {param provider: /}
+{/call}
+*/
+
+/**
+ * Get Directions component
+ * @param address1
+ * @param? address2
+ * @param state
+ * @param city
+ * @param postalCode
+ * @param? country
+ * @param? name
+ * @param? provider
+ */
+{template .get_directions_url}
+  {let $url}
+    {if $provider == 'Bing'}
+      {let $query}
+        {$address1 |noAutoescape}, {if $address2}{$address2 |noAutoescape}, {/if}{$city}, {$state} {$postalCode}
+      {/let}
+      http://bing.com/maps/default.aspx?rtp=~adr.{$query |escapeUri}
+    {elseif $provider == 'MapQuest'}
+      {let $query}
+        {$address1 |noAutoescape}{if $address2} {$address2 |noAutoescape}{/if} {$city} {$state} {$postalCode}{if $country} {$country}{/if}
+      {/let}
+      http://mapq.st/directions?q={$query |escapeUri}&maptype=map
+    {else}
+      {let $query}
+        {$address1 |noAutoescape}, {if $address2}{$address2 |noAutoescape}, {/if}{$city}, {$state} {$postalCode}{if $country} {$country}{/if}{if $name} ({$name |noAutoescape}){/if}
+      {/let}
+      http://maps.google.com/?q={$query |noAutoescape |escapeUri}&output=classic
+    {/if}
+  {/let}
+  {$url | noAutoescape}
+{/template}

@@ -1,0 +1,56 @@
+//
+// Nearby locations Component SCSS Stylesheet
+//
+
+
+.c-nearby-locations
+{
+  &-item
+  {
+    border-bottom:1px solid #ddd;
+    margin-bottom:15px;
+    padding-bottom:15px;
+
+    &-title
+    {
+      font-weight:bold;
+    }
+
+    &-address
+    {
+    }
+
+    &-phone
+    {
+    }
+
+    &-link
+    {
+      &-wrapper
+      {
+        margin:5px 0px;
+      }
+
+      display: block;
+
+      &:after
+      {
+        content: "  \00bb";
+      }
+    }
+
+    &:first-child
+    {
+      margin-top:20px;
+    }
+
+    &:last-child
+    {
+      border-bottom:none;
+    }
+
+    &-distance
+    {
+    }
+  }
+}

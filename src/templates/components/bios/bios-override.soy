@@ -1,0 +1,153 @@
+{namespace components.bios}
+
+/*
+{call components.bios}
+ {param bios: /}
+ {param listName: /}
+
+ {param title: /}
+ {param numberOfBiosToDisplay: /}
+ {param sectionName: /}
+ {param linkText: /}
+{/call}
+*/
+
+/**
+ * Bios component
+ * @param bios Passthrough
+ * @param listName Bios List Name
+ * @param? title
+ * @param? numberOfBiosToDisplay Number of Bios to display
+ * @param? sectionName Section Name
+ * @param? linkText
+ * @param? hideSchema Optional Passthrough
+ * @param? showReadMore Enable text truncation
+ * @param? readMoreText Text for read more button
+ * @param? readLessText Text for read less button
+ * @param? readMoreTextLength Number of characters to truncate to
+ */
+{template .wrapper}
+  {let $numbBios : $numberOfBiosToDisplay ?: 4 /}
+
+  {if $title and isNonnull($bios) and length($bios ?: []) > 0}
+    <h3 class="c-bios-list-title">
+      {$title}
+    </h3>
+  {/if}
+  {if isNonnull($bios) and length($bios ?: []) > 0}
+    {foreach $list in $bios}
+      {if ($list.title == $listName) and length($list.sections) > 0}
+        {if strlen($sectionName ?: '') >0}
+          {foreach $section in $list.sections}
+            {if (not isNonnull($sectionName) and $section.name == '') or $section.name == $sectionName}
+              {call .bios data="all"}
+                {param bios: $section.items /}
+                {param numberOfBiosToDisplay: $numbBios /}
+              {/call}
+            {/if}
+          {/foreach}
+        {else}
+          {call .bios data="all"}
+            {param bios: listItems($list.sections) /}
+            {param numberOfBiosToDisplay: $numbBios /}
+          {/call}
+        {/if}
+      {/if}
+    {/foreach}
+  {/if}
+{/template}
+
+/**
+ * @param bios
+ * @param numberOfBiosToDisplay
+ * @param? linkText
+ * @param? hideSchema
+ * @param? showReadMore Enable text truncation
+ * @param? readMoreText Text for read more button
+ * @param? readLessText Text for read less button
+ * @param? readMoreTextLength Number of characters to truncate to
+ */
+{template .bios}
+  <div class="c-bios-list">
+    {foreach $bio in $bios}
+      {if index($bio) < $numberOfBiosToDisplay}
+        <div class="c-bios-bio-wrapper">
+          {call .bio data="all"}
+            {param bio: $bio /}
+          {/call}
+        </div>
+      {/if}
+    {/foreach}
+  </div>
+{/template}
+
+/**
+ * @param bio
+ * @param? linkText
+ * @param? hideSchema Optional Passthrough
+ * @param? showReadMore Enable text truncation
+ * @param? readMoreText Text for read more button
+ * @param? readLessText Text for read less button
+ * @param? readMoreTextLength Number of characters to truncate to
+ */
+{template .bio}
+  <div class="c-bios-bio" {if not $hideSchema}itemprop="employee" itemscope itemtype="http://schema.org/Person"{/if}>
+    <div class="c-bios-bio-image-wrapper">
+      <img class="c-bios-bio-image" src="{$bio.photo?.sizes?[0]?.url}">
+    </div>
+    <div class="c-bios-bio-name" {if not $hideSchema}itemprop="name"{/if}>
+      {msg desc=""}Meet{/msg}{sp}{$bio.name} //Overriden so could add and translate 'Meet'
+    </div>
+    {if strlen($bio.title ?: '') > 0}
+      <div class="c-bios-bio-title" {if not $hideSchema}itemprop="jobTitle"{/if}>
+        {$bio.title}
+      </div>
+    {/if}
+    {if strlen($bio.description ?: '') > 0}
+      <div class="c-bios-bio-description">
+        {call components.description data="all"}
+          {param description: $bio.description /}
+        {/call}
+      </div>
+    {/if}
+    {if length($bio.education ?: []) > 0}
+      <div class="c-bios-bio-education">
+        <ul class="c-bios-bio-education-list">
+          {foreach $school in $bio.education}
+            <li class="c-bios-bio-education-list-item" {if not $hideSchema}itemprop="alumniOf"{/if}>
+              {$school}
+            </li>
+          {/foreach}
+        </ul>
+      </div>
+    {/if}
+    {if length($bio.affiliationAndCertification ?: []) > 0}
+      <div class="c-bios-bio-affiliations">
+        <ul class="c-bios-bio-affiliations-list">
+          {foreach $affilitation in $bio.affiliationAndCertification}
+            <li class="c-bios-bio-affiliations-list-item" {if not $hideSchema}itemprop="affiliation"{/if}>
+              {$affilitation}
+            </li>
+          {/foreach}
+        </ul>
+      </div>
+    {/if}
+    {if length($bio.services ?: []) > 0}
+      <div class="c-bios-bio-services">
+        <ul class="c-bios-bio-services-list">
+          {foreach $service in $bio.services}
+            <li class="c-bios-bio-services-list-item">
+              {$service}
+            </li>
+          {/foreach}
+        </ul>
+      </div>
+    {/if}
+    {if strlen($bio.url ?: '') > 0}
+      <div class="c-bios-bio-url-wrapper">
+        <a class="c-bios-bio-url" href="{$bio.url}">{$linkText ?: ($bio.url ?: '')}</a>
+      </div>
+    {/if}
+  </div>
+{/template}
+

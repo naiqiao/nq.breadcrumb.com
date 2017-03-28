@@ -1,0 +1,63 @@
+{namespace components.static_share}
+
+/**
+ * @param url // passthrough
+ * @param? buttonTitle
+ * @param? shareTitle // passthrough
+ */
+{template .facebook_link}
+  {call .generic_share_link}
+    {param url}
+      {call .facebook_url data="all" /}
+    {/param}
+    {param buttonTitle: $buttonTitle ?: 'Facebook' /}
+    {param type: 'Facebook' /}
+  {/call}
+{/template}
+
+/**
+ * @param url
+ * @param? shareTitle
+ */
+{template .facebook_url}
+  https://www.facebook.com/sharer/sharer.php?u={$url |escapeUri}
+  {if $shareTitle}
+    ?t={$shareTitle |escapeUri}
+  {/if}
+{/template}
+
+/**
+ * @param subject
+ * @param body
+ * @param? buttonTitle
+ */
+{template .email_link}
+  {call .generic_share_link}
+    {param url}
+      {call .email_url data="all" /}
+    {/param}
+    {param buttonTitle: $buttonTitle ?: 'Email' /}
+    {param type: 'Email' /}
+  {/call}
+{/template}
+
+/**
+ * @param subject
+ * @param body
+ */
+{template .email_url}
+  mailto:?&subject={$subject |escapeUri}&body={$body}
+{/template}
+
+/**
+ * @param url
+ * @param buttonTitle
+ * @param type
+ */
+{template .generic_share_link}
+  <a href="{$url |noAutoescape}"
+     class="static-share-button static-share-button-{$type |slugify}"
+     target="_blank">
+    {$buttonTitle}
+  </a>
+{/template}

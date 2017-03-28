@@ -1,0 +1,25 @@
+.c-review
+{
+  margin-top: 20px;
+
+  &-star
+  {
+    font-size: 24px;
+    padding-right: 3px;
+
+    &-active
+    {
+      color:$link-color-active;
+    }
+    &-inactive
+    {
+      color:$link-color-primary;
+    }
+  }
+
+  &-comment
+  {
+    font-size:$font-size-large;
+    line-height: $line-height-large;
+  }
+}

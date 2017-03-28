@@ -1,0 +1,106 @@
+//
+// Location hours Component SCSS Stylesheet
+//
+
+.c-location-hours
+{
+  @include clearfix();
+
+  &-title
+  {
+
+  }
+
+  &-additional-text
+  {
+
+  }
+
+  &-details
+  {
+    &-row
+    {
+      &.is-today
+      {
+        font-weight: $font-weight-bold;
+
+        .c-location-hours-details-row-dot-before
+        {
+          position: relative;
+
+          &:before
+          {
+            content: "\2022";
+            color: $brand-primary;
+            font-size: 28px;
+            left: -12px;
+            position: absolute;
+            top: 0px;
+          }
+        }
+
+        .c-location-hours-details-row-dot-after
+        {
+          position: relative;
+
+          &:after
+          {
+            content: "\2022";
+            color: $brand-primary;
+            font-size: 28px;
+            right: -12px;
+            position: absolute;
+            top: 0px;
+          }
+        }
+      }
+
+      &-day
+      {
+        padding-right: 20px;
+      }
+
+      &-intervals
+      {
+        &-instance
+        {
+
+        }
+      }
+    }
+
+    &-opentoday
+    {
+      display: none;
+    }
+  }
+}
+
+.c-location-hours-today
+{
+  &-details-row
+  {
+    display: none;
+
+    &.is-today
+    {
+      display: block;
+    }
+  }
+
+  &-day-status
+  {
+
+  }
+
+  &-day-hours
+  {
+    &-interval
+    {
+      &-separator
+      {
+
+      }
+    }
+  }
+}

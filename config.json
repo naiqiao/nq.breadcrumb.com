@@ -1,65 +1,112 @@
 {
-	"configVersion": "1",
-	"deviceDetected": false,
-	"https": false,
-	"liveSite": false,
-	"locales": ["en","es","pt"],
-	"templateVersion": 2,
-	"features": [
-		{
-			"name": "Locations",
-			"locationPageSet": {
-				"urlTemplate": "url.location",
-				"template": "desktop.location.default",
-				"outputFormat": ["Html", "Json"]
-			}
-		},
-		{
-			"name": "Location Directory",
-			"locationDirectory": {
-				"levels": [
-					 "levels": [
-          				{
-					    "urlTemplate": "url.dir_808_country",
-					    "template": "desktop.directory.countryList",
-					    "field": "Country",
-					    "orderBy": {
-					      "field": "Country",
-					      "order": "ascending"
-					    },
-					    "limit": 0
-					},
-					{
-						"urlTemplate": "url.dir_808_state",
-						"template": "desktop.directory.stateList",
-						"field": "State",
-						"orderBy": {
-							"field": "State",
-							"order": "ascending"
-						}
-					},
-					{
-						"urlTemplate": "url.dir_808_city",
-						"template": "desktop.directory.cityList",
-						"field": "City",
-						"orderBy": {
-							"field": "City",
-							"order": "ascending"
-						}
-					},
-					{
-						"urlTemplate": "url.dir_808_locations",
-						"template": "desktop.directory.locationList",
-						"field": "Locations",
-						"orderBy": {
-							"field": "Locations",
-							"order": "ascending"
-						}
-					}
-				],
-				"locationPageSet": "Locations",
-				"outputFormat": ["Html", "Json"]
-			}
-		}
-	]
+  "configVersion": "1",
+  "deviceDetected": false,
+  "locales": [
+    "en",
+    "es",
+    "pt"
+  ],
+  "liveSite": true,
+  "https": false,
+  "templateVersion": 2,
+  "features": [
+    {
+      "name": "XML Sitemap",
+      "xmlsitemap": {
+        "urlTemplate": "url.xml_sitemap",
+        "excludeStaticFiles": false
+      }
+    },
+    {
+      "name": "Locations",
+      "locationPageSet": {
+        "urlTemplate": "url.locations",
+        "template": "desktop.location.default",
+        "outputFormat": [
+          "Html",
+          "Json"
+        ],
+        "pageUrlCustomField": "Pages Site URL",
+        "locationScope": {
+          "savedSearch": "School of Rock Pages - 2016-01-01"
+        }
+      }
+    },
+    {
+      "name": "Store Locator",
+      "search": {
+        "urlTemplate": "url.store_locator",
+        "template": "desktop.search.default",
+        "locationPageSet": "Locations",
+        "queryParam": "q",
+        "maxRadiusParam": {
+          "name": "r",
+          "default": 50
+        },
+        "pageResultParam": {
+          "name": "per",
+          "default": 10
+        },
+        "pageToShowParam": "p",
+        "totalResultParam": {
+          "name": "max",
+          "default": 50
+        },
+        "disableReverseIpSearch": false
+      }
+    },
+    {
+      "name": "State - City Drilldown",
+      "locationDirectory": {
+        "levels": [
+          {
+            "urlTemplate": "url.dir_808_country",
+            "template": "desktop.directory.countryList",
+            "field": "Country",
+            "orderBy": {
+              "field": "Country",
+              "order": "ascending"
+            },
+            "limit": 0
+          },
+          {
+            "urlTemplate": "url.dir_808_state",
+            "template": "desktop.directory.stateList",
+            "field": "State",
+            "orderBy": {
+              "field": "State",
+              "order": "ascending"
+            },
+            "limit": 0
+          },
+          {
+            "urlTemplate": "url.dir_808_city",
+            "template": "desktop.directory.cityList",
+            "field": "City",
+            "orderBy": {
+              "field": "City",
+              "order": "ascending"
+            },
+            "limit": 0
+          },
+          {
+            "urlTemplate": "url.dir_808_locations",
+            "template": "desktop.directory.locationList",
+            "field": "Locations",
+            "orderBy": {
+              "field": "Locations",
+              "order": "ascending"
+            },
+            "limit": 0
+          }
+        ],
+        "outputFormat": [
+          "Html",
+          "Json"
+        ],
+        "locationPageSet": "Locations",
+        "locationScopeOverrideUrl": ""
+      }
+    }
+  ]
 }

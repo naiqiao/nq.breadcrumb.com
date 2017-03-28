@@ -1,0 +1,86 @@
+//
+// Simple List Component SCSS Stylesheet
+//
+
+.c-social-posts
+{
+  &-wrapper
+  {
+
+  }
+
+  &-title
+  {
+
+  }
+
+  &-item
+  {
+    @include clearfix();
+    @include word-wrap();
+
+    margin-bottom: $grid-gutter-width;
+
+    position:relative;
+    background-color:white;
+
+    &-day
+    {
+      font-weight: $font-weight-bold;
+      margin-bottom: $grid-gutter-width/2;
+      padding-top: 20px;
+
+      width:100%;
+      @extend .font-small;
+
+      &-date
+      {
+
+      }
+
+      &-time
+      {
+        font-style: italic;
+        font-weight: $font-weight-normal;
+      }
+    }
+
+    &-image
+    {
+      display: block;
+      margin-bottom: $grid-gutter-width/2;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &-link
+    {
+      &-wrapper
+      {
+        margin-left: $grid-gutter-width/2;
+        padding-left: $grid-gutter-width/3;
+        border-left: 1px solid gray;
+        margin-bottom: 20px;
+      }
+
+      &-link
+      {
+        margin: $grid-gutter-width/6 0px;
+        color: $gray-4;
+      }
+    }
+
+    &-message
+    {
+      padding-bottom: 20px;
+    }
+
+    &-text
+    {
+      &-wrapper
+      {
+        padding: 0px 20px;
+      }
+    }
+  }
+}

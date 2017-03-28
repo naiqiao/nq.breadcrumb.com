@@ -1,0 +1,48 @@
+//
+// Address Component SCSS Stylesheet
+//
+
+.c-address
+{
+
+  &-country-name
+  {
+    @include break-after;
+  }
+
+  &-street-2
+  {
+    @include break-before;
+  }
+
+  &-city
+  {
+    @include break-before;
+  }
+
+  &-state
+  {
+
+  }
+
+  &-postal-code
+  {
+    
+  }
+
+  @media (max-width: $screen-sm-min)
+  {
+  }
+
+  @media (max-width: $screen-md-min)
+  {
+  }
+
+  @media (max-width: $screen-lg-min)
+  {
+  }
+
+  @media (min-width: $screen-lg-min)
+  {
+  }
+}

@@ -1,0 +1,64 @@
+//
+// Location grid Component SCSS Stylesheet
+//
+
+.c-location-grid
+{
+  &-col
+  {
+    display:inline-block;
+    float:none;
+    vertical-align:text-top;
+  }
+
+  &-item
+  {
+    border-bottom:1px solid #ddd;
+    margin-bottom:15px;
+
+    &-title
+    {
+      @extend .h4;
+    }
+
+    &-address
+    {
+    }
+
+    &-phone
+    {
+
+    }
+
+    &-link
+    {
+      display: block;
+
+      &:after
+      {
+        content: "  \00bb";
+      }
+
+      &-wrapper
+      {
+        margin:10px 0px;
+      }
+    }
+  }
+
+  @media (max-width: $screen-sm-min)
+  {
+  }
+
+  @media (max-width: $screen-md-min)
+  {
+  }
+
+  @media (max-width: $screen-lg-min)
+  {
+  }
+
+  @media (min-width: $screen-lg-min)
+  {
+  }
+}

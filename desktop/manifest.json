@@ -1,0 +1,127 @@
+{
+  "components": {
+    "address": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "bios": {
+      "isOverriden": true
+    },
+    "brands": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "bread-crumbs": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "carousel": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "columnar-list": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "description": {
+      "isOverriden": true
+    },
+    "directory-list": {
+      "version": "5b113d15f3a1c395c99fdea5291bfc96eff7194a"
+    },
+    "ecl-carousel": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "enhanced-gallery-list": {
+      "isOverriden": true
+    },
+    "events": {
+      "isOverriden": true
+    },
+    "facebook-plugin": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "gallery-list": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "google-adwords": {
+      "version": "8af92499c9945b96d0eb8ec79cd90c8ffb16bd28"
+    },
+    "google-analytics": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "instagram": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "location-grid": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "location-hours": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "location-info": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "location-title": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "location-title-info": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "maps": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "menu": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "menu-grid": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "menu-with-photos": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "nearby-locations": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "phone": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "pinterest": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "products": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "recent-tweets": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "reviews": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "search": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "simple-list": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "social": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "social-posts": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "special-offer": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "static-share": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "table-cell": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    },
+    "util": {
+      "version": "f4751b426349f366163c870f162cfd0529f52875"
+    },
+    "yext-analytics": {
+      "version": "453206d3932a06360c56046216932e08f31180cf"
+    },
+    "youtube-embed": {
+      "version": "058d1eeaa4218e2c21ecce48b702b7be92ddf746"
+    }
+  }
+}

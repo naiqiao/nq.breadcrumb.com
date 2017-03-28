@@ -1,0 +1,115 @@
+
+// reset styles from common/layout to prevent odd footer behavior
+
+$map-height: 800px;
+$location-list-height: 615px; // manually calculated to match the map height.
+
+.search
+{
+  &-title
+  {
+    @include font-h2;
+    text-transform: uppercase;
+    margin-top: 0px
+  }
+
+  &-container
+  {
+    @include make-row();
+    margin-left: 0px;
+    margin-right: 0px;
+
+  }
+  &-content
+  {
+    padding-top: 14px;
+    padding-bottom: 14px;
+
+    &-wrapper
+    {
+      @include make-md-column(5);
+      @include make-md-column-pull(7);
+
+      @include bpgte(md)
+      {
+        max-height: $map-height;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+
+.map
+{
+  &-desktop
+  {
+    @include bplte(sm)
+    {
+      display: none;
+    }
+
+    @include make-md-column(7);
+    @include make-md-column-push(5);
+    padding-left: 0px;
+    padding-right: 0px;
+
+    @include bpgte(md)
+    {
+      .c-map-with-pins
+      {
+        height: $map-height;
+      }
+
+      @at-root
+      {
+        .location-list
+        {
+          max-height: $location-list-height;
+          overflow-y: scroll;
+        }
+      }
+    }
+  }
+
+  &-mobile
+  {
+    @include bpgte(sm)
+    {
+      display: none;
+    }
+    @include bplte(sm)
+    {
+      display: block;
+    }
+  }
+
+  &-details
+  {
+    &[open]
+    {
+      .map-summary-label
+      {
+        &-open
+        {
+          display: inline;
+        }
+        &-closed
+        {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &-summary
+  {
+    &-label
+    {
+      &-open
+      {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{namespace components}
+
+/*
+{call components.menu}
+  {param menus: /}
+  {param menuTitle: /}
+{/call}
+*/
+
+/**
+ * Menu component
+ * @param menus Passthrough
+ * @param? menuTitle Main header text for Menu component
+ */
+{template .menu}
+<div class="c-menu">
+  <h2 class="c-menu-title"> {if $menuTitle}{$menuTitle}{else}Menu{/if}</h2>
+  {foreach $menu in $menus}
+    <h5 class="c-menu-section-title">{$menu.title}</h5>
+    {foreach $section in $menu.sections}
+      {foreach $item in $section.items}
+        {if $item}
+          <div class="c-menu-item">
+            {$item.name}
+          </div>
+        {/if}
+      {/foreach}
+    {/foreach}
+  {/foreach}
+</div>
+{/template}

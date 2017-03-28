@@ -1,0 +1,37 @@
+{
+	"templates" : [
+		{
+			"name": "desktop.location.default",
+			"dataUrl": "http://locations.schoolofrock.com.yextpages.net/vienna.json"
+		},
+		{
+			"name": "desktop.directory.countryList",
+			"dataUrl": "http://locations.schoolofrock.com.yextpages.net/index.json"
+		},
+    {
+      "name": "desktop.directory.stateList",
+      "dataUrl": "http://locations.schoolofrock.com.yextpages.net/us.json"
+    },
+		{
+			"name": "desktop.directory.cityList",
+			"dataUrl": "http://locations.schoolofrock.com.yextpages.net/us/virginia.json"
+		},
+		{
+			"name": "desktop.directory.locationList",
+			"dataUrl": "http://locations.schoolofrock.com.yextpages.net/us/virginia/vienna.json"
+		},
+		{
+			"name": "desktop.search.default",
+			"dataUrl": "http://locations.schoolofrock.com.yextpages.net/search.html"
+		}
+	],
+	"auth": {
+		"username": "test",
+		"password": "test"
+	},
+	"proxy": {
+		"host": "http://locations.schoolofrock.com.yextpages.net",
+		"searchUrls": ["search.html"],
+		"directoryTemplateOrder": ["desktop.directory.countryList", "desktop.directory.stateList", "desktop.directory.cityList", "desktop.directory.locationList"]
+	}
+}

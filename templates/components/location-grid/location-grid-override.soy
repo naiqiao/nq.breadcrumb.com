@@ -1,0 +1,108 @@
+{namespace components}
+
+/*
+{call components.location_grid}
+  {param base: /}
+  {param keys: /}
+
+  {param linkAddressToGetDirections: /}
+  {param linkTitle: /}
+  {param visitLinkText: /}
+  {param directionsLinkText: /}
+  {param bootstrapColumnClass: /}
+  {param customNameKeyPaths: [['customByName', 'EXAMPLECUSTOMFIELDNAME'], ['city']] /}
+  {param customNameSeparator: /}
+  {param schemaType: /}
+{/call}
+*/
+
+/**
+ * Location grid component
+ * @param base
+ * @param keys
+ * @param? linkAddressToGetDirections
+ * @param? linkTitle
+ * @param? visitLinkText
+ * @param? directionsLinkText
+ * @param? bootstrapColumnClass The bootstrap column class to use on the wrapping div
+ * @param? provider
+ * @param? collapseDays
+ * @param? closedTodayMessage
+ * @param? openTodayMessage
+ * @param? allWeekMessage
+ */
+{template .location_grid}
+{for $counter in range(length($keys))}
+  {let $k: $keys[$counter] /}
+  {let $l : $k.loc /}
+  {let $queryString: $l.address1 + ' ' + $l.address2 + ' ' + $l.state + ' ' + $l.city + ' ' + $l.postalCode + ' ' + $l.country  /}
+  {let $visitText}
+    {if $visitLinkText}
+      {$visitLinkText}
+    {else}
+      {msg desc=""}
+        Visit Site
+      {/msg}
+    {/if}
+  {/let}
+  {let $directionsText}
+    {if $directionsLinkText}
+      {$directionsLinkText}
+    {else}
+      {msg desc=""}
+        Directions
+      {/msg}
+    {/if}
+  {/let}
+  {if $bootstrapColumnClass}
+    <div class="c-location-grid-col {$bootstrapColumnClass}">
+  {else}
+    <div class="c-location-grid-col col-lg-3 col-sm-4 col-xs-12">
+  {/if}
+    <div class="c-location-grid-item">
+      <h5 class="c-location-grid-item-title">
+        {if $linkTitle}<a href="{$base.url}{$k.url}">{/if}
+          {call common.helpers.location_name data="$l" /}
+        {if $linkTitle}</a>{/if}
+      </h5>
+      <div class="c-location-grid-item-address">
+        {if $linkAddressToGetDirections}
+          <a data-ga-category="Get Directions" class="c-location-grid-item-address-link" target="_blank" href="https://maps.google.com?daddr={$queryString |escapeUri}">
+        {/if}
+        {call components.address data="$l"}
+          {param includeCountry: 'no' /}
+          {param stateAbbr: true /}
+          {param schemaOrg: false /}
+          {param provider: $provider /}
+        {/call}
+        {if $linkAddressToGetDirections}
+          </a>
+        {/if}
+      </div>
+      <div class="c-location-grid-item-phone">
+        {call components.phone_link}
+          {param rawPhoneNumber: stripOutPhoneDigits($l.phone) /}
+          {param type: 'MAIN' /}
+          {param hideId: true /}
+          {param hideSchemas: true /}
+        {/call}
+      </div>
+      <div class="c-location-grid-item-hours-today">
+        {call components.hours.location_hours_today data="all"}
+          {param hours: $l.hours /}
+          {param hideSchemaOrg: true /}
+        {/call}
+      </div>
+      <div class="c-location-grid-item-link-wrapper">
+        {let $directionsUrl}
+          {call components.maps.get_directions_url data="$l"}
+            {param provider: $provider /}
+          {/call}
+        {/let}
+        <a class="c-location-grid-item-link" href="{$base.url}{$k.url}">{$visitText}</a>
+        <a data-ga-category="Get Directions" class="c-location-grid-item-link" target="_blank" href="{$directionsUrl}">{$directionsText}</a>
+      </div>
+    </div>
+  </div>
+{/for}
+{/template}

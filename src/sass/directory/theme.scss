@@ -1,0 +1,123 @@
+//
+// Theme.scss
+//
+// This file should include styles for theming a particular design. This is
+// where custom images, custom colors, custom fonts, and other such 'theme'
+// based styles should appear. We will use this for our generic templates, but
+// probably not as much for the highly customized pages projects.
+//
+
+h1
+{
+  @include font-h2;
+  text-transform: uppercase;
+  margin-top: 0px;
+}
+
+.jvectormap
+{
+  height: 700px;
+  margin-top: -120px;
+}
+
+.c-directory-list-content-item-link,
+.country-list-link
+{
+  text-decoration: underline;
+  text-transform: uppercase;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.c-directory-list-content
+{
+  column-count: 2;
+  @include bplte(xs) {
+    column-count: 1;
+  }
+}
+
+.c-map-with-pins
+{
+  height: 600px;
+}
+
+.continent-title
+{
+  text-transform: uppercase;
+  color: $brand-secondary;
+}
+
+.country-list
+{
+  padding-left: 0px;
+  list-style-type: none;
+}
+
+.location-list
+{
+  &-container
+  {
+    // i know this is silly:
+    padding-top: 9px;
+    padding-bottom: 9px;
+    padding-left: 13px;
+    padding-right: 13px;
+
+    background-color: $brand-primary;
+  }
+
+  &-title
+  {
+    border-bottom: $border;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.c-location-grid-col
+{
+  @include make-md-column(4);
+
+  @include bpgte(md)
+  {
+    margin-top: 54px;
+
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3)
+    {
+      margin-top: 0px;
+    }
+  }
+
+  @include make-sm-column(6);
+
+  @include bp(sm, sm)
+  {
+    margin-top: 27px;
+
+    &:nth-child(1),
+    &:nth-child(2)
+    {
+      margin-top: 0px;
+    }
+  }
+
+  @include bplte(xs)
+  {
+    display: block;
+
+    & + &
+    {
+      margin-top: $grid-gutter-width;
+    }
+  }
+}
+
+.c-location-grid-item
+{
+  border-bottom: none;
+
+  @include location-grid-item;
+}

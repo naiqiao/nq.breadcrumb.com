@@ -1,0 +1,109 @@
+.social-links
+{
+  display: block;
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  vertical-align: middle;
+
+  &-item
+  {
+    display: inline-block;
+    margin-left: $grid-gutter-width/2;
+  }
+}
+
+.social-link
+{
+  display: inline-block;
+  text-align: center;
+  background-color: $brand-secondary;
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  padding-top: 6px;
+
+  @include font-sizes(18px, 18px);
+
+  @include link-states()
+  {
+    color: $gray-2;
+  }
+}
+
+.placeholder .search-label {display: none;}
+.c-phone-label {display: none;}
+
+.modal
+{
+  &-close
+  {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    top: 10px;
+    right: 6px;
+  }
+  &-content
+  {
+    background-color: black;
+    border-radius: 0px;
+    border: none;
+    background-image: url($image-path + '/sor-header-bg.png');
+    background-size: 105% auto;
+    background-repeat: no-repeat;
+    background-position: -13px 0px;
+    padding-top: 76px;
+    position: relative;
+  }
+  &-body
+  {
+    clear: both;
+  }
+}
+
+.form-thankyou
+{
+  &-body,
+  &-footer,
+  &-title,
+  {
+    text-align: center;
+  }
+
+  &-title
+  {
+    background-color: $brand-secondary;
+    @include font-h1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 53px;
+    margin-left: -$grid-gutter-width/2;
+    margin-right: -$grid-gutter-width/2;
+    text-transform: uppercase;
+  }
+  &-body
+  {
+    @include font-sizes(18px, 22px);
+    font-weight: $font-weight-bold;
+  }
+  &-footer
+  {
+    @include font-sizes(15px, 16px);
+    font-weight: $font-weight-semibold;
+    margin-top: 35px;
+    margin-bottom: 63px;
+  }
+  &-phone
+  {
+    font-weight: $font-weight-bold
+  }
+}
+
+.c-address
+{
+  &-street
+  {
+    display: block;
+  }
+}

@@ -1,0 +1,119 @@
+{namespace components}
+
+/*
+{call components.ecl_carousel}
+  {param carouselId: /}
+  {param productLists: /}
+  {param listName: /}
+  {param numberOfImagesToDisplay: /}
+
+  {param sectionName: /}
+  {param showSlideIndicators: /}
+  {param showNavControls: /}
+  {param loopSlides: /}
+  {param pauseSlidesOnHover: /}
+  {param gallerySizeIndex: /}
+  {param showDescription: /}
+  {param leftCarouselIndicatorClass: /}
+  {param rightCarouselIndicatorClass: /}
+{/call}
+*/
+
+/**
+ * Enhanced Carousel component
+ * @param carouselId
+ * @param productLists Must be in the form of productLists[x].sections[x].items[]
+ * @param listName Product List Name
+ * @param numberOfImagesToDisplay Number of gallery images to display
+ * @param? linkImage Make the image a link - default is true
+ * @param? sectionName Section Name
+ * @param? showSlideIndicators Show the dots to indicate what slide you're on - default is true
+ * @param? showNavControls Show the left and right arrows - default is true
+ * @param? loopSlides Play the slides in a loop - default is true
+ * @param? pauseSlidesOnHover Pause the slide show when the mouse is hovering - default is true
+ * @param? gallerySizeIndex
+ * @param? displayUrlText The text to use for the displayed link
+ * @param? leftCarouselIndicatorClass
+ * @param? rightCarouselIndicatorClass
+ */
+{template .ecl_carousel}
+{let $indicators: $showSlideIndicators ?: true /}
+{let $nav: $showNavControls ?: true /}
+{let $loop: $loopSlides ?: true /}
+{let $pause: $pauseSlidesOnHover ?: true /}
+{let $leftIndicatorClass: $leftCarouselIndicatorClass ?: 'glyphicon glyphicon-chevron-left' /}
+{let $rightIndicatorClass: $rightCarouselIndicatorClass ?: 'glyphicon glyphicon-chevron-right' /}
+{let $linkCarouselImage: $linkImage ?: true /}
+{if isNonnull($productLists) and length($productLists) > 0}
+  {foreach $list in $productLists}
+    {if ($list.name == $listName or $list.title == $listName) and length($list.sections) > 0}
+      {foreach $section in $list.sections}
+        {if (not isNonnull($sectionName) and $section.name == '') or $section.name == $sectionName}
+          {let $items: $section.items /}
+          <div class="c-ecl-carousel-wrapper">
+            <div id="{$carouselId}" class="carousel slide" data-ride="carousel" data-pause="{$pause}" data-wrap="{$loop}">
+              <!-- Indicators -->
+              {if $indicators}
+                <ol class="carousel-indicators">
+                  {for $i in range(length($items))}
+                    <li data-target="#{$carouselId}" data-slide-to="{$i}" {if $i == 0} class="active" {/if}></li>
+                  {/for}
+                </ol>
+              {/if}
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                {foreach $item in $items}
+                  {if index($item) < $numberOfImagesToDisplay}
+                    <div class="item{if index($item)==0} active{/if} c-ecl-carousel-image-wrapper">
+                      <div class="carousel-caption c-ecl-carousel-caption">
+                        {if isNonnull($item.name) and strlen($item.name) > 0}
+                          <div class="c-ecl-carousel-caption-name">
+                            {$item.name |noAutoescape}
+                          </div>
+                        {/if}
+                        {if isNonnull($item.description) and strlen($item.description) > 0}
+                          <div class="c-ecl-carousel-caption-description">
+                            {$item.description |noAutoescape}
+                          </div>
+                        {/if}
+                        {if isNonnull($item.url) and strlen($item.url) > 0}
+                          <div class="c-ecl-carousel-caption-link">
+                            <a href="{$item.url}">{if isNonnull($displayUrlText)}{$displayUrlText |noAutoescape}{else}{$item.url}{/if}</a>
+                          </div>
+                        {/if}
+                      </div>
+                      {if strlen($item.url ?: '') > 0 and $linkCarouselImage}
+                      <a href="{$item.url}" class="c-ecl-carousel-image-item-link" target="_blank" rel="nofollow">
+                      {/if}
+                        {if length($item.gallery)>0}
+                          {let $index: $gallerySizeIndex ?: 0 /}
+                          {if length($item.gallery[0].sizes) > $index}
+                            <img class="c-ecl-carousel-item-image" src="{$item.gallery[0].sizes[$index].url}">
+                          {elseif length($item.gallery[0].sizes) >0}
+                            <img class="c-ecl-carousel-item-image" src="{$item.gallery[0].sizes[0].url}">
+                          {/if}
+                        {/if}
+                      {if strlen($item.url ?: '') > 0}
+                      </a>
+                      {/if}
+                    </div>
+                  {/if}
+                {/foreach}
+              </div>
+              <!-- Controls -->
+              {if $nav}
+                <a class="left carousel-control" href="#{$carouselId}" data-slide="prev">
+                  <span class="{$leftIndicatorClass}"></span>
+                </a>
+                <a class="right carousel-control" href="#{$carouselId}" data-slide="next">
+                  <span class="{$rightIndicatorClass}"></span>
+                </a>
+              {/if}
+            </div>
+          </div>
+        {/if}
+      {/foreach}
+    {/if}
+  {/foreach}
+{/if}
+{/template}

@@ -1,0 +1,70 @@
+// Location Title Info SCSS File
+
+.share-this
+{
+  &-label
+  {
+
+  }
+  &-buttons
+  {
+    .social-share-button
+    {
+      display: inline-block;
+      margin-right: 6px;
+
+      &.email-share-button-wrapper
+      {
+        background-color: #14A0F0;
+        border-radius: 2px;
+        padding: 4px 6px;
+        font-size: 12px;
+        line-height: 12px;
+
+        .email-share-button
+        {
+          &:link,
+          &:hover,
+          &:visited,
+          &:active
+          {
+            color:white;
+          }
+        }
+      }
+      &.fb-like-wrapper
+      {
+
+      }
+      &.twitter-share-button-wrapper
+      {
+        position: relative;
+        top: 6px;
+      }
+      &.pinterest-pin-button-wrapper
+      {
+        position: relative;
+        top: 6px;
+      }
+      &.instagram-share-button-wrapper
+      {
+        @include gradient-vertical(rgb(81,129,166), rgb(47,82,131));
+        border-radius: 2px;
+        padding: 4px 6px;
+        font-size: 12px;
+        line-height: 12px;
+
+        .instagram-share-button
+        {
+          &:link,
+          &:hover,
+          &:visited,
+          &:active
+          {
+            color:white;
+          }
+        }
+      }
+    }
+  }
+}

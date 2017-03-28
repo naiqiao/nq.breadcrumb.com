@@ -1,0 +1,1464 @@
+{namespace desktop.location}
+
+/**
+ * @param base
+ * @param address1 Contains the street address
+ * @param address2 Contains the second line of the street address
+ * @param city
+ * @param state The abbreviated format of a state
+ * @param postalCode
+ * @param country Abbreviated format of a country
+ * @param latitude
+ * @param longitude
+ * @param description
+ * @param hours
+// * @param phone
+ * @param phones
+ * @param videos
+ * @param crumbNames
+ * @param crumbUrls
+ * @param productLists
+ * @param calendars
+ * @param bios
+ * @param customByName
+ * @param? isStaging
+ * @param id
+ * @param businessId
+ * @param siteId
+ * @param locationPageSetId
+ * @param siteDomain Passthrough
+ * @param locale
+ * @param corporateCode
+ * @param versions
+ * @param logo
+ */
+{template .default}
+  {let $textOnlyName}
+    {call common.helpers.location_name data="all"}
+      {param textOnly: true /}
+    {/call}
+  {/let}
+  {let $spanishPagesStoreIDs: ['191', '211', '372', '210', '193', '243', '194', '196', '195', '416'] /}
+  {let $portuguesePagesStoreIDs: ['335', '188', '189'] /}
+  {let $pageVersion}
+    {foreach $storeID in $spanishPagesStoreIDs}
+      {if $corporateCode == $storeID and $locale != 'es'}
+        es
+      {/if}
+    {/foreach}
+    {foreach $storeID in $portuguesePagesStoreIDs}
+      {if $corporateCode == $storeID and $locale != 'pt'}
+        pt
+      {/if}
+    {/foreach}
+  {/let}
+
+  {let $zendeskURL}
+    {if $isStaging}
+      https://dx7ujvfs34.execute-api.us-east-1.amazonaws.com/Development/lead
+    {else}
+      https://dx7ujvfs34.execute-api.us-east-1.amazonaws.com/prod/lead
+    {/if}
+  {/let}
+
+  {if strlen($pageVersion) > 0}
+    {call components.util.soft_redirect_with_html}
+      {param url: $base+$versions[$pageVersion] /}
+    {/call}
+  {else}
+    {call common.layout data="all"}
+      {param isLocationPage: true /}
+      {param isCompanyLocation}
+        {if $customByName['Folder 2'] == 'company'}
+          company
+        {/if}
+      {/param}
+      {param baseUrl: $base /}
+      {param pageTitle}
+        {if strlen($customByName['Title Tag'] ?: '') > 0}
+          {$customByName['Title Tag'] |noAutoescape}
+        {else}
+          {$textOnlyName} | Music Lessons - We Teach Guitar, Drums, Piano, Bass, Vocals
+        {/if}
+      {/param}
+      {param metaDescription}
+        {$customByName['Meta Description'] ?: ''}
+      {/param}
+      {param metaKeywords}
+        {if strlen($customByName['Meta Keywords'] ?: '') > 0}
+          {$customByName['Meta Keywords']}
+        {else}
+          {call common.helpers.keywords /}
+        {/if}
+      {/param}
+
+      {param campUrl}
+        {if strlen($customByName['Camps URL'] ?: '') > 0}
+          {$customByName['Camps URL']}
+        {/if}
+      {/param}
+
+      {param useminHeader}
+        <!-- build:css(.tmp) css/location/style.css -->
+        <link rel="stylesheet" type="text/css" href="/css/location/vendor.css">
+        <link rel="stylesheet" type="text/css" href="/css/location/default.css">
+        <!-- endbuild -->
+        {call components.util.data_for_js}
+          {param id: 'js-zendesk-url' /}
+          {param content}
+            "{$zendeskURL}"
+          {/param}
+        {/call}
+      {/param}
+
+      {param schemaScope: 'itemscope itemtype="http://schema.org/MusicStore"' /}
+      {param hideBreadcrumbs: true /}
+
+      {param pageContent}
+        // Add class if JS is enabled
+        // should be the first thing
+        <script type="text/javascript">
+          document.documentElement.className += " js";
+        </script>
+
+        <link itemprop="image" href="{$logo}" no-usemin>
+        
+        {call .title_and_crumbs data="all" /}
+
+        {call .carousel_section data="all"}
+          {param textOnlyName: $textOnlyName /}
+        {/call}
+
+        {call .about_nap_map data="all"}
+          {param textOnlyName: $textOnlyName /}
+        {/call}
+
+        {call .programs data="all" /}
+
+        {call .secondary_content data="all" /}
+
+      {/param}
+
+      {param modalContent}
+        {call components.youtube_embed}
+          {param video: 'https://www.youtube.com/embed/' + $videos /}
+          {param embedYouTube: true /}
+        {/call}
+      {/param}
+
+      {param addFormThankYou: true /}
+
+      {param useminFooter}
+        {call components.google_adwords.script_tag_async /}
+
+        <!-- build:js .tmp/junk.js -->
+        {literal}
+        <!-- endbuild -->
+        <!-- build:js({.tmp,bower_components}) js/location/script.js -->
+        {/literal}
+        <script src="/modernizr/modernizr.js" type="text/javascript"></script>
+        <script src="/modernizr/feature-detects/elem-details.js" type="text/javascript"></script>
+        <script src="/modernizr/feature-detects/forms-placeholder.js" type="text/javascript"></script>
+        <script src="/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="/uri.js/src/URI.js" type="text/javascript"></script>
+        <script src="/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js" type="text/javascript"></script>
+        <script src="/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js" type="text/javascript"></script>
+        <script src="/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js" type="text/javascript"></script>
+        <script src="/js/lib/analytics.js" type="text/javascript"></script>
+        <script src="/js/script.js" type="text/javascript"></script>
+        <script src="/js/location.js" type="text/javascript"></script>
+        <script src="/js/components/google-adwords/google-adwords.js" type="text/javascript"></script>
+        <script src="/js/zendesk.js" type="text/javascript"></script>
+        <script src="/js/components/location-hours/location-hours.js" type="text/javascript"></script>
+        <script src="/js/components/maps/maps.js" type="text/javascript"></script>
+        <script src="/js/components/events/events-override.js" type="text/javascript"></script>
+        <script src="/js/components/description/description-override.js" type="text/javascript"></script>
+        <script src="/js/components/yext-analytics/yext-analytics.js" type="text/javascript"></script>
+        <script src="/js/components/youtube-embed/youtube-embed.js" type="text/javascript"></script>
+        <!-- endbuild -->
+
+        {if $corporateCode == '27'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/212041522/f57c56086cbdf20e9069/12/swap.js"></script>
+        {elseif $corporateCode == '35'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/326873121/753be09219c365f21bde/12/swap.js"></script>
+        {elseif $corporateCode == '25'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/180522015/e9e3eae31695d2da6c17/12/swap.js"></script>
+        {elseif $corporateCode == '32'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/291137915/c722afda770da1265d93/12/swap.js"></script>
+        {elseif $corporateCode == '132'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/227202866/1f8eba33c3919d906c20/12/swap.js"></script>
+        {elseif $corporateCode == '31'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/318139923/929269549500a8aff9aa/12/swap.js"></script>
+        {elseif $corporateCode == '54'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/241370289/43212779b299ce0aab46/12/swap.js"></script>
+        {elseif $corporateCode == '123'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/319893309/b2b695adf823cf409de6/12/swap.js"></script>
+        {elseif $corporateCode == '133'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/167795561/fe2d13d57d9a99c8ca2d/12/swap.js"></script>
+        {elseif $corporateCode == '122'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/197658303/55b251eff9bccf63eab1/12/swap.js"></script>
+        {elseif $corporateCode == '45'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/293498573/daf0d6bcaedfb8a5d851/12/swap.js"></script>
+        {elseif $corporateCode == '38'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/316168190/df51d4c4c7b0f72b069c/12/swap.js"></script>
+        {elseif $corporateCode == '82'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/174296536/8133bb15d88714db568c/12/swap.js"></script>
+        {elseif $corporateCode == '16'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/287039963/b61139f254b2faffffe0/12/swap.js"></script>
+        {elseif $corporateCode == '111'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/174034452/ffd310ea7699c51d9f10/12/swap.js"></script>
+        {elseif $corporateCode == '295'}
+          <script type="text/javascript" src="//cdn.calltrk.com/companies/545360383/0cd858e07f5aa4d6daff/12/swap.js"></script>
+        {/if}
+      {/param}
+
+      {param analytics}
+        {call components.yext_analytics.location data="all" /}
+        {let $click_trackings: [
+          [
+            'selector' : '.zendesk-form-button',
+            'analyticsEventName' : 'get_free_lesson',
+            'optional' : true
+          ],
+          [
+            'selector' : '.js-carousel-item-read-more',
+            'analyticsEventName' : 'carousel_read_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-carousel-next',
+            'analyticsEventName' : 'carousel_next',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-carousel-prev',
+            'analyticsEventName' : 'carousel_previous',
+            'optional' : true
+          ],
+          [
+            'selector' : '.c-get-directions-button',
+            'analyticsEventName' : 'get_directions'
+          ],
+          [
+            'selector' : '.c-phone-number-link',
+            'analyticsEventName' : 'tap_to_call',
+            'optional' : true
+          ],
+          [
+            'selector' : '.collapse-list-title-calendar .js-collapse-list-toggle',
+            'analyticsEventName' : 'events_view_all',
+            'optional' : true
+          ],
+          [
+            'selector' : '.collapse-list-item-calendar .js-show-more',
+            'analyticsEventName' : 'events_read_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '.videos-link',
+            'analyticsEventName' : 'videos_view_all',
+            'optional' : true
+          ],
+          [
+            'selector' : '.collapse-list-title-bio .js-collapse-list-toggle',
+            'analyticsEventName' : 'staff_view_all',
+            'optional' : true
+          ],
+          [
+            'selector' : '.collapse-list-item-bio .js-show-more',
+            'analyticsEventName' : 'staff_read_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '.news-view-all',
+            'analyticsEventName' : 'news_view_all',
+            'optional' : true
+          ],
+          [
+            'selector' : '.news-item .js-show-more',
+            'analyticsEventName' : 'news_read_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-performance',
+            'analyticsEventName' : 'performance_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-rock-101',
+            'analyticsEventName' : 'rock_101_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-allstars',
+            'analyticsEventName' : 'all_stars_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-adult-program',
+            'analyticsEventName' : 'adult_prog_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-rookies',
+            'analyticsEventName' : 'rookies_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-program-toggle-little-wing',
+            'analyticsEventName' : 'little_wing_tab',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-performance .js-show-more',
+            'analyticsEventName' : 'performance_tab_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-rock-101 .js-show-more',
+            'analyticsEventName' : 'rock_101_tab_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-allstars .js-show-more',
+            'analyticsEventName' : 'all_stars_tab_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-adult-program .js-show-more',
+            'analyticsEventName' : 'adult_prog_tab_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-rookies .js-show-more',
+            'analyticsEventName' : 'rookies_tab_more',
+            'optional' : true
+          ],
+          [
+            'selector' : '#js-desktop-description-little-wing .js-show-more',
+            'analyticsEventName' : 'little_wing_tab_more',
+            'optional' : true
+          ]
+          ]
+        /}
+
+        {foreach $ct in $click_trackings}
+          {call components.yext_analytics.click data="$ct" /}
+        {/foreach}
+
+        {if strlen($customByName['Facebook Pixel'] ?: '') > 0}
+          {$customByName['Facebook Pixel'] | noAutoescape}
+        {/if}
+      {/param}
+
+      {param footerInfo}
+        <span class="footer-title">
+          {call common.helpers.geomodifier data="all" /}
+        </span>
+        {sp}
+        <span class="footer-info">
+          {$address1}
+          {if $address2}, {$address2}{/if}
+          {sp}{$city}, {$state} {$postalCode}
+          {if $country != 'US'}
+            , {$country}
+          {/if}
+          {sp}
+          {call .phone_number_parser data="all"}
+            {param spanClass: 'footer-info-phone' /}
+          {/call}
+        </span>
+      {/param}
+      {param pageLevel: 'location' /}
+
+    {/call}
+  {/if}
+{/template}
+
+/**
+ * title_and_crumbs
+ * @param phones
+ * @param customByName
+ * @param city
+ * @param crumbNames
+ * @param crumbUrls
+ * @param base
+ * @param country
+ */
+{template .title_and_crumbs}
+
+  {call components.location_title}
+    {param name}
+      {call common.helpers.location_name data="all" /}
+      {call .phone_number_parser data="all"}
+        {param spanClass: 'location-name-phone' /}
+        {param linkOnMobile: true /}
+      {/call}
+    {/param}
+  {/call}
+
+  <h2 class="sr-only">
+    Breadcrumb Navigation
+  </h2>
+
+  {call common.helpers.breadCrumbs data="all"}
+    {param baseUrl: $base /}
+  {/call}
+{/template}
+
+/** International Phone Number Parser
+ * @param country
+ * @param phones
+ * @param spanClass
+ * @param? linkOnMobile
+ */
+{template .phone_number_parser}
+  {foreach $phone in $phones}
+    {if $phone.type == 'MAIN'}
+      {sp}
+      {let $phoneNumber}
+        {if $country == 'AU'}
+          (0{substring($phone.number, 0,1)}) {substring($phone.number, 1,5)} {substring($phone.number, 5)}
+        {elseif $country == 'BR'}
+          ({substring($phone.number, 0,2)}) {substring($phone.number, 2,6)}-{substring($phone.number, 6)}
+        {elseif $country == 'CL'}
+          +56 {substring($phone.number, 0,5)} {substring($phone.number, 5)}
+        {elseif $country == 'MX'}
+          {substring($phone.number, 0,2)}-{substring($phone.number, 2,6)}-{substring($phone.number, 6)}
+        {elseif $country == 'PA'}
+          {substring($phone.number, 0,4)}-{substring($phone.number, 4)}
+        {elseif $country == 'PH'}
+          0{substring($phone.number, 0,3)} {substring($phone.number, 3,6)} {substring($phone.number, 6)}
+        {elseif $country == 'ZA'}
+          0{substring($phone.number, 0,2)} {substring($phone.number, 2,5)} {substring($phone.number, 5)}
+        {else}
+          ({substring($phone.number, 0,3)}) {substring($phone.number, 3,6)}-{substring($phone.number, 6)}
+        {/if}
+      {/let}
+      <span class="{$spanClass} {if $linkOnMobile}hidden-xs{/if}"
+        {call components.schemaProperties}
+          {param phoneType: 'MAIN' /}
+          {param hideId: false /}
+        {/call}>
+        {$phoneNumber}
+      </span>
+      {if $linkOnMobile}
+        <a href="tel:{$phone.number}" class="{$spanClass} visible-xs">{$phoneNumber}</a>
+      {/if}
+    {/if}
+  {/foreach}
+{/template}
+
+/**
+ * carousel_section
+ * @param textOnlyName
+ * @param customByName
+ * @param isStaging
+ * @param country
+ */
+{template .carousel_section}
+  <h2 class="sr-only">
+    What's Going on at {$textOnlyName}
+  </h2>
+
+  {let $photoOne: [
+      'photo': $customByName['Message Carousel Photo 1'],
+      'title': $customByName['Message Carousel Title 1'] ?: ''
+    ]
+  /}
+
+  {let $photoTwo: [
+      'photo': $customByName['Message Carousel Photo 2'],
+      'title': $customByName['Message Carousel Title 2'] ?: ''
+    ]
+  /}
+
+  {let $photoThree: [
+      'photo': $customByName['Message Carousel Photo 3'],
+      'title': $customByName['Message Carousel Title 3'] ?: ''
+    ]
+  /}
+
+  {let $photoFour: [
+      'photo': $customByName['Message Carousel Photo 4'],
+      'title': $customByName['Message Carousel Title 4'] ?: ''
+    ]
+  /}
+
+  // can you believe it? this works:
+  {let $carouselPhotos: length($photoOne.photo?.sizes ?: []) > 0 ? [$photoOne] : [] /}
+  {let $carouselPhotos: length($photoTwo.photo?.sizes ?: []) > 0 ? augmentList($carouselPhotos, [$photoTwo]) : $carouselPhotos /}
+  {let $carouselPhotos: length($photoThree.photo?.sizes ?: []) > 0 ? augmentList($carouselPhotos, [$photoThree]) : $carouselPhotos /}
+  {let $carouselPhotos: length($photoFour.photo?.sizes ?: []) > 0 ? augmentList($carouselPhotos, [$photoFour]) : $carouselPhotos /}
+
+  {let $hasPhotos: length($carouselPhotos) > 0 /}
+  <div class="carousel-and-form" id="js-carousel-container">
+    <div class="{if $hasPhotos}carousel-row{else}carousel-row-no-carousel{/if}">
+      {if $hasPhotos}
+        <div class="carousel-wrapper">
+          <h3 class="sr-only">
+            News from {$textOnlyName}
+          </h3>
+          // implementation inspired by the discussion here:
+          // http://accessibility.athena-ict.com/aria/examples/carousel.shtml
+          <div class="carousel" id="js-carousel" aria-live="polite">
+            <ul class="carousel-content">
+              {foreach $photoData in $carouselPhotos}
+                {let $status}
+                  {if isFirst($photoData)}
+                    {sp}is-current
+                  {else}
+                    {if isLast($photoData)}
+                      {sp}is-prev
+                    {/if}
+                    {if index($photoData) == 1}
+                      {sp}is-next
+                    {/if}
+                  {/if}
+                {/let}
+                {let $hidden: isFirst($photoData) ? false :true /}
+                <li class="carousel-item js-carousel-item{$status}"
+                    aria-hidden="{$hidden}"
+                    id="js-carousel-item-{index($photoData)}"
+                    data-index="{index($photoData)}">
+                  <h4 class="carousel-item-title">
+                    <span class="carousel-item-title-text">
+                      {$photoData.title}
+                    </span>
+                    {let $targetID}
+                      js-carousel-item-description-{index($photoData)}
+                    {/let}
+                    {if strlen($photoData.photo.description) > 0}
+                      {sp}
+                      {let $carouselGA: [
+                          'hitType': 'event',
+                          'eventCategory': 'Carousel',
+                          'eventAction': 'CTA',
+                          'eventLabel': 'More_News'
+                        ]
+                      /}
+                      <button class="carousel-item-read-more js-carousel-item-read-more collapsed"
+                              data-toggle="collapse"
+                              data-target="#{$targetID}"
+                              aria-controls="#{$targetID}"
+                              data-ga-event='{$carouselGA |json}'
+                              >
+                        <span class="carousel-item-read-more-label-collapsed">
+                          {msg desc=""}Read More{/msg}
+                        </span>
+                        <span class="carousel-item-read-more-label-expanded">
+                          {msg desc=""}Read Less{/msg}
+                        </span>
+                      </button>
+                    {/if}
+                  </h4>
+                  {let $itemId}
+                    carousel-item-{index($photoData)}
+                  {/let}
+                  // add background image on screens sm and larger.
+                  <style>
+                    @media(min-width: 992px)
+                    {lb}
+                      #{$itemId} {lb}
+                        background-image: url('{imageBySize($photoData.photo.sizes, '800x400')}');
+                      {rb}
+                    {rb}
+                  </style>
+                  <a href="{$photoData.photo.clickthrough_url}" class="carousel-image-link jenkins-ignore">
+                    <div class="carousel-item-content"
+                         id="{$itemId}">
+                        <img src="{imageBySize($photoData.photo.sizes, '800x400')}"
+                            class="carousel-item-image visible-xs visible-sm"
+                             alt="Image {index($photoData)} of {length($carouselPhotos)}: {$photoData.photo.name ?: ''}">
+                      <div class="carousel-item-description-wrapper collapse js-carousel-description"
+                           id="{$targetID}">
+                        <div class="carousel-item-description">
+                          {$photoData.photo.description}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              {/foreach}
+            </ul>
+            <fieldset aria-label="carousel buttons"
+                      class="carousel-buttons"
+                      aria-controls="js-carousel">
+              <button value="prev"
+                      id="js-carousel-prev"
+                      aria-label="Previous Carousel Slide"
+                      class="js-carousel-button carousel-button carousel-button-prev">
+                <i class="fa fa-chevron-left"></i>
+              </button>
+              <button value="next"
+                      id="js-carousel-next"
+                      aria-label="Next Carousel Slide"
+                      class="js-carousel-button carousel-button carousel-button-next">
+                <i class="fa fa-chevron-right"></i>
+              </button>
+            </fieldset>
+          </div>
+        </div>
+      {/if}
+      {if $customByName['Zendesk Group ID'] and $customByName['Zendesk Email']}
+        <div class="zendesk-form-wrapper" id="js-carousel-ie-fix" >
+          <div class="zendesk-form-content">
+            <h3 class="zendesk-form-title">
+              {if $country == 'CL'}
+                <span class="zendesk-form-title-main">
+                  {msg desc=""}For Further Information{/msg}
+                </span>
+              {else}
+                <span class="zendesk-form-title-sub">
+                  {msg desc=""}Sign Up For A{/msg}
+                </span>
+                {sp}
+                <span class="zendesk-form-title-main">
+                  {msg desc=""}Free Lesson{/msg}
+                </span>
+              {/if}
+            </h3>
+
+            {call .zendesk_form data="all"}
+              {param recipient: $customByName['Zendesk Email'] /}
+              {param groupId}
+                {if $isStaging}
+                  21014420
+                {else}
+                  {$customByName['Zendesk Group ID']}
+                {/if}
+              {/param}
+            {/call}
+          </div>
+        </div>
+      {/if}
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * @param recipient
+ * @param groupId
+ * @param country
+ */
+{template .zendesk_form}
+  // US Pattern & International Pattern from https://www.safaribooksonline.com/library/view/regular-expressions-cookbook
+  // variable is in the format of [US]|[International]
+  // US Source: https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9781449327453/ch04s02.html
+  // "Allow a leading 1" case
+  // International Source: https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9781449327453/ch04s03.html
+  // base case
+
+  {let $phonePattern}
+    {literal}^[+]?[0-9\-\/\(\)\s]{7,}${/literal}
+  {/let}
+
+  {let $first_name_msg}
+    {msg desc=""}Your First Name{/msg}
+  {/let}
+  {let $last_name_msg}
+    {msg desc=""}Your Last Name{/msg}
+  {/let}
+  {let $email_msg}
+    {msg desc=""}Your Email{/msg}
+  {/let}
+  {let $phone_msg}
+    {msg desc=""}Your Phone{/msg}
+  {/let}
+  {let $bass_msg}
+    {msg desc=""}Bass{/msg}
+  {/let}
+  {let $drums_msg}
+    {msg desc=""}Drums{/msg}
+  {/let}
+  {let $guitar_msg}
+    {msg desc=""}Guitar{/msg}
+  {/let}
+  {let $piano_msg}
+    {msg desc=""}Piano/Keys{/msg}
+  {/let}
+  {let $vocals_msg}
+    {msg desc=""}Vocals{/msg}
+  {/let}
+  {let $other_msg}
+    {msg desc=""}Other{/msg}
+  {/let}
+
+  {let $input_fields: [
+      [
+        'name': 'First Name',
+        'type': 'text',
+        'autocomplete': 'given-name',
+        'msg': $first_name_msg
+      ],
+      [
+        'name': 'Last Name',
+        'type': 'text',
+        'autocomplete': 'family-name',
+        'msg': $last_name_msg
+      ],
+      [
+        'name': 'Email',
+        'type': 'email',
+        'autocomplete': 'email',
+        'msg': $email_msg
+      ],
+      [
+        'name': 'Phone',
+        'type': 'tel',
+        'autocomplete': 'tel',
+        'pattern': $phonePattern,
+        'msg': $phone_msg
+      ]
+    ]
+  /}
+  <form class="js-zendesk zendesk-form"
+        data-group-id="{$groupId}"
+        data-recipient="{$recipient}">
+    {foreach $input in $input_fields}
+      {let $slug}
+        {$input.name |slugify}
+      {/let}
+      <label for="{$slug}"
+             class="zendesk-form-label">
+            {$input.msg}
+      </label>
+      <input type="{$input.type}"
+             id="{$slug}"
+             name="{$slug}"
+             class="zendesk-form-input"
+             placeholder="{$input.msg}"
+             autocomplete="{$input.autocomplete}"
+             {if $input.pattern}
+             pattern="{$input.pattern}"
+             {/if}
+             required>
+    {/foreach}
+    <select id="instrument"
+            class="zendesk-form-select"
+            name="instrument">
+      <option value="" disabled selected
+              class="zendesk-form-select-option">
+        {msg desc=""}Instruments{/msg}
+      </option>
+      {let $instruments: [
+          ['title': $bass_msg, 'value': 'instrument_bass'],
+          ['title': $drums_msg, 'value': 'instrument_drums'],
+          ['title': $guitar_msg, 'value': 'instrument_guitar'],
+          ['title': $piano_msg, 'value': 'instrument_keyboard'],
+          ['title': $vocals_msg, 'value': 'instrument_vocals'],
+          ['title': $other_msg, 'value': 'instrument_other']
+        ]
+      /}
+      {foreach $instrument in $instruments}
+        <option value="{$instrument.value}"
+                class="zendesk-form-select-option">
+          {$instrument.title}
+        </option>
+      {/foreach}
+    </select>
+    {if $country == 'CA'}
+      <input type="checkbox" id="marketing-opt-in" class="zendesk-form-checkbox" name="opt-in">
+      {sp}
+      <label class="zendesk-form-checkbox-label"
+             for="marketing-opt-in">
+        ​Yes, I want to receive emails from School of Rock related to news, updates, and other relevant information. I understand I can withdraw my consent at any time.
+      </label>
+    {/if}
+    {if $country == 'CL'}
+    <button type="submit" class="zendesk-form-button">
+      {msg desc=""}Send Us Your Contact Information{/msg}
+    </button>
+    {else}
+      <button type="submit" class="zendesk-form-button">
+        {msg desc=""}Get a Free Lesson{/msg}
+      </button>
+    {/if}
+  </form>
+{/template}
+
+/**
+ * about_nap_map
+ * @param textOnlyName
+ * @param description
+ * @param customByName
+ * @param city
+ * @param address1
+ * @param address2
+ * @param state
+ * @param country
+ * @param postalCode
+ * @param phones
+ * @param hours
+ * @param latitude
+ * @param longitude
+ * @param base
+ * @param siteDomain
+ */
+{template .about_nap_map}
+  <h2 class="sr-only" id="#contact-info">
+    Contact Information, Hours and Basic Information for {$textOnlyName}
+  </h2>
+
+  <div class="c-description-wrapper">
+    <h3 class="sr-only">
+      About {$textOnlyName}
+    </h3>
+    <div class="main-description" id="whySOR">
+      {call components.description data="all"}
+        {param description}
+          {if strlen($customByName['Pages Description'] ?: '') > 0}
+            {$customByName['Pages Description'] | noAutoescape}
+          {else}
+            {$description | noAutoescape}
+          {/if}
+        {/param}
+      {/call}
+    </div>
+  </div>
+
+  <div class="nap-and-map">
+    <h3 class="sr-only">
+      Contact Information
+    </h3>
+    <div class="nap-and-hours">
+      <div class="nap">
+        <div class="nap-name">
+          {call common.helpers.location_name data="all" /}
+        </div>
+        {call components.address data="all"}
+          {param includeCountry: $country == 'US' ? 'no' : 'yes' /}
+          {param stateAbbr: true /}
+          {param schemaOrg: true /}
+          {param itemRefId: 'address' /}
+        {/call}
+        {call .phone_number_parser data="all"}
+          {param spanClass: '' /}
+        {/call}
+      </div>
+
+      {call components.maps.get_directions data="all"}
+        {param name: $textOnlyName /}
+      {/call}
+
+      <div class="c-location-hours">
+        <h3 class="c-location-hours-title">
+          {msg desc=""}Hours of Operation{/msg}
+        </h3>
+        {call components.hours.hours_table data="all"}
+          {param collapseDays: true /}
+        {/call}
+      </div>
+      <div class="social-links-wrapper">
+        <div>Connect with{sp}{call common.helpers.location_name data="all"}{param textOnly: true /}{/call}</div>
+
+        //For each social icon appearing in specific location's details, show the franchise's account if available.
+        //Else redirect to national SoR social media pages.
+        {if $customByName['Facebook URL']}
+          <a href="{$customByName['Facebook URL']}" target="_blank"><img src="../../images/Facebook_Icon.png"></a>
+        {/if}
+
+        {if $customByName['FranchiseeTwitter']}
+          <a href="{$customByName['FranchiseeTwitter']}" target="_blank"><img src="../../images/Twitter_Icon.png"></a>
+        {/if}
+
+        {if $customByName['FranchiseeGooglePlus']}
+          <a href="{$customByName['FranchiseeGooglePlus']}" target="_blank"><img src="../../images/GooglePlus_Icon.png"></a>
+        {/if}
+
+        {if $customByName['FranchiseeInstagram']}
+          <a href="{$customByName['FranchiseeInstagram']}" target="_blank"><img src="../../images/Instagram_Icon.png"></a>
+        {/if}
+
+        {if $customByName['FranchiseeYouTube']}
+          <a href="{$customByName['FranchiseeYouTube']}" target="_blank"><img src="../../images/YouTube.png"></a>
+        {/if}
+
+      </div>
+    </div>
+    <div class="map-wrapper">
+      {call components.maps.locationMap data="all"}
+        {param name: $textOnlyName /}
+        {param baseUrl: $base /}
+        {param zoom: 10 /}
+        {param itemRefs: 'telephone address location-name' /}
+        {param maxNumberOfLocationsToDisplay: 1 /}
+      {/call}
+    </div>
+  </div>
+{/template}
+
+/**
+ * programs
+ * @param customByName
+ * @param locale
+ * @param corporateCode
+ */
+{template .programs}
+
+  {let $programsMap: [
+      'Performance': 'Program Text - Performanc',
+      'Rock 101': 'Program Text - Rock 101',
+      'AllStars': 'Program Text - AllStars',
+      'Adult Program': 'Program Text - Adult Prog',
+      'Rookies': 'Program Text - Rookies',
+      'Little Wing': 'Program Text - LittleWing',
+      'Camps and Workshops': 'Program Text - Camps'
+    ]
+  /}
+
+  {let $performance_msg}
+    {msg desc=""}Performance{/msg}
+  {/let}
+  {let $rock_101_msg}
+    {msg desc=""}Rock 101{/msg}
+  {/let}
+  {let $allstars_msg}
+    {msg desc=""}AllStars{/msg}
+  {/let}
+  {let $adult_program_msg}
+    {msg desc=""}Adult Program{/msg}
+  {/let}
+  {let $rookies_msg}
+    {msg desc=""}Rookies{/msg}
+  {/let}
+  {let $little_wing_msg}
+    {msg desc=""}Little Wing{/msg}
+  {/let}
+  {let $camps_msg}
+    {msg desc=""}Camps{/msg}
+  {/let}
+
+  {let $programsMsgMap: [
+      'Performance': $performance_msg,
+      'Rock 101': $rock_101_msg,
+      'AllStars': $allstars_msg,
+      'Adult Program': $adult_program_msg,
+      'Rookies': $rookies_msg,
+      'Little Wing': $little_wing_msg,
+      'Camps and Workshops': $camps_msg
+    ]
+  /}
+
+  {let $programs: $customByName['Programs Offered'] ?: [] /}
+
+  {if length($programs) > 0}
+    <div class="programs-wrapper">
+      <div class="programs">
+        <div class="programs-list-title-wrapper">
+          <h3 class="programs-list-title {if $locale != 'en'} locale-font-size{/if}" id="programs">
+            {msg desc=""}Programs{/msg}
+          </h3>
+        </div>
+        <div class="programs-list-wrapper">
+          {let $parentId: 'js-programs-list' /}
+          <ul class="programs-list panel-group"
+              id="{$parentId}"
+              role="tablist"
+              aria-multiselectable="true">
+            {foreach $programName in $programs}
+              {let $programDescription: $customByName[$programsMap[$programName] ?: 'ERRORMISSINGFIELD'] ?: '' /}
+              {if strlen($programDescription) > 0}
+                {let $collapseTarget}
+                  js-description-{$programName|slugify}
+                {/let}
+                {let $gaData: [
+                    'hitType': 'event',
+                    'eventCategory': 'Programs',
+                    'eventAction': 'Menu_Item',
+                    'eventLabel': replace($programName, ' ', '_')
+                  ]
+                /}
+                <li class="programs-list-item panel {if $locale != 'en'} locale-padding{/if}">
+                  <h4 class="programs-list-item-title">
+                    <a role="button"
+                       data-toggle="collapse"
+                       data-parent="#{$parentId}"
+                       data-desktop-target="#js-desktop-description-{$programName |slugify}"
+                       href="#{$collapseTarget}"
+                       aria-expanded="false"
+                       aria-controls="#{$collapseTarget}"
+                       data-ga-event='{$gaData |json}'
+                       id="js-program-toggle-{$programName |slugify}"
+                       class="collapsed js-program-toggle programs-list-item-title-link
+                              {if isFirst($programName)} is-expanded{/if}
+                              {if $locale != 'en'} locale-font-size{/if}"
+                       >
+                      {if $programName == 'Adult Program' and $corporateCode == '191'}
+                        Performance Adultos
+                      {elseif $programName == 'Performance' and $corporateCode == '196'}
+                        Performance
+                      {elseif $programName == 'Rookies' and $corporateCode == '196'}
+                        Rookies
+                      {elseif $programName == 'Little Wing' and $corporateCode == '196'}
+                        Little Wing
+                      {else}
+                        {$programsMsgMap[$programName]}
+                      {/if}
+                    </a>
+                  </h4>
+                  <p class="programs-list-item-description collapse{if isFirst($programName)} in{/if}"
+                     id="{$collapseTarget}">
+                    {$programDescription |changeNewlineToBr}
+
+                    {if $programName == 'Camps and Workshops' and $customByName['Camps URL']}
+                      <a href="{$customByName['Camps URL']}" class="programs-description-link">
+                        {msg desc=""}Find a Camp or Workshop{/msg}
+                      </a>
+                    {/if}
+                  </p>
+                </li>
+              {/if}
+            {/foreach}
+          </ul>
+        </div>
+      </div>
+      <div class="programs-description collapse in"
+           id="js-program-description"
+           aria-live="polite">
+        {foreach $programName in $programs}
+          <div class="js-programs-description programs-description-wrapper{if not isFirst($programName)} is-hidden{/if}"
+               id="js-desktop-description-{$programName |slugify}">
+            {call components.description}
+              {param description: $customByName[$programsMap[$programName] ?: 'ERRORMISSINGFIELD'] ?: '' /}
+              {param afterDescription}
+                {if $programName == 'Camps and Workshops' and $customByName['Camps URL']}
+                  <a href="{$customByName['Camps URL']}" class="programs-description-link">
+                    {msg desc=""}Find a Camp or Workshop{/msg}
+                  </a>
+                {/if}
+              {/param}
+              {param showReadMore: true /}
+              {param readMoreTextLength: 400 /}
+              {param hideSchema: true /}
+            {/call}
+          </div>
+        {/foreach}
+      </div>
+    </div>
+  {/if}
+{/template}
+
+/**
+ * secondary_content
+ * @param productLists
+ * @param bios
+ * @param calendars
+ * @param videos
+ * @param customByName
+ * @param siteDomain
+ */
+{template .secondary_content}
+  <div class="secondary-content">
+    <div class="secondary-content-left">
+      {call .collapse_ecl data="all"}
+        {param lists: $calendars /}
+        {param listType: 'calendar' /}
+        {param title}
+          {msg desc=""}Upcoming Events{/msg}
+        {/param}
+        {param collapseAfter: 2 /}
+        {param idWithNoPound: 'js-events-details' /}
+        {param anchorId: 'events' /}
+      {/call}
+
+      {if strlen($videos) > 0}
+        <div class="videos">
+          <div class="videos-info">
+            <div class="videos-title-wrapper">
+              <a class="jenkins-ignore" name="videos"></a>
+              <h3 class="videos-title" id="videos">
+                {msg desc=""}Videos{/msg}
+              </h3>
+            </div>
+
+            {let $videosGAEvent: [
+                'hitType': 'event',
+                'eventCategory': 'Videos',
+                'eventAction': 'CTA',
+                'eventLabel': 'View_All'
+              ]
+            /}
+
+            <a href="https://www.youtube.com/user/SchoolofRockUSA"
+               class="videos-link"
+               title="View All Videos"
+               data-ga-event='{$videosGAEvent |json}'
+               data-ga-event-outbound="true"
+               target="_blank">
+              {msg desc=""}View All{/msg}
+            </a>
+
+            <p class="videos-description">
+              {msg desc=""}Take a tour of School of Rock to see how our approach to music education teaches kids to rock their worlds.{/msg}
+            </p>
+          </div>
+          <div class="videos-preview">
+            // STOLEN FROM YOUTUBE EMBED
+            <div class="youtube-thumbnail-wrapper-outer">
+              <div class="youtube-thumbnail-wrapper-inner">
+                <img class="youtube-thumbnail-image"
+                     data-youtubeurl="{$videos}"
+                     data-thumbnailindex="mqdefault">
+                <div class="youtube-thumbnail-play-table-wrapper">
+                  <table class="youtube-thumbnail-play-table">
+                    <tr>
+                      <td>
+                        <button class="youtube-thumbnail-play-button"
+                                type="button"
+                                data-toggle="modal"
+                                data-target="#modal">
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+
+      {call .collapse_ecl data="all"}
+        {param lists: $bios /}
+        {param listType: 'bio' /}
+        {param title}
+          {msg desc=""}Staff{/msg}
+        {/param}
+        {param collapseAfter: 1 /}
+        {param idWithNoPound: 'js-staff-details' /}
+        {param anchorId: 'staff' /}
+      {/call}
+    </div>
+    <div class="secondary-content-right" id="other-content">
+      {call .collapse_ecl data="all"}
+        {param lists: $productLists /}
+        {param listToUse: 'Promotions' /}
+        {param listType: 'productList' /}
+        {param title}
+          {msg desc=""}Promotions{/msg}
+        {/param}
+        {param collapseAfter: 1 /}
+        {param idWithNoPound: 'js-promotions-details' /}
+        {param anchorId: 'promotions' /}
+      {/call}
+
+      {let $newsCount}
+        {for $i in range(1,5)}
+          {if strlen($customByName['News Item ' + $i + ' - Body'] ?: '') > 0
+              and strlen($customByName['News Item ' + $i + ' - Title'] ?: '') > 0}
+            1
+          {/if}
+        {/for}
+      {/let}
+
+      {if strlen($newsCount) > 0}
+        {let $newsOne:
+            [
+              'body': $customByName['News Item 1 - Body'] ?: '',
+              'title': $customByName['News Item 1 - Title'] ?: '',
+              'url': $customByName['News Item 1 - Url'] ?: '',
+              'photo': $customByName['News Item 1 - Photo'] ?: ''
+            ]
+        /}
+        {let $newsTwo:
+            [
+              'body': $customByName['News Item 2 - Body'] ?: '',
+              'title': $customByName['News Item 2 - Title'] ?: '',
+              'url': $customByName['News Item 2 - Url'] ?: '',
+              'photo': $customByName['News Item 2 - Photo'] ?: ''
+            ]
+        /}
+        {let $newsThree:
+            [
+              'body': $customByName['News Item 3 - Body'] ?: '',
+              'title': $customByName['News Item 3 - Title'] ?: '',
+              'url': $customByName['News Item 3 - Url'] ?: '',
+              'photo': $customByName['News Item 3 - Photo'] ?: ''
+            ]
+        /}
+        {let $newsFour:
+            [
+              'body': $customByName['News Item 4 - Body'] ?: '',
+              'title': $customByName['News Item 4 - Title'] ?: '',
+              'url': $customByName['News Item 4 - Url'] ?: '',
+              'photo': $customByName['News Item 4 - Photo'] ?: ''
+            ]
+        /}
+
+        {let $news: strlen($newsOne.body) > 0 and strlen($newsOne.title) > 0 ? [$newsOne] : [] /}
+        {let $news: strlen($newsTwo.body) > 0 and strlen($newsTwo.title) > 0 ? augmentList($news, [$newsTwo]) : $news /}
+        {let $news: strlen($newsThree.body) > 0 and strlen($newsThree.title) > 0 ? augmentList($news, [$newsThree]) : $news /}
+        {let $news: strlen($newsFour.body) > 0 and strlen($newsFour.title) > 0 ? augmentList($news, [$newsFour]) : $news /}
+
+        <div class="news-wrapper">
+          <h3 class="news-title" id="news">
+            {msg desc=""}News{/msg}
+          </h3>
+          {if length($news) > 1}
+            {let $newsGAEvent: [
+                'hitType': 'event',
+                'eventCategory': 'News',
+                'eventAction': 'CTA',
+                'eventLabel': 'View_All'
+              ]
+            /}
+            <a class="news-view-all collapsed"
+               href="#js-news-details"
+               data-toggle="collapse"
+               data-ga-event='{$newsGAEvent |json}'>
+              <span class="news-view-all-label-collapsed">
+                {msg desc=""}View All{/msg}
+              </span>
+              <span class="news-view-all-label-expanded">
+                {msg desc=""}View Less{/msg}
+              </span>
+            </a>
+          {/if}
+          <ul class="news">
+            {if length($news) > 1}
+              <li class="news-teaser">
+                <ul class="news-list-wrapper">
+                  {call .news_item data="$news[0]" /}
+                </ul>
+              </li>
+              <li class="news-details collapse" id="js-news-details">
+                <ul class="news-list-wrapper">
+                  {for $i in range(1, length($news))}
+                    {call .news_item data="$news[$i]" /}
+                  {/for}
+                </ul>
+              </li>
+            {else}
+              {foreach $newsItem in $news}
+                {call .news_item data="$newsItem" /}
+              {/foreach}
+            {/if}
+          </ul>
+        </div>
+      {/if}
+
+      {let $testimonialCount}
+        {for $i in range(1,5)}
+          {if strlen($customByName['Testimonial ' + $i + ' - Body'] ?: '') > 0
+              and strlen($customByName['Testimonial ' + $i + ' - Giver'] ?: '') > 0}
+            1
+          {/if}
+        {/for}
+      {/let}
+
+      {if strlen($testimonialCount) > 0}
+        {let $testimonials: [
+            [
+              'body': $customByName['Testimonial 1 - Body'] ?: '',
+              'giver': $customByName['Testimonial 1 - Giver'] ?: ''
+            ],
+            [
+              'body': $customByName['Testimonial 2 - Body'] ?: '',
+              'giver': $customByName['Testimonial 2 - Giver'] ?: ''
+            ],
+            [
+              'body': $customByName['Testimonial 3 - Body'] ?: '',
+              'giver': $customByName['Testimonial 3 - Giver'] ?: ''
+            ],
+            [
+              'body': $customByName['Testimonial 4 - Body'] ?: '',
+              'giver': $customByName['Testimonial 4 - Giver'] ?: ''
+            ]
+          ]
+        /}
+        <div class="testimonials-wrapper">
+          <h3 class="testimonials-title" id="testimonials">
+            {msg desc=""}Testimonials{/msg}
+          </h3>
+          <ul class="testimonials">
+            {foreach $testimonial in $testimonials}
+              {if strlen($testimonial.body) > 0 and strlen($testimonial.giver) > 0}
+                <li class="testimonials-item">
+                  <blockquote class="testimonials-item-body">
+                    &ldquo;{$testimonial.body}&rdquo;
+                    <div class="testimonials-item-giver-wrapper">
+                      <cite class="testimonials-item-giver">
+                        {$testimonial.giver}
+                      </cite>
+                    </div>
+                  </blockquote>
+                </li>
+              {/if}
+            {/foreach}
+          </ul>
+        </div>
+      {/if}
+
+    </div>
+  </div>
+{/template}
+
+/**
+ * news_item
+ * @param title
+ * @param body
+ * @param photo
+ * @param url
+ */
+{template .news_item}
+  <li class="news-item">
+    {if $photo}
+      <div class="news-item-image-wrapper">
+        <img class="news-item-image" src="{imageBySize($photo.sizes ?: [], '250x140')}">
+      </div>
+    {/if}
+    <h4 class="news-item-title">
+      {$title}
+    </h4>
+    <p class="news-item-body">
+      {call components.description data="all"}
+        {param description: $body /}
+        {param showReadMore: true /}
+        {param readMoreTextLength: 200 /}
+      {/call}
+    </p>
+  </li>
+{/template}
+
+/**
+ * .collapse_ecl
+ * @param lists
+ * @param listType
+ * @param? listToUse
+ * @param title passthrough
+ * @param collapseAfter passthrough
+ * @param idWithNoPound passthrough
+ * @param siteDomain passthrough for events
+ * @param anchorId
+ */
+{template .collapse_ecl}
+  {foreach $list in $lists}
+    {let $items: listItems($list.sections) /}
+    {if ((not $listToUse and isFirst($list)) or $list.title == $listToUse) and length($items) > 0}
+      {call .collapse_ecl_list data="all"}
+        {param items: $items /}
+        {param currency: $list.currency /}
+      {/call}
+    {/if}
+  {/foreach}
+{/template}
+
+
+/**
+ * @param items
+ * @param listType
+ * @param title
+ * @param collapseAfter
+ * @param currency passthrough for ProductList Type
+ * @param idWithNoPound
+ * @param siteDomain passthrough for events
+ * @param anchorId
+ */
+{template .collapse_ecl_list}
+  {let $shouldCollapse: length($items) > $collapseAfter /}
+  <div class="collapse-list-wrapper">
+    <h3 class="collapse-list-title collapse-list-title-{$listType |slugify}" id="{$anchorId}">
+      {$title}
+      {if $shouldCollapse}
+        {sp}
+        {let $eventCategory}
+          {if $listType == 'bio'}
+            Staff
+          {elseif $listType == 'calendar'}
+            Events
+          {else}
+            Promotions
+          {/if}
+        {/let}
+        {let $gaData: [
+            'hitType': 'event',
+            'eventCategory': $eventCategory,
+            'eventAction': 'CTA',
+            'eventLabel': 'View_All'
+          ]
+        /}
+        <span class="collapse-list-view-more js-collapse-list-toggle collapsed"
+              role="button"
+              data-toggle="collapse"
+              data-target="#{$idWithNoPound}"
+              aria-expanded="false"
+              aria-controls="{$idWithNoPound}"
+              data-ga-event='{$gaData |json}'>
+          <span class="collapse-list-view-more-collapsed">
+            {msg desc=""}View All{/msg}
+          </span>
+          <span class="collapse-list-view-more-expanded">
+            {msg desc=""}View Less{/msg}
+          </span>
+        </span>
+      {/if}
+    </h3>
+    <ul class="collapse-list collapse-list-{$listType |slugify}{if not $shouldCollapse} collapse-list-row{/if}">
+      {if $shouldCollapse}
+        <li>
+          <ul class="collapse-list-teaser collapse-list-row">
+            {for $i in range($collapseAfter)}
+              {call .collapse_ecl_item data="all"}
+                {param item: $items[$i] /}
+              {/call}
+            {/for}
+          </ul>
+        </li>
+        <li>
+          <ul class="collapse-list-details collapse-list-row collapse"
+              id="{$idWithNoPound}">
+            {for $i in range($collapseAfter, length($items))}
+              {call .collapse_ecl_item data="all"}
+                {param item: $items[$i] /}
+              {/call}
+            {/for}
+          </ul>
+        </li>
+      {else}
+        {foreach $item in $items}
+          {call .collapse_ecl_item data="all"}
+            {param item: $item /}
+          {/call}
+        {/foreach}
+      {/if}
+    </ul>
+  </div>
+{/template}
+
+/**
+ * collapse_ecl_item
+ * @param item
+ * @param listType
+ * @param currency
+ * @param siteDomain passthrough
+ */
+{template .collapse_ecl_item}
+  <li class="collapse-list-item collapse-list-item-{$listType |slugify}">
+    {if $listType == 'calendar'}
+      {call components.events.event data="all"}
+        {param event: $item /}
+        {param doNotLinkEventTitle: true /}
+        {param showReadMore: true /}
+        {param readMoreTextLength: 200 /}
+      {/call}
+    {elseif $listType == 'bio'}
+      {call components.bios.bio}
+        {param bio: $item /}
+        {param linkText: 'Learn More' /}
+        {param showReadMore: true /}
+        {param readMoreTextLength: 200 /}
+      {/call}
+    {else}
+      {call components.enhanced_gallery_list.item data="all" }
+        {param showName: true /}
+        {param showDescription: true /}
+        {param hideSchema: true /}
+        {param notLinkItemImage: true /}
+        {param showExternalLink: true /}
+        {param externalLinkText: 'Learn More' /}
+      {/call}
+    {/if}
+  </li>
+{/template}

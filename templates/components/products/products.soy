@@ -1,0 +1,52 @@
+{namespace components}
+
+/*
+{call components.products}
+  {param productLists: /}
+
+  {param columns: /}
+  {param rows: /}
+  {param title: /}
+{/call}
+*/
+
+/**
+ * Products component
+ * @param? columns Maximum number of columns
+ * @param? rows Maximum number of rows per column
+ * @param productLists Passthrough
+ * @param? title
+ */
+{template .products}
+{let $r: $rows ?: 10 /}
+{let $c: $columns ?: 2 /}
+<div class="c-products">
+  {if $title}
+  <h3 class="c-products-title">
+    {$title}
+  </h3>
+  {else}
+  <h3 class="c-products-title">
+    Products
+  </h3>
+  {/if}
+  <table class="c-products-table">
+    <tr class="c-products-table-row">
+      {for $col in range(0, $c)}
+      <td class="c-products-table-cell">
+        {for $row in range($col * $r, ($col+1) * $r)}
+          {if $row < length($productLists[0].sections)}
+            {let $items: $productLists[0].sections[$row].items /}
+            {foreach $item in $items}
+            <div class="c-products-entry">
+              {$item.name}
+            </div>
+            {/foreach}
+          {/if}
+        {/for}
+      </td>
+      {/for}
+    </tr>
+  </table>
+</div>
+{/template}

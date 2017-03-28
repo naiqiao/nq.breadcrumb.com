@@ -1,0 +1,45 @@
+.search
+{
+  &-wrapper
+  {
+    position: relative;
+  }
+
+  &-label
+  {
+    vertical-align: middle;
+
+    &-wrapper
+    {
+      display: table-cell;
+    }
+  }
+
+  &-input
+  {
+    vertical-align: middle;
+
+    &-row
+    {
+      display: table;
+      width: 100%;
+    }
+
+    &-wrapper
+    {
+      display: table-cell;
+    }
+  }
+
+  &-button
+  {
+    padding: 0;
+    border: none;
+    vertical-align: middle;
+
+    &-wrapper
+    {
+      display: table-cell;
+    }
+  }
+}

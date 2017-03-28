@@ -1,0 +1,74 @@
+//
+// Events Component SCSS Stylesheet
+//
+
+.c-events
+{
+  &-title
+  {
+    font-weight: 600;
+  }
+
+  &-wrapper
+  {
+  }
+  &-event
+  {
+    border-top:1px solid;
+    margin-bottom:$grid-gutter-width / 2;
+
+    &-details
+    {
+      &-date
+      {
+        @extend h4;
+        margin-bottom:0px;
+      }
+      &-time
+      {
+
+      }
+      &-title
+      {
+        @extend h4;
+        font-weight: bold;
+        margin-bottom:0px;
+        &-link
+        {
+        }
+      }
+      &-type
+      {
+      }
+      &-description
+      {
+        margin-top:10px;
+        font-size: 14px;
+
+        &.show-full-description
+        {
+          .c-events-section-event-details-description
+          {
+            &-truncated
+            {
+              display:none;
+            }
+            &-full
+            {
+              display:block;
+            }
+          }
+        }
+
+        &-truncated
+        {
+
+        }
+        &-full
+        {
+          display:none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{namespace components}
+
+/*
+{call components.special_offer}
+  {param specialOffer: /}
+
+  {param showSchema: /}
+{/call}
+*/
+
+/**
+ * @param specialOffer
+ * @param? showSchema default to true
+ */
+{template .special_offer}
+  {let $displaySchema: $showSchema ?: true /}
+  <div class="c-special-offer">
+    {if $specialOffer and $specialOffer.url}
+      <a href="{$specialOffer.url}" class="c-special-offer-link" {if $displaySchema}itemprop="makesOffer"{/if}>{$specialOffer.description}</a>
+    {elseif $specialOffer}
+      <span {if $displaySchema}itemprop="makesOffer"{/if}>{$specialOffer.description}</span>
+    {/if}
+  </div>
+{/template}

@@ -1,0 +1,248 @@
+{namespace components.events}
+
+/*
+{call components.events}
+  {param calendars: /}
+  {param calendarName: /}
+
+  {param maxEntries: /}
+  {param showReadMore: /}
+  {param readMoreText: /}
+  {param readLessText: /}
+  {param readMoreTextLength: /}
+  {param title: /}
+  {param dateFormatString: /}
+  {param hourFormatString: /}
+  {param customSeparator: /}
+  {param doNotLinkEventTitle: /}
+  {param externalLinkText}
+{/call}
+*/
+
+/**
+ * Events component
+ * @param calendars
+ * @param calendarName
+ * @param? maxEntries Maximum events to show
+ * @param? showReadMore Enable text truncation
+ * @param? readMoreText Text for read more button
+ * @param? readLessText Text for read less button
+ * @param? readMoreTextLength Number of characters to truncate to
+ * @param? title
+ * @param? dateFormatString
+ * @param? hourFormatString
+ * @param? customSeparator
+ * @param? doNotLinkEventTitle
+ * @param? externalLinkText
+ * @param? siteDomain
+ * @param? crumbUrls
+ * @param? useHttps
+ */
+{template .list}
+  {let $calendarTitle: $title?: 'Upcoming Events' /}
+  {if $calendars and length($calendars) >0}
+    {foreach $calendar in $calendars}
+      {if $calendar.title == $calendarName}
+        {if length(listItems($calendar.sections))}
+          <div class="c-events-wrapper">
+            <h3 class="c-events-title">
+              {$calendarTitle | noAutoescape}
+            </h3>
+            <div class="c-events">
+              {foreach $event in listItems($calendar.sections)}
+                {if not isNonnull($maxEntries) or index($event) < $maxEntries}
+                  {call .event data="all"}
+                    {param event: $event /}
+                  {/call}
+                {/if}
+              {/foreach}
+            </div>
+          </div>
+        {/if}
+      {/if}
+    {/foreach}
+  {/if}
+{/template}
+
+
+/**
+ * @param event
+ * @param? externalLinkText
+ * @param? doNotLinkEventTitle
+ * @param? dateFormatString
+ * @param? hourFormatString
+ * @param? showReadMore
+ * @param? readMoreTextLength
+ * @param? readMoreText
+ * @param? customSeparator
+ * @param? readLessText
+ * @param? hideSchema
+ * @param? siteDomain
+ * @param? crumbUrls
+ * @param? useHttps
+ */
+{template .event}
+  <div class="c-events-event"{if not $hideSchema} {call .wrapper_schema /}{/if}>
+    {if not $hideSchema}
+      {call .event_schema_date data="$event" /}
+    {/if}
+    <div class="c-events-event-details">
+      {let $separator: $customSeparator ?: ' - ' /}
+      {call .event_date data="all"}
+        {param separator: $separator /}
+      {/call}
+      {call .event_time data="all"}
+        {param separator: $separator /}
+      {/call}
+      {call .event_title data="all" /}
+
+      {if strlen($event.type ?: '') >0}
+        <div class="c-events-event-details-type">
+          {$event.type}
+        </div>
+      {/if}
+
+      <div class="c-events-event-details-description">
+        {call components.description data="all"}
+          {param description: $event.description /}
+          {param url: $event.url /}
+        {/call}
+      </div>
+      {call .event_link data="$event"}
+        {param hideSchema: not $doNotLinkEventTitle or $hideSchema /}
+        {param externalLinkText: $externalLinkText /}
+      {/call}
+      {if not $hideSchema}
+        {call .event_offer_schema data="all" /}
+      {/if}
+    </div>
+  </div>
+{/template}
+
+/**
+ */
+{template .wrapper_schema}
+  itemprop="event" itemscope itemtype="http://schema.org/Event" itemref="schema-location"
+{/template}
+
+/**
+ * @param event
+ * @param? siteDomain
+ * @param? crumbUrls
+ * @param? useHttps
+ */
+{template .event_offer_schema}
+  <span itemscope itemprop="offers" itemtype="http://schema.org/Offer">
+    {let $url}
+      {if strlen($event.url) > 0}
+        {$event.url}
+      {else}
+        http{if $useHttps}s{/if}://{$siteDomain}/{$crumbUrls[(length($crumbUrls) - 1)]}
+      {/if}
+    {/let}
+    <meta itemprop="price" content="0.00">
+    <meta itemprop="url" content="{$url}">
+  </span>
+{/template}
+
+/**
+ * @param start
+ * @param end
+ */
+{template .event_schema_date}
+  {let $format8601: '2006-01-02T15:04:05Z07:00' /}
+  {if ($start ?: 0) > 0}
+    <meta itemprop="startDate" content="{timestampf($format8601, floor($start))}">
+  {/if}
+  {if ($end ?: 0) > 0}
+    <meta itemprop="endDate" content="{timestampf($format8601, floor($end))}">
+  {/if}
+{/template}
+
+/**
+ * @param event
+ * @param dateFormatString
+ * @param separator
+ */
+{template .event_date}
+  {if ($event.start ?: 0) > 0}
+    <div class="c-events-event-details-date">
+      {let $dateF: $dateFormatString ?: 'January 2' /}
+      {if not $event.end or sameDay($event.start, $event.end)}
+        {timestampf($dateF, floor($event.start))}
+      {elseif sameYear($event.start, floor($event.end))}
+        // must ignore format string for this to make sense
+        {timestampf('January 2', floor($event.start))}
+        {$separator|noAutoescape}
+        {if timestampf('Jan', floor($event.start)) == timestampf('Jan', floor($event.end))}
+          {timestampf('2 2006', floor($event.end))}
+        {else}
+          {timestampf('January 2 2006', floor($event.end))}
+        {/if}
+      {else}
+        // must ignore format string for this to make sense
+        {timestampf('January 2 2006', floor($event.start))}
+        {$separator|noAutoescape}
+        {timestampf('January 2 2006', floor($event.end))}
+      {/if}
+    </div>
+  {/if}
+{/template}
+
+/**
+ * @param event
+ * @param separator
+ * @param hourFormatString
+ */
+{template .event_time}
+  {if ($event.start ?: 0) > 0 and ( not $event.end or sameDay($event.start, $event.end))}
+    <div class="c-events-event-details-time">
+      {let $timeF: $hourFormatString ?: '3:04 PM' /}
+      {timestampf($timeF, floor($event.start))}
+      {if $event.end and timef($timeF, floor($event.start)) != timef($timeF, floor($event.end))}
+        {$separator|noAutoescape}
+        {timestampf($timeF, floor($event.end))}
+      {/if}
+    </div>
+  {/if}
+{/template}
+
+/**
+ * @param event
+ * @param doNotLinkEventTitle
+ * @param? hideSchema
+ */
+{template .event_title}
+  <div class="c-events-event-details-title"{if not $hideSchema} itemprop="name"{/if}>
+    {if strlen($event.url ?: '') > 0
+        and not $doNotLinkEventTitle}
+      {call .event_link}
+        {param externalLinkText: $event.name /}
+        {param url: $event.url /}
+        {param hideSchema: $hideSchema /}
+        {param class: 'c-events-event-details-title-link' /}
+      {/call}
+    {else}
+      {$event.name}
+    {/if}
+  </div>
+{/template}
+
+/**
+ * @param externalLinkText
+ * @param url
+ * @param hideSchema
+ * @param? class
+ */
+{template .event_link}
+  {if strlen($externalLinkText ?: '') >0
+      and strlen($url ?: '') > 0}
+    <a class="{$class ?: 'c-events-event-details-link'}"
+       href="{$url}"
+       data-ga-category="Event Details"
+       target="_blank"
+       {if not $hideSchema} itemprop="url"{/if}>
+      {$externalLinkText |noAutoescape}
+    </a>
+  {/if}
+{/template}

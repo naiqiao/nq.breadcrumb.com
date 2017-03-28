@@ -1,0 +1,53 @@
+// by default we only include SSP 300, 400, 600 and 700 in
+// components/head_includes.  Any other fonts
+// should be included there
+$font-path: '../../fonts';
+$icon-font-path: '#{$font-path}/'; // Bootstrap
+$fa-font-path: $font-path; // Font Awesome
+$image-path: '../../images';
+$download-path: '../../downloads';
+
+
+$font-family-main: 'Source Sans Pro', Verdana, sans-serif;
+$font-family-secondary: 'GarageGothic', Impact, sans-serif;
+
+$font-weight-bold: 900;
+$font-weight-semibold: 700;
+$font-weight-normal: 400;
+$font-weight-light: 300;
+
+$brand-primary:#2B2B2C;
+$brand-secondary:#E22136;
+$brand-tertiary:#95979A;
+
+$gray-1: #aaaaaa;
+$gray-2: #333333;
+$gray-3: #666666;
+
+$link-color-primary: white;
+$link-color-hover: white;
+$link-color-active: white;
+$link-color-visited: white;
+
+$link-color-secondary: $brand-secondary;
+$link-color-secondary-hover: $brand-secondary;
+$link-color-secondary-active: $brand-secondary;
+$link-color-secondary-visited: $brand-secondary;
+
+$text-primary: white;
+$text-secondary: $brand-tertiary;
+
+// Bootstrap Overrides
+$grid-gutter-width: 30px;
+
+$padded-padding:$grid-gutter-width/2;
+$spaced-margin:$grid-gutter-width/2;
+
+$vertical-margin-top:$grid-gutter-width;
+$vertical-margin-bottom:$grid-gutter-width;
+
+$animation-timing: .5s;
+
+$grid-float-breakpoint: 992px; //$screen-md-min
+
+$border: 1px solid white;

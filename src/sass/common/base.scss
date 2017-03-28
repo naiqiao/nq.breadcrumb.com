@@ -1,0 +1,145 @@
+//
+// Base.scss
+//
+// Include the default css rules in this file. They should be single element selectors,
+// with or without attributes, pseudo-classes, child or sibling selectors. What you are
+// defining is the styles that should apply regardless of where the element is on the
+// page.
+
+html
+{
+
+}
+
+body
+{
+  margin: 0;
+  @include baseBodyBackground();
+  @include font-base;
+}
+
+h1, .h1
+{
+  @extend h1;
+  @include font-h1;
+}
+
+h2, .h2
+{
+  @extend h2;
+  @include font-h2;
+}
+
+h3, .h3
+{
+  @extend h3;
+  @include font-h3;
+}
+
+h4, .h4
+{
+  @extend h4;
+  @include font-h4;
+}
+
+a
+{
+  color: $link-color-primary;
+
+  &:link
+  {
+    color: $link-color-primary;
+  }
+
+  &:visited
+  {
+    color: $link-color-visited;
+  }
+
+  &:hover
+  {
+    color: $link-color-hover;
+  }
+
+  &:active
+  {
+    color: $link-color-active;
+  }
+
+  &:focus
+  {
+    outline: none;
+  }
+}
+
+ul
+{
+
+}
+
+li
+{
+
+}
+
+p
+{
+  @include font-base;
+  color: inherit;
+}
+
+img
+{
+  max-width: 100%;
+}
+
+strong
+{
+  font-weight: $font-weight-bold;
+}
+
+em
+{
+  // Please note, by default SSP Italic is not included.
+}
+
+footer, .footer
+{
+  @include font-sizes(.75, 1.5, .75, 1.5);
+}
+
+hr
+{
+  background-color: white;
+  height: 1px;
+}
+
+iframe
+{
+  border: none;
+}
+
+abbr[title]
+{
+  border-bottom: none;
+}
+
+:focus
+{
+  @include focus;
+}
+
+summary
+{
+  &::-webkit-details-marker
+  {
+    display:none;
+  }
+}
+
+input
+{
+  // override apple's treatment of inputs
+  -webkit-appearance: none !important; // overide it for all input types
+  border-radius: 0;
+}

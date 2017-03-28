@@ -1,0 +1,62 @@
+{namespace components}
+
+/*
+{call components.carousel}
+  {param carouselId: /}
+  {param carouselPhotos: /}
+
+  {param showSlideIndicators: /}
+  {param showNavControls: /}
+  {param loopSlides: /}
+  {param pauseSlidesOnHover: /}
+{/call}
+*/
+
+/**
+ * Carousel component
+ * @param carouselId
+ * @param carouselPhotos // Must be called from $labelPhotos['carousel']
+ * @param? showSlideIndicators Show the dots to indicate what slide you're on - default is true
+ * @param? showNavControls Show the left and right arrows - default is true
+ * @param? loopSlides Play the slides in a loop - default is true
+ * @param? pauseSlidesOnHover Pause the slide show when the mouse is hovering - default is true
+ */
+{template .carousel}
+{let $indicators: $showSlideIndicators ?: true /}
+{let $nav: $showNavControls ?: true /}
+{let $loop: $loopSlides ?: true /}
+{let $pause: $pauseSlidesOnHover ?: true /}
+{if length($carouselPhotos) > 0}
+  <div class="c-carousel-wrapper">
+    <div id="{$carouselId}" class="carousel slide" data-ride="carousel" data-pause="{$pause}" data-wrap="{$loop}">
+      <!-- Indicators -->
+      {if $indicators}
+      <ol class="carousel-indicators">
+        {for $i in range(length($carouselPhotos))}
+          <li data-target="#{$carouselId}" data-slide-to="{$i}" {if $i==0} class="active" {/if}></li>
+        {/for}
+      </ol>
+      {/if}
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        {for $i in range(length($carouselPhotos))}
+          {if $carouselPhotos[$i]}
+            <div class="item{if $i==0} active{/if} c-carousel-image-wrapper">
+              <img class="c-carousel-image" src="{$carouselPhotos[$i].url}"/>
+            </div>
+          {/if}
+        {/for}
+      </div>
+      <!-- Controls -->
+      {if $nav}
+      <a class="left carousel-control" href="#{$carouselId}" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#{$carouselId}" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+      {/if}
+    </div>
+  </div>
+{/if}
+{/template}

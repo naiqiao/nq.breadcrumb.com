@@ -1,0 +1,219 @@
+// This file contains utiltiy mixins that aren't meant to be overridden
+
+@mixin bp($min, $max) {
+
+  $MediaQueriesEnabled: true !default;
+
+  @if $MediaQueriesEnabled
+  {
+    $bps: xs, sm, md, lg;
+    $valid-input: true;
+    $mq: "";
+
+    $maxes: (
+      xs: "(max-width: #{$screen-xs-max})",
+      sm: "(max-width: #{$screen-sm-max})",
+      md: "(max-width: #{$screen-md-max})"
+    );
+
+    $mins: (
+      sm: "(min-width: #{$screen-sm-min})",
+      md: "(min-width: #{$screen-md-min})",
+      lg: "(min-width: #{$screen-lg-min})"
+    );
+
+    @if($min != null and $max != null)
+    {
+      @if index($bps, $min) and index($bps, $max)
+      {
+        $mq: "#{map-get($mins, $min)} and #{map-get($maxes, $max)}"
+      }
+      @else
+      {
+        @warn "Breakpoint parameters must be either xs, sm, md, or lg.";
+        $valid-input: false;
+      }
+    }
+
+    @else if ($min != null and $max == null)
+    {
+      @if $min == xs
+      {
+        @warn "There is no min-width for Mobile Screens.";
+        $valid-input: false;
+      }
+      @else
+      {
+        $mq: "#{map-get($mins, $min)}"
+      }
+    }
+
+    @else if ($min == null and $max != null)
+    {
+      @if $max == lg
+      {
+        @warn "There is no Max Width for Large Screens.";
+        $valid-input: false;
+      }
+      @else
+      {
+        $mq: "#{map-get($maxes, $max)}"
+      }
+    }
+    @else
+    {
+      @warn "You must pass a parameter to the bp() mixin!";
+      $valid-input: false;
+    }
+    @if $valid-input
+    {
+      @media #{$mq} { @content;}
+    }
+  }
+}
+
+@mixin bplte($max) {
+  @include bp(null, $max) {
+    @content;
+  }
+}
+
+@mixin bpgte($min) {
+  @include bp($min, null) {
+    @content;
+  }
+}
+
+@mixin font-sizes($font-size, $line-height, $font-size-xs: $font-size, $line-height-xs: $line-height)
+{
+  font-size: $font-size;
+  line-height:$line-height;
+
+  @media screen and (max-width:$screen-xs-max)
+  {
+    font-size: $font-size-xs;
+    line-height:$line-height-xs;
+  }
+}
+
+// Icons
+@import "compass/utilities/sprites";
+@import "icons/*.png";
+@include all-icons-sprites;
+
+@mixin render-sprite($sprite-name, $display: inline-block)
+{
+  @include icons-sprite($sprite-name);
+  height: icons-sprite-height($sprite-name);
+  width: icons-sprite-width($sprite-name);
+  display: $display;
+}
+
+// .example-icon
+// {
+//   @include render-sprite(social-rounded-instagram) # Renders original image "src/sprites/icons/social-rounded-instagram.png"
+// }
+
+@mixin word-wrap() {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+@mixin hideBR
+{
+  br
+  {
+    content: ' ';
+
+    &:after
+    {
+      content: ', ';
+    }
+  }
+}
+
+@mixin break($pseudo:'after')
+{
+  &:#{$pseudo}
+  {
+    content: "\000A";
+    white-space: pre;
+  }
+}
+
+@mixin break-after
+{
+  @include break();
+}
+
+@mixin break-before
+{
+  @include break('before');
+}
+
+@mixin fa-icon($placement, $icon, $font-size:inherit)
+{
+  &:#{$placement}
+  {
+    content: $icon;
+    font-family: 'FontAwesome';
+    font-size: $font-size;
+
+    @content;
+  }
+}
+
+@mixin fa-icon-before($icon, $font-size:inherit)
+{
+  @include fa-icon(before, $icon, $font-size) { @content; }
+}
+
+@mixin fa-icon-after($icon, $font-size:inherit)
+{
+  @include fa-icon(after, $icon, $font-size) { @content; }
+}
+
+@mixin link($color-default, $color-visited:$color-default, $color-hover:$color-default, $color-active:$color-default)
+{
+  color: $color-default;
+
+  &:link
+  {
+    color: $color-default;
+  }
+
+  &:visited
+  {
+    color: $color-visited;
+  }
+
+  &:hover
+  {
+    color: $color-hover;
+  }
+
+  &:active
+  {
+    color: $color-active;
+  }
+}
+
+@mixin link-states($selector:'&')
+{
+  #{$selector}, #{$selector}:hover, #{$selector}:visited, #{$selector}:active, #{$selector}:link
+  {
+    @content;
+  }
+}
+
+@mixin vertical-center
+{
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin disable-collapse
+{
+  height: auto !important;
+  display: block;
+}

@@ -1,0 +1,102 @@
+{namespace components}
+
+/*
+{call components.instagram}
+  {param instagramHandle: /}
+  {param accessToken: /}  //how to generate: http://jelled.com/instagram/access-token
+  {param userId: /}
+
+  {param showFollowUsMessage: /}
+  {param followUsMessage: /}
+  {param limit: /}
+  {param resolution: /}
+  {param divId: /}
+{/call}
+*/
+
+/**
+ * Instagram component
+ * @param instagramHandle
+ * @param accessToken how to generate: http://jelled.com/instagram/access-token
+ * @param userId instagram user id that you get from entering the Instagram handle at this site: http://www.otzberg.net/iguserid/
+ * @param? showFollowUsMessage
+ * @param? followUsMessage
+ * @param? linkFollowUs
+ * @param? limit
+ * @param? resolution
+ * @param? divId needed when you want multiple instances of the component on a page
+ */
+{template .instagram}
+  {let $ih: strContains($instagramHandle, '@') ? $instagramHandle : '@' + $instagramHandle /}
+  {let $nakedHandle: substring($ih, 1) /}
+  {let $followMessage: $followUsMessage ?: 'Follow us on Instagram:' /}
+  <div class="c-instagram">
+    {if $showFollowUsMessage}
+      <div class="c-instagram-title">
+        {if $linkFollowUs}
+          {call components.instagram_follow_us_link}
+            {param instagramHandle: $nakedHandle /}
+            {param linkText}
+              {$followMessage}{sp}{$ih}
+            {/param}
+          {/call}
+        {else}
+          <span class="c-instagram-follow-us-message">{$followMessage}{sp}</span>
+          {call components.instagram_follow_us_link}
+            {param instagramHandle: $nakedHandle /}
+            {param linkText: $ih /}
+          {/call}
+        {/if}
+      </div>
+    {/if}
+    <div class="row">
+      <div class="col-md-12">
+        {call components.instafeed data="all"/}
+      </div>
+    </div>
+  </div>
+{/template}
+
+/*
+{call components.instagram_follow_us_link}
+  {param instagramHandle: /}
+  {param linkText: /}
+{/call}
+*/
+
+/**
+ * @param instagramHandle
+ * @param linkText
+ */
+
+{template .instagram_follow_us_link}
+  <a target="_blank" href="http://www.instagram.com/{$instagramHandle}" class="c-instagram-follow-us-link">{$linkText}</a>
+{/template}
+
+/*
+{call components.instafeed}
+  {param accessToken: /}
+  {param userId: /}
+
+  {param divId: /}
+  {param limit: /}
+  {param resolution: /}
+{/call}
+*/
+
+/**
+ * @param? divId needed when you want multiple instances of the component on a page
+ * @param accessToken
+ * @param userId
+ * @param? limit
+ * @param? resolution
+ */
+
+{template .instafeed}
+  <div  id="{$divId ?: 'instafeed'}"
+        data-accesstoken="{$accessToken}"
+        data-userid="{$userId}"
+        data-limit="{$limit ?: 4}"
+        data-resolution="{$resolution ?: 'low_resolution'}">
+  </div>
+{/template}

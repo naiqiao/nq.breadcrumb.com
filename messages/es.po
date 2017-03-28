@@ -1,0 +1,541 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: src\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#.
+#: id=1826215573205981970
+msgid "Company"
+msgstr "Compañía"
+
+#.
+#: id=3687194426938367329
+msgid "Partners"
+msgstr "socios"
+
+#.
+#: id=5779770381601735038
+msgid "Careers"
+msgstr "careras"
+
+#.
+#: id=8922674966703761396
+msgid "Franchising"
+msgstr "franquicias"
+
+#.
+#: id=7710800292924165419
+msgid "Press"
+msgstr "prensa"
+
+#.
+#: id=7922989125096435449
+msgid "Contact"
+msgstr "contactos"
+
+#.
+#: id=8440128775129354214
+msgid "Privacy"
+msgstr "política de privacidad"
+
+#.
+#: id=8553139267864793345
+msgid "My Safe School"
+msgstr "mi escuela segura"
+
+#.
+#: id=1325512777410502880
+msgid "Paia Manual"
+msgstr ""
+
+#.
+#: id=2567541743153406749
+msgid "Form C"
+msgstr ""
+
+#.
+#: id=2108556984026731328
+msgid "Why {START_ABBR}SOR{END_ABBR}"
+msgstr "Por Qué SOR"
+
+#.
+#: id=6697326904524934689
+msgid "Programs"
+msgstr "Programas"
+
+#.
+#: id=8861250472217563726
+msgid "Camps"
+msgstr "Campamentos"
+
+#.
+#: id=419717086090199227
+msgid "What's New"
+msgstr "Lo Nuevo"
+
+#.
+#: id=4022066031214545422
+msgid "Locations"
+msgstr "Lugares"
+
+#.
+#: id=336765468888428187
+msgid "Search by City, State/Region or Postal Code"
+msgstr "Buscar por Ciudad, Estado/Región o Código Postal"
+
+#.
+#: id=6133495983093212227
+msgid "United States"
+msgstr "Estados Unidos"
+
+#.
+#: id=3486679398271885916
+msgid "Canada"
+msgstr "Canadá"
+
+#.
+#: id=8147072510678737075
+msgid "Mexico"
+msgstr "México"
+
+#.
+#: id=7803448958935133459
+msgid "Panama"
+msgstr "Panamá"
+
+#.
+#: id=8039968326438721789
+msgid "South Africa"
+msgstr "Sudáfrica"
+
+#.
+#: id=797743923912773831
+msgid "Australia"
+msgstr "Australia"
+
+#.
+#: id=8818655556476681482
+msgid "Philippines"
+msgstr "Filipinas"
+
+#.
+#: id=5414293408829797992
+msgid "Brazil"
+msgstr "Brasil"
+
+#.
+#: id=6268459440891516871
+msgid "Chile"
+msgstr "Chile"
+
+#. Find a location.
+#: id=7297944290589265560
+msgid "Go"
+msgstr ""
+
+#.
+#: id=6844949399499395105
+msgid "Search by City, State or Zip code..."
+msgstr ""
+
+#.
+#: id=5003708937751371127
+msgid "Meet"
+msgstr "Conozca"
+
+#.
+#: id=2827984212740060090
+msgid "Read more"
+msgstr "Ver Más"
+
+#.
+#: id=7216129782170445339
+msgid "Read less"
+msgstr "Ver Menos"
+
+#.
+#: id=818248703042672682
+msgid "Visit Site"
+msgstr ""
+
+#.
+#: id=8981724482694536509
+msgid "Directions"
+msgstr ""
+
+#.
+#: id=4628776961570250524
+msgid "Store Hours:"
+msgstr ""
+
+#.
+#: id=6650138090390808
+msgid "Open 24 hours"
+msgstr ""
+
+#.
+#: id=7860418101283165917
+msgid "Closed"
+msgstr "Cerrado"
+
+#.
+#: id=6307084383315366376
+msgid "Open until midnight"
+msgstr ""
+
+#.
+#: id=8828277235303377607
+msgid "Open until"
+msgstr ""
+
+#.
+#: id=1985092179966731661
+msgid "Closed at"
+msgstr ""
+
+#.
+#: id=8050087808612352027
+msgid "Open Today"
+msgstr ""
+
+#.
+#: id=8739442281958563044
+msgid "Monday"
+msgstr "Lunes"
+
+#.
+#: id=9176037901730521018
+msgid "Tuesday"
+msgstr "Martes"
+
+#.
+#: id=8798932904948432529
+msgid "Wednesday"
+msgstr "Miércoles"
+
+#.
+#: id=1433683192825895947
+msgid "Thursday"
+msgstr "Jueves"
+
+#.
+#: id=3730139500618908668
+msgid "Friday"
+msgstr "Viernes"
+
+#.
+#: id=1830554030016307335
+msgid "Saturday"
+msgstr "Sábado"
+
+#.
+#: id=6950140976689343775
+msgid "Sunday"
+msgstr "Domingo"
+
+#.
+#: id=2450854373785341130
+msgid "Open Today:"
+msgstr ""
+
+#.
+#: id=7660111047556490099
+msgid "Closed Today:"
+msgstr ""
+
+#. Open 24 hours a day message.
+#: id=6833802623236445427
+msgid "24 hours"
+msgstr ""
+
+#. Share information via email.
+#: id=7419704019640008953
+msgid "Share"
+msgstr ""
+
+#. Follow on Instagram.
+#: id=6018246591673612412
+msgid "Follow"
+msgstr ""
+
+#.
+#: id=3714400483609776128
+msgid "Share This Location"
+msgstr ""
+
+#.
+#: id=5950895346618553652
+msgid "Get Directions"
+msgstr "Obtenga Direcciones"
+
+#.
+#: id=4340944007474085518
+msgid "Nearby Locations"
+msgstr ""
+
+#. Visit webpage.
+#: id=193225954404557427
+msgid "Go to Site"
+msgstr ""
+
+#.
+#: id=2521670961404777544
+msgid "Today's Hours:"
+msgstr ""
+
+#.
+#: id=114579801111215837
+msgid "Main Number"
+msgstr ""
+
+#.
+#: id=6556772568177944555
+msgid "Alternate Number"
+msgstr ""
+
+#. Mobile number.
+#: id=1002165214775409029
+msgid "Mobile"
+msgstr ""
+
+#.
+#: id=7429303956572021019
+msgid "Fax Number"
+msgstr ""
+
+#.
+#: id=6074599755612986543
+msgid "TTY"
+msgstr ""
+
+#.
+#: id=6340560915365485036
+msgid "Toll Free Number"
+msgstr ""
+
+#.
+#: id=8415574471091351401
+msgid "Search by City, State, Zip..."
+msgstr ""
+
+#. The title for the page that displays locations.
+#: id=1656873482438649046
+msgid "Browse All School of Rock Locations"
+msgstr ""
+
+#.
+#: id=3464603648578331528
+msgid "Locations by Country"
+msgstr "Lugares Por País"
+
+#.
+#: id=1228771048078164312
+msgid "North America"
+msgstr "Norte América"
+
+#.
+#: id=1413778527796351850
+msgid "Africa"
+msgstr "África"
+
+#.
+#: id=6198589271008146609
+msgid "Asia Pacific"
+msgstr "Pacífico Asiático "
+
+#.
+#: id=5957846001261659229
+msgid "South America"
+msgstr "Sudamérica"
+
+#.
+#: id=1215865328325175218
+msgid "Locations in"
+msgstr "Lugares en"
+
+#.
+#: id=7058029259193530844
+msgid "The"
+msgstr "Los"
+
+#.
+#: id=115930618352415341
+msgid "Read More"
+msgstr "Ver Más"
+
+#.
+#: id=4164683707696039088
+msgid "Read Less"
+msgstr "Ver Menos"
+
+#.
+#: id=2760060810952329134
+msgid "For Further Information"
+msgstr "SOLICITA MÁS INFORMACIÓN"
+
+#.
+#: id=5063680091454686145
+msgid "Sign Up For A"
+msgstr "Inscríbase para"
+
+#.
+#: id=6598027297564001985
+msgid "Free Lesson"
+msgstr "una Lección Gratis"
+
+#.
+#: id=3195964629095801284
+msgid "Your First Name"
+msgstr "Nombre"
+
+#.
+#: id=8006937610129247371
+msgid "Your Last Name"
+msgstr "Apellido"
+
+#.
+#: id=204562474612147063
+msgid "Your Email"
+msgstr "Correo Electrónico"
+
+#.
+#: id=2459052156747514927
+msgid "Your Phone"
+msgstr "Teléfono"
+
+#.
+#: id=243400187056236782
+msgid "Bass"
+msgstr "Bajo"
+
+#.
+#: id=4839088995145928561
+msgid "Drums"
+msgstr "Percusión"
+
+#.
+#: id=4338694631344317742
+msgid "Guitar"
+msgstr "Guitarra"
+
+#.
+#: id=5675734485359491772
+msgid "Piano/Keys"
+msgstr "Piano/Teclados"
+
+#.
+#: id=4965895472107147792
+msgid "Vocals"
+msgstr "Vocales"
+
+#.
+#: id=8693603235657020323
+msgid "Other"
+msgstr "Otro"
+
+#.
+#: id=967099695129534913
+msgid "Instruments"
+msgstr "Instrumentos"
+
+#.
+#: id=3752885096907847049
+msgid "Send Us Your Contact Information"
+msgstr "Envíanos tu información de contacto"
+
+#.
+#: id=4943424566110997433
+msgid "Get a Free Lesson"
+msgstr "Obtenga una lección gratis"
+
+#.
+#: id=7115484541401189238
+msgid "Hours of Operation"
+msgstr "Horas de Servicio"
+
+#.
+#: id=1322586333669103999
+msgid "Performance"
+msgstr "Presentaciones"
+
+#.
+#: id=3231294155503603378
+msgid "Rock 101"
+msgstr "Rock 101"
+
+#.
+#: id=3953146218560653512
+msgid "AllStars"
+msgstr "AllStars"
+
+#.
+#: id=1016620648555182244
+msgid "Adult Program"
+msgstr "Programa para adultos"
+
+#.
+#: id=6082351101671453317
+msgid "Rookies"
+msgstr "Principiantes"
+
+#.
+#: id=1061863759237890708
+msgid "Little Wing"
+msgstr "Alita"
+
+#.
+#: id=1435711890844446779
+msgid "Find a Camp or Workshop"
+msgstr "Encontrar un campamento o taller"
+
+#.
+#: id=5399965515961120951
+msgid "Upcoming Events"
+msgstr "Próximos Eventos"
+
+#.
+#: id=8936704404804793618
+msgid "Videos"
+msgstr "Videos"
+
+#.
+#: id=6472599282785029372
+msgid "View All"
+msgstr "Ver Todo"
+
+#.
+#: id=8851410022950187974
+msgid ""
+"Take a tour of School of Rock to see how our approach to music education "
+"teaches kids to rock their worlds."
+msgstr ""
+"Haga un recorrido por la School of Rock para ver cómo es que nuestro enfoque "
+"de la educación musical enseña a los niños a estremecer su mundo."
+
+#.
+#: id=5953658680929738267
+msgid "Staff"
+msgstr "Personal"
+
+#.
+#: id=7081924880298683507
+msgid "Promotions"
+msgstr "Promociones"
+
+#.
+#: id=841934696444961534
+msgid "News"
+msgstr "Noticias"
+
+#.
+#: id=3281548670936061737
+msgid "View Less"
+msgstr "Ver Menos"
+
+#.
+#: id=7100508900545127127
+msgid "Testimonials"
+msgstr "Testimonios"

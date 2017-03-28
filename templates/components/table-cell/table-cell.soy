@@ -1,0 +1,46 @@
+{namespace components}
+
+/*
+{call components.table_cell}
+  {param link_url: '' /}
+  {param title: '' /}
+  {param subtitle: '' /}
+  {param disclosure_text: '' /}
+  {param disclosure_classes: '' /}
+  {param class_modifier: '' /}
+{/call}
+*/
+
+/**
+ * Social component
+ * @param link_url The url to link to when the cell is tapped
+ * @param title The main title of the table cell
+ * @param? subtitle The subtitle of the table cell, smaller and underneath the title
+ * @param? disclosure_text Use this to make the disclosure text instead of an icon
+ * @param? disclosure_classes Use this to change the class of the disclosure icon
+ * @param? class_modifier Use this to make 'special' table cells
+ */
+{template .table_cell}
+{let $cm: $class_modifier ? '-' + $class_modifier : '' /}
+{let $dc: $disclosure_classes ? $disclosure_classes : 'glyphicon glyphicon-chevron-right' /}
+<div class="c-table-cell c-table-cell{$cm}">
+  <a class="c-table-cell-link" href="{$link_url}"></a>
+  <table class="c-table-cell-table">
+    <tr class="c-table-cell-row">
+      <td class="c-table-cell-cell">
+        <div class="c-table-cell-title">{$title}</div>
+        {if isNonnull($subtitle) and $subtitle}
+        <div class="c-table-cell-subtitle">{$subtitle}</div>
+        {/if}
+      </td>
+      <td class="c-table-cell-cell">
+        {if isNonnull($disclosure_text) and $disclosure_text}
+        <div class="c-table-cell-disclosure-text">{$disclosure_text}</div>
+        {else}
+        <div class="c-table-cell-disclosure"><span class="{$dc}"></span></div>
+        {/if}
+      </td>
+    </tr>
+  </table>
+</div>
+{/template}

@@ -1,0 +1,21 @@
+{namespace components}
+
+/*
+{call components.location_title}
+  {param name: /}
+
+  {param hideSchemaTags: /}
+{/call}
+*/
+
+/**
+ * Location Title component
+ * @param name
+ * @param? hideSchemaTags
+ */
+{template .location_title}
+  {let $hideSchemas: $hideSchemaTags ?: false /}
+  <div class="c-location-title">
+    <h1{if not $hideSchemas} id="location-name" itemprop="name"{/if}>{$name | noAutoescape}</h1>
+  </div>
+{/template}

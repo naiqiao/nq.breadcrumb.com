@@ -1,0 +1,39 @@
+//
+// Menu with photos Component SCSS Stylesheet
+//
+
+.c-menu-with-photos
+{
+  &-title
+  {
+    @extend .h2;
+    text-align: center;
+  }
+
+  &-item
+  {
+    display: inline-block;
+    float:none;
+    vertical-align: top;
+
+    margin-top:15px;
+    margin-bottom:15px;
+
+    &-name
+    {
+      @extend .h4;
+    }
+  }
+
+  &-btn
+  {
+    @extend .button-primary;
+
+    &-wrapper
+    {
+      margin-top:15px;
+      margin-bottom:15px;
+      text-align: center;
+    }
+  }
+}

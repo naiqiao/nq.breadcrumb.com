@@ -1,0 +1,76 @@
+{namespace components}
+
+/*
+{call components.description}
+  {param description: /}
+
+  {param showReadMore: /}
+  {param readMoreText: /}
+  {param readLessText: /}
+  {param readMoreTextLength: /}
+  {param hideSchema: /}
+{/call}
+*/
+
+/**
+ * Description component
+ * @param description
+ * @param? url
+ * @param? showReadMore Enable text truncation
+ * @param? readMoreText Text for read more button
+ * @param? readLessText Text for read less button
+ * @param? readMoreTextLength Number of characters to truncate to
+ * @param? hideSchema
+ * @param? afterDescription
+ */
+{template .description}
+  <div class="c-description">
+    {if $showReadMore and strlen($description) > $readMoreTextLength ?: 150}
+      <div class="c-description-truncated">
+        {$description |truncate:$readMoreTextLength ?: 150,true}
+        <br>
+        <a href="#" class="c-description-visible-read-more js-show-more">
+          {if $readMoreText}
+            {$readMoreText}
+          {else}
+            {msg desc=""}
+              Read more
+            {/msg}
+          {/if}
+        </a>
+      </div>
+      <div class="c-description-full"{if not $hideSchema} itemprop="description"{/if}>
+        {$description | changeNewlineToBr}
+
+        <div class="description-url-wrapper">
+          {call components.events.event_link}
+            {param externalLinkText: 'Learn More' /}
+            {param url: $url /}
+            {param hideSchema: $hideSchema /}
+          {/call}
+        </div>
+
+        {$afterDescription ?: '' |noAutoescape}
+
+        <a href="#" class="c-description-visible-read-less js-show-less">
+          {if $readLessText}
+            {$readLessText}
+          {else}
+            {msg desc=""}
+              Read less
+            {/msg}
+          {/if}
+        </a>
+      </div>
+    {else}
+      <span{if not $hideSchema} itemprop="description"{/if}>{$description |changeNewlineToBr}</span>
+      <div class="description-url-wrapper">
+        {call components.events.event_link}
+          {param externalLinkText: 'Learn More' /}
+          {param url: $url /}
+          {param hideSchema: $hideSchema /}
+        {/call}
+      </div>
+    {/if}
+  </div>
+{/template}

@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url($font-path + '/sourcesanspro-semiboldit-webfont.eot');
+  src: url($font-path + '/sourcesanspro-semiboldit-webfont.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/sourcesanspro-semiboldit-webfont.woff2') format('woff2'),
+       url($font-path + '/sourcesanspro-semiboldit-webfont.woff') format('woff'),
+       url($font-path + '/sourcesanspro-semiboldit-webfont.ttf') format('truetype'),
+       url($font-path + '/sourcesanspro-semiboldit-webfont.svg#source_sans_proSBdIt') format('svg');
+  font-weight: $font-weight-semibold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url($font-path + '/sourcesanspro-semibold-webfont.eot');
+  src: url($font-path + '/sourcesanspro-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/sourcesanspro-semibold-webfont.woff2') format('woff2'),
+       url($font-path + '/sourcesanspro-semibold-webfont.woff') format('woff'),
+       url($font-path + '/sourcesanspro-semibold-webfont.ttf') format('truetype'),
+       url($font-path + '/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
+  font-weight: $font-weight-semibold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url($font-path + '/sourcesanspro-black-webfont.eot');
+  src: url($font-path + '/sourcesanspro-black-webfont.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/sourcesanspro-black-webfont.woff2') format('woff2'),
+       url($font-path + '/sourcesanspro-black-webfont.woff') format('woff'),
+       url($font-path + '/sourcesanspro-black-webfont.ttf') format('truetype'),
+       url($font-path + '/sourcesanspro-black-webfont.svg#source_sans_problack') format('svg');
+  font-weight: $font-weight-bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url($font-path + '/sourcesanspro-regular-webfont.eot');
+  src: url($font-path + '/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/sourcesanspro-regular-webfont.woff2') format('woff2'),
+       url($font-path + '/sourcesanspro-regular-webfont.woff') format('woff'),
+       url($font-path + '/sourcesanspro-regular-webfont.ttf') format('truetype'),
+       url($font-path + '/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GarageGothic';
+  src: url($font-path + '/GarageGothic-Black.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/GarageGothic-Black.otf')  format('opentype'),
+       url($font-path + '/GarageGothic-Black.woff') format('woff'),
+       url($font-path + '/GarageGothic-Black.ttf')  format('truetype'),
+       url($font-path + '/GarageGothic-Black.svg#GarageGothic-Black') format('svg');
+  font-weight: $font-weight-bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GarageGothic';
+  src: url($font-path + '/GarageGothic-Regular.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/GarageGothic-Regular.otf')  format('opentype'),
+       url($font-path + '/GarageGothic-Regular.woff') format('woff'),
+       url($font-path + '/GarageGothic-Regular.ttf')  format('truetype'),
+       url($font-path + '/GarageGothic-Regular.svg#GarageGothic-Regular') format('svg');
+  font-weight: $font-weight-normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GarageGothic';
+  src: url($font-path + '/GarageGothic-Bold.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/GarageGothic-Bold.otf')  format('opentype'),
+       url($font-path + '/GarageGothic-Bold.woff') format('woff'),
+       url($font-path + '/GarageGothic-Bold.ttf')  format('truetype'),
+       url($font-path + '/GarageGothic-Bold.svg#GarageGothic-Bold') format('svg');
+  font-weight: $font-weight-semibold;
+  font-style: normal;
+}

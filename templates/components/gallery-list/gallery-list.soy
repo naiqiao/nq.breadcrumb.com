@@ -1,0 +1,35 @@
+{namespace components}
+
+/*
+{call components.gallery_list}
+  {param photos: /}
+  {param bootstrapColumnClass: /}
+  {param numberOfImagesToDisplay: /}
+
+  {param title: /}
+{/call}
+*/
+
+/**
+ * Gallery list component
+ * @param? title
+ * @param photos gallery photos available to display
+ * @param bootstrapColumnClass Class to apply to the gallery list item wrapper div
+ * @param numberOfImagesToDisplay Number of gallery images to display
+ */
+{template .gallery_list}
+	{if $title}
+		<h3 class="c-gallery-list-title">
+			{$title}
+		</h3>
+	{/if}
+	{foreach $photo in $photos}
+		{if index($photo) < $numberOfImagesToDisplay}
+		<div class="{$bootstrapColumnClass}">
+			<div class="c-gallery-list-item">
+				<img class="c-gallery-list-image" src="{$photo.url}">
+			</div>
+		</div>
+		{/if}
+	{/foreach}
+{/template}

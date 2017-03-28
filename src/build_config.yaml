@@ -1,0 +1,79 @@
+# All file paths are relative to the project's src directory
+tests:
+    coffeelint: true
+    jshint: true
+    links: true
+    open_graph: true
+    yslow: true
+    microdata: true
+    favicon: true
+    screen_captures: true
+    title: true
+    phantom_js: true
+coffeelint:
+    config_file: coffeelint.json
+    exceptions:
+        - bower_components/*
+        - .tmp/*
+        - node_modules/*
+        - js/lib/*
+jshint:
+    config_file: .jshintrc
+    exceptions:
+        - bower_components/*
+        - .tmp/*
+        - node_modules/*
+        - js/lib/*
+        - aws_lambda_functions/*
+phantom_js:
+    config_file: phantomTests.js
+yslow:
+    ynumreq: true
+    ycdn: false
+    yexpires: false
+    ycompress: false
+    ycsstop: true
+    yjsbottom: true
+    yexpressions: true
+    yexternal: true
+    ydns: true
+    yminify: true
+    yredirects: true
+    ydupes: true
+    yetags: true
+    yxhr: true
+    yxhrmethod: true
+    ymindom: true
+    yno404: true
+    ymincookie: true
+    ycookiefree: true
+    ynofilter: true
+    yimgnoscale: true
+    yfavicon: true
+    yemptysrc: true
+    ydefault: true
+# The links key is the configuration for the link tester
+links:
+    # Selectors are a list of selectors that you do not want the link checker to test
+    selectors:
+        - a[target=_new]
+        - .js-email-share-link
+        - .jenkins-ignore
+    # This is the user agent string for chrome on OSX. Can be removed/replaced
+    useragent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36'
+open_graph:
+    required:
+        - title
+        - type
+        - image
+        - url
+urlsToTest:
+    - name: State List
+      url: desktop.directory.stateList
+    - name: City List
+      url: desktop.directory.cityList
+    - name: Location List
+      url: desktop.directory.locationList
+    - name: Location
+      url: desktop.location.default
+campaign: false

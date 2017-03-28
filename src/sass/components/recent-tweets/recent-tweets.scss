@@ -1,0 +1,13 @@
+//
+// Recent tweets Component SCSS Stylesheet
+//
+
+@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+
+.c-recent-tweets
+{
+  &-follow-us
+  {
+    @extend h3;
+  }
+}

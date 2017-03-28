@@ -1,0 +1,177 @@
+// For all columns of the $class type (xs,sm,md,lg), when combined with $selector, set attributes to @content
+@mixin all-columns-with-selector($class, $selector)
+{
+    $list: '';
+    $i: 1;
+    $list: ".col-#{$class}-#{$i}.#{$selector}";
+    @for $i from 2 through $grid-columns {
+      $list: ".col-#{$class}-#{$i}.#{$selector}, #{$list}";
+    }
+    #{$list} {
+      @content
+    }
+}
+
+// Add top and bottom margin to columns when they wrap due to screen width
+@media(max-width:$screen-xs-max)
+{
+  @include all-columns-with-selector("sm", "col-spaced")
+  {
+    margin-top:$spaced-margin;
+    margin-bottom:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("sm", "col-spaced-top")
+  {
+    margin-top:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("sm", "col-spaced-bottom")
+  {
+    margin-bottom:$spaced-margin;
+  }
+}
+
+@media(max-width:$screen-sm-max)
+{
+  @include all-columns-with-selector("md", "col-spaced")
+  {
+    margin-top:$spaced-margin;
+    margin-bottom:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("md", "col-spaced-top")
+  {
+    margin-top:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("md", "col-spaced-bottom")
+  {
+    margin-bottom:$spaced-margin;
+  }
+}
+
+@media(max-width:$screen-md-max)
+{
+  @include all-columns-with-selector("lg", "col-spaced")
+  {
+    margin-top:$spaced-margin;
+    margin-bottom:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("lg", "col-spaced-top")
+  {
+    margin-top:$spaced-margin;
+  }
+
+  @include all-columns-with-selector("lg", "col-spaced-bottom")
+  {
+    margin-bottom:$spaced-margin;
+  }
+}
+
+// Add padding that disappears on wrap
+@media(min-width:$screen-sm-min)
+{
+  @include all-columns-with-selector("sm", "col-padded")
+  {
+    padding:$padded-padding;
+  }
+}
+
+@media(min-width:$screen-md-min)
+{
+  @include all-columns-with-selector("md", "col-padded")
+  {
+    padding:$padded-padding;
+  }
+}
+
+@media(min-width:$screen-lg-min)
+{
+  @include all-columns-with-selector("lg", "col-padded")
+  {
+    padding:$padded-padding;
+  }
+}
+
+.row
+{
+  &-separator
+  {
+    border-bottom:solid 1px $gray-light;
+  }
+
+  &-vertical-margin
+  {
+    &-top
+    {
+      margin-top: $vertical-margin-top;
+
+      &-sm
+      {
+        margin-top: $vertical-margin-top / 2;
+      }
+    }
+
+    &-bottom
+    {
+      margin-bottom: $vertical-margin-top;
+
+      &-sm
+      {
+        margin-bottom: $vertical-margin-top / 2;
+      }
+    }
+
+    &-sm
+    {
+      @extend .row-vertical-margin-top-sm;
+      @extend .row-vertical-margin-bottom-sm;
+    }
+
+    @extend .row-vertical-margin-top;
+    @extend .row-vertical-margin-bottom;
+  }
+}
+
+
+@each $abbreviation, $selector, $breakPixels in (lg, "min-width", $screen-lg-min),
+                                                (md, "min-width", $screen-md-min),
+                                                (sm, "min-width", $screen-sm-min),
+                                                (xs, "max-width", $screen-xs-max)
+{
+  @media(#{$selector}: #{$breakPixels})
+  {
+    .row-flex-#{$abbreviation}
+    {
+      display: flex;
+      flex-pack: distribute;
+      flex-direction:row;
+    }
+    .col-flex-#{$abbreviation}
+    {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+
+      .col-flex-child
+      {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
+.content-container
+{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.site-main
+{
+  flex: 1;
+  flex-basis: auto;
+}

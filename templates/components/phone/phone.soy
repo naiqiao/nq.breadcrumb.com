@@ -1,0 +1,186 @@
+{namespace components}
+
+/**
+ * @param rawPhoneNumber must be the uglyformatted phone
+ * @param type
+ * @param? hideSchemas
+ * @param? labelMap
+ */
+{template .phone}
+  {if strlen($rawPhoneNumber) > 0}
+    {let $typeClass}{$type | slugify}{/let}
+    <div class="c-phone c-phone-{$typeClass}">
+      <div class="c-phone-label c-phone-{$typeClass}-label">
+        {call .prettyLabel data="all"}
+          {param uglyLabel: $type /}
+        {/call}
+      </div>
+      <div class="c-phone-number-wrapper c-phone-{$typeClass}-number-wrapper">
+        {call .phone_link data="all"/}
+      </div>
+    </div>
+  {/if}
+{/template}
+
+/**
+ * @param rawPhoneNumber
+ * @param type
+ * @param? hideSchemas
+ * @param? hideId
+ */
+{template .phone_link}
+  <div class="c-phone-number c-phone-{$type}-number">
+    <span class="c-phone-number-span c-phone-{$type}-number-span"
+        {if not $hideSchemas}
+          {call .schemaProperties}
+            {param phoneType: $type /}
+            {param hideId: $hideId /}
+          {/call}
+        {/if}
+        >
+      {prettyPrintPhone($rawPhoneNumber)}
+    </span>
+    <a class="c-phone-number-link c-phone-{$type}-number-link"
+       href="tel:{$rawPhoneNumber}">
+      {prettyPrintPhone($rawPhoneNumber)}
+    </a>
+  </div>
+{/template}
+
+/**
+ * @param phones Array
+ * @param? includeKeys
+ * @param? hideSchemas
+ * @param? labelMap
+ */
+{template .phones_with_include}
+  {foreach $key in $includeKeys}
+    {foreach $phone in $phones}
+      {if $phone.type == $key}
+        {call .phone data="all"}
+          {param rawPhoneNumber: $phone.number /}
+          {param type: $phone.type /}
+          {param hideSchemas: $hideSchemas /}
+        {/call}
+      {/if}
+    {/foreach}
+  {/foreach}
+{/template}
+
+/**
+ * @param phones Array
+ * @param? excludeKeys
+ * @param? hideSchemas
+ * @param? labelMap
+ */
+{template .phones_with_exclude}
+  {let $excludeString}
+    {foreach $key in $excludeKeys}
+      {$key}{if not isLast($key)},{/if}
+    {/foreach}
+  {/let}
+
+  {foreach $phone in $phones}
+    {if not strContains($excludeString, $phone.type)}
+      {call .phone data="all"}
+        {param rawPhoneNumber: $phone.number /}
+        {param type: $phone.type /}
+        {param hideSchemas: $hideSchemas /}
+      {/call}
+    {/if}
+  {/foreach}
+
+{/template}
+
+
+/**
+ * @param phones Array
+ * @param? hideSchemas
+ * @param? labelMap
+ */
+{template .phones}
+  {foreach $phone in $phones}
+    {call .phone data="all"}
+      {param rawPhoneNumber: $phone.number /}
+      {param type: $phone.type /}
+      {param hideSchemas: $hideSchemas /}
+    {/call}
+  {/foreach}
+{/template}
+
+
+/**
+ * @param uglyLabel
+ * @param? labelMap
+ */
+{template .prettyLabel}
+  {let $main}
+    {msg desc=""}
+      Main Number
+    {/msg}
+  {/let}
+  {let $alternate}
+    {msg desc=""}
+      Alternate Number
+    {/msg}
+  {/let}
+  {let $mobile}
+    {msg desc="Mobile number."}
+      Mobile
+    {/msg}
+  {/let}
+  {let $fax}
+    {msg desc=""}
+      Fax Number
+    {/msg}
+  {/let}
+  {let $tty}
+    {msg desc=""}
+      TTY
+    {/msg}
+  {/let}
+  {let $tollFree}
+    {msg desc=""}
+      Toll Free Number
+    {/msg}
+  {/let}
+
+  {let $map: $labelMap ?:
+    [
+      'MAIN': $main,
+      'ALTERNATE': $alternate,
+      'MOBILE': $mobile,
+      'FAX': $fax,
+      'TTY': $tty,
+      'TOLL_FREE': $tollFree
+    ]
+  /}
+  {$map[$uglyLabel] ?: $uglyLabel |noAutoescape}
+{/template}
+
+/**
+ * @param phoneType
+ * @param hideId
+ */
+{template .schemaProperties}
+  // cursury research only comes up with
+  // schema info for Main and Fax.
+  // perhaps more research will allow
+  // other types to be incorporated
+  {let $typeSchema:
+    [
+      'MAIN': [
+        'itemprop': 'telephone',
+        'id': 'telephone'
+      ],
+      'FAX': [
+        'itemprop': 'faxNumber',
+        'id': 'fax-number'
+      ]
+    ]
+  /}
+
+  {if strlen($typeSchema[$phoneType] ? $typeSchema[$phoneType].itemprop : '')>0}
+    itemprop="{$typeSchema[$phoneType].itemprop}"{if not $hideId} id="{$typeSchema[$phoneType].id}{/if}"
+  {/if}
+{/template}

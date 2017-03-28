@@ -1,0 +1,58 @@
+//
+// Phone Component SCSS Stylesheet
+//
+
+.c-phone
+{
+  &-label
+  {
+
+  }
+
+  &-number
+  {
+    &-wrapper
+    {
+
+    }
+    &-span
+    {
+      @include bplte(xs)
+      {
+        display: none;
+      }
+    }
+    &-link
+    {
+      @include bpgte(sm)
+      {
+        display: none;
+      }
+    }
+  }
+
+  &-main
+  {
+
+  }
+  &-alternate
+  {
+
+  }
+  &-mobile
+  {
+
+  }
+  &-fax
+  {
+
+  }
+  &-tty
+  {
+
+  }
+  &-toll-free
+  {
+
+  }
+}

@@ -1,0 +1,69 @@
+{namespace components}
+
+/*
+{call components.bread_crumbs}
+  {param base: /}
+  {param crumbNames: /}
+  {param crumbUrls: /}
+
+  {param crumbBaseName: /}
+  {param crumbSeparator: /}
+  {param hideSchema: /}
+{/call}
+*/
+
+/**
+ * Bread crumbs component
+ * @param base Passthrough
+ * @param crumbNames Passthrough
+ * @param crumbUrls Passthrough
+ * @param? crumbBaseName The first entry in the crumb list
+ * @param? crumbSeparator The text to use between each crumb
+ * @param? hideSchema
+ * @param? abbrState
+ */
+{template .bread_crumbs}
+  {let $abbr: $abbrState ?: true /}
+  <div class="c-bread-crumbs">
+    {foreach $name in $crumbNames}
+     {if not isFirst($name)}
+        <span class="c-bread-crumbs-separator">
+          {if $crumbSeparator}{$crumbSeparator |noAutoescape}{else}&#x232a;{/if}
+        </span>
+      {/if}
+      // it's official, google doesn't support the schema.org markup for breadcrumbs
+      // here's their support page on the subject: https://support.google.com/webmasters/answer/185417?hl=en
+      <span class="c-bread-crumbs-item"{if not $hideSchema and not isLast($name)} itemscope itemtype="http://data-vocabulary.org/Breadcrumb"{/if}>
+        {if not isLast($name)}<a href="{$base}{$crumbUrls[index($name)]}"{if not $hideSchema} itemprop="url"{/if}>{/if}
+          <span {if not $hideSchema and not isLast($name)}itemprop="title" {/if}class="c-bread-crumbs-name">
+            {if isFirst($name)}
+              {if $crumbBaseName}
+                {$crumbBaseName}
+              {else}
+                {msg desc=""}
+                  Locations
+                {/msg}
+              {/if}
+            {else}
+              {$name|abbr:$abbr}
+            {/if}
+          </span>
+        {if not isLast($name)}</a>{/if}
+      </span>
+    {/foreach}
+  </div>
+{/template}
+
+/**
+ * Bread crumbs component
+ * @param base Passthrough
+ * @param crumbNames Passthrough
+ * @param crumbUrls Passthrough
+ * @param? crumbBaseName The first entry in the crumb list
+ * @param? crumbSeparator The text to use between each crumb
+ */
+{template .bread_crumbs_no_schema}
+  {call .bread_crumbs data="all"}
+    {param hideSchema: true /}
+  {/call}
+{/template}

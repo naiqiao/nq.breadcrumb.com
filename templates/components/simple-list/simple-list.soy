@@ -1,0 +1,111 @@
+{namespace components}
+
+/*
+{call components.simple_list}
+  {param lists: /}
+  {param listName: /}
+
+  {param columns: /}
+  {param maxNumberOfSections: /}
+  {param maxItemsPerSection: /}
+{/call}
+*/
+
+/**
+ * Simple List component
+ * @param? columns The number of columns per section, if a section is greater it will wrap, else it will be this.
+ * @param? maxNumberOfSections Maximum Number of Sections
+ * @param? maxItemsPerSection Maximum number or items displayed per section
+ * @param lists Lists to use
+ * @param listName Name of the listing
+ */
+{template .simple_list}
+{let $r: $maxNumberOfSections ?: 2 /}
+{let $maxItems: $maxItemsPerSection ?: 8 /}
+{let $c: $columns ?: 4 /}
+<div class="c-simple-list">
+  {foreach $list in $lists}
+    {if $list.title == $listName and length($list.sections) > 0}
+      <div class="c-simple-list-title">
+        {$list.title}
+      </div>
+      <div class="table-responsive">
+        <table class="c-simple-list-table table">
+          {let $maxRowIndex: length($list.sections) > $r ? $r : length($list.sections) /}
+          {for $sectionIndex in range(0, $maxRowIndex)}
+            {let $section: $list.sections[$sectionIndex]/}
+            {if length($section.items) > 0}
+              {if strlen($section.description) > 0 or strlen($section.name) > 0}
+                <thead class="c-simple-list-table-section-header">
+                  {if strlen($section.name) > 0}
+                    <tr>
+                      <th colspan="{$c}"  class="c-simple-list-table-section-header-title">
+                        {$section.name}
+                      </th>
+                    </tr>
+                  {/if}
+                  {if strlen($section.description) > 0}
+                    <tr>
+                      <th colspan="{$c}"  class="c-simple-list-table-section-header-description">
+                        {$section.description}
+                      </th>
+                    </tr>
+                  {/if}
+                </thead>
+              {/if}
+              <tbody>
+                {let $stopAt: length($section.items) > $maxItems ? $maxItems : length($section.items) /}
+                {for $row in range(0, ceiling($stopAt/$c))}
+                  <tr>
+                    {for $col in range($row * $c, ($row+1) * $c)}
+                      <td class="c-simple-list-table-section-item-cell">
+                        {if $col < length($section.items)}
+                          {let $item: $section.items[$col] /}
+                          <div class="c-simple-list-table-section-item">
+                            {if strlen($item.name) > 0}
+                              <div class="c-simple-list-table-section-item-name">
+                                {if strlen($item.url) > 0}
+                                  <a href="{$item.url}" class="c-simple-list-table-section-item-link">
+                                    {$item.name}
+                                  </a>
+                                {else}
+                                  {$item.name}
+                                {/if}
+                              </div>
+                            {/if}
+                            {if strlen($item.description) > 0}
+                              <div class="c-simple-list-table-section-item-description">
+                                {$item.description}
+                              </div>
+                            {/if}
+                            {if $item.price.cents > 0}
+                              <div class="c-simple-list-table-section-item-price">
+                                ${floor($item.price.cents / 100)}.
+                                {if $item.price.cents % 100 < 10}
+                                  0
+                                {/if}
+                                {$item.price.cents % 100}
+                              </div>
+                            {/if}
+                            {if strlen($item.videoUrl) > 0}
+                              <div class="c-simple-list-table-section-item-youtube-wrapper">
+                                <a class="c-simple-list-table-section-item-youtube-link" href="{$item.videoUrl}">
+                                  Watch Youtube Video
+                                </a>
+                              </div>
+                            {/if}
+                          </div>
+                        {/if}
+                      </td>
+                    {/for}
+                  </tr>
+                {/for}
+              </tbody>
+            {/if}
+          {/for}
+        </table>
+      </div>
+    {/if}
+  {/foreach}
+</div>
+{/template}

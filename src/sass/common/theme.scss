@@ -1,0 +1,577 @@
+.social-links-item {
+  margin-left: 10px;
+  img {
+    width: 35px;
+    height: 35px;
+  }
+}
+.c-bread-crumbs
+{
+  margin: $grid-gutter-width/2 0px;
+  @include font-h2;
+  color: $brand-tertiary;
+  text-transform: uppercase;
+
+  &-item
+  {
+    @include link-states(a)
+    {
+      color: $brand-tertiary;
+    }
+
+    &:last-child
+    {
+      text-transform: none;
+    }
+  }
+}
+
+body
+{
+  background-image: url($image-path + '/sor-header-bg.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% auto;
+}
+
+@mixin phone-button
+{
+  @include button-secondary();
+  font-weight: $font-weight-bold;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.header
+{
+  @include bp(sm, sm)
+  {
+    margin-bottom: 21px;
+  }
+  @include bplte(xs)
+  {
+    margin-bottom: 19px;
+  }
+
+  &-nav
+  {
+    padding-left: 0px;
+    padding-right: 0px;
+
+    &-links-list
+    {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+
+      &-item
+      {
+        padding-right: 45px;
+        transform: translateY(50%);
+
+        @include bp(md, md)
+        {
+          padding-right: 22px;
+        }
+
+        @include bpgte(md)
+        {
+          &-phone
+          {
+            padding-right: 0px;
+            width: 173px;
+          }
+        }
+      }
+    }
+
+    &-phone
+    {
+      .c-phone-number
+      {
+        &-span
+        {
+          width: 100%;
+          @include bpgte(md)
+          {
+            @include phone-button;
+          }
+        }
+      }
+    }
+  }
+
+  @include bplte(sm)
+  {
+    &-logo
+    {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    &-logo-wrapper
+    {
+      position: relative;
+      @include clearfix;
+      text-align: center;
+    }
+    &-toggle
+    {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  }
+
+  &-logo
+  {
+    width: 448px;
+
+    @include bp(sm, sm)
+    {
+      width: 353px;
+    }
+
+    @include bplte(xs)
+    {
+      width: 225px;
+
+      &-wrapper
+      {
+        text-align: left;
+      }
+    }
+  }
+
+  &-search
+  {
+    @include bp(sm, sm)
+    {
+      display: table-cell;
+    }
+
+    &-wrapper
+    {
+      @include bpgte(md)
+      {
+        display: table-cell;
+        vertical-align: middle;
+
+        @at-root
+        {
+          .placehodler &
+          {
+            width: 300px;
+          }
+        }
+      }
+
+      @include bp(sm, sm)
+      {
+        display: table;
+        width: 100%;
+      }
+
+    }
+
+    &-phone
+    {
+      display: none;
+
+      @include bp(sm, sm)
+      {
+        display: table-cell;
+        width: 210px;
+        vertical-align: middle;
+      }
+
+      @include bplte(xs)
+      {
+        display: block;
+        margin-top: 9px;
+      }
+
+      .c-phone-number
+      {
+        width: 100%;
+        vertical-align: middle;
+
+        &-span
+        {
+          width: 100%;
+          @include bpgte(sm)
+          {
+            @include phone-button;
+          }
+        }
+
+        &-link
+        {
+          width: 100%;
+          @include bplte(xs)
+          {
+            @include phone-button;
+          }
+        }
+      }
+    }
+
+    .search
+    {
+      &-wrapper
+      {
+        @include bp(sm, sm)
+        {
+          padding-right: $grid-gutter-width/2;
+        }
+      }
+
+      &-label-wrapper
+      {
+        vertical-align: middle;
+      }
+
+      &-input
+      {
+        background-color: transparent;
+        width: 100%;
+        border: 0px;
+        height: 100%;
+        padding-left: 12px;
+
+        ::placeholder
+        {
+          color: white;
+          opacity: 1;
+        }
+
+        &-wrapper
+        {
+          $border: 1px solid $brand-tertiary;
+          vertical-align: middle;
+          border-left: $border;
+          border-top: $border;
+          border-bottom: $border;
+
+          @at-root
+          {
+            .placeholder &
+            {
+              @include bpgte(sm)
+              {
+                min-width: 300px;
+              }
+            }
+          }
+        }
+
+        &-row
+        {
+          height: 30px;
+        }
+      }
+
+      &-button
+      {
+        &-wrapper
+        {
+          width: 30px;
+          vertical-align: middle;
+          height: 100%;
+        }
+
+        width: 100%;
+        height: 100%;
+        background-color: $brand-tertiary;
+      }
+    }
+  }
+
+  &-social-wrapper
+  {
+    display: table-cell;
+    width: 180px;
+    vertical-align: middle;
+
+    @include bplte(sm)
+    {
+      display: none;
+    }
+
+    .social-links
+    {
+      margin-right: -$grid-gutter-width;
+    }
+  }
+}
+
+@include bpgte(md)
+{
+  .header
+  {
+    position: relative;
+
+    &-nav
+    {
+      margin-top: 12px;
+      margin-bottom: $grid-gutter-width/2;
+      width: 100%;
+
+      position: absolute;
+      top: 0px;
+      left: 0px;
+
+      &.navbar-collapse.collapse
+      {
+        display: table !important;
+      }
+
+
+      &-links-list
+      {
+        display: table-row;
+
+        &-item
+        {
+          display: inline-table;
+          text-transform: uppercase;
+          font-weight: $font-weight-bold;
+        }
+      }
+
+      &-link
+      {
+        position: relative;
+        display: inline-block;
+
+        &:after
+        {
+          position: absolute;
+          content: '';
+          top: 101%;
+          left: 50%;
+          margin-left: -5px;
+          border-top: solid 5px $gray-1;
+          border-left: solid 5px transparent;
+          border-right: solid 5px transparent;
+          width: 0;
+          height: 0;
+        }
+      }
+      &-phone
+      {
+        width: 100%;
+      }
+    }
+    &-info-row
+    {
+      display: table;
+      width: 100%;
+      padding-top: 57px;
+    }
+    &-logo-wrapper
+    {
+      display: table-cell;
+    }
+  }
+}
+@include bplte(sm)
+{
+  .header
+  {
+    &-nav
+    {
+      background-color: $brand-primary;
+
+      &.navbar-collapse
+      {
+        border-top: $border;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-top: 5px;
+        margin-bottom: $grid-gutter-width/2;
+      }
+      &-links-list-item
+      {
+        text-transform: uppercase;
+        font-weight: $font-weight-bold;
+        padding-left: $grid-gutter-width/2;
+        padding-right: $grid-gutter-width/2;
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        & + &
+        {
+          border-top: $border;
+        }
+      }
+    }
+    &-toggle
+    {
+      font-size: 34px;
+      color: $brand-tertiary;
+
+      &.navbar-toggle
+      {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+
+        @include bp(sm, sm)
+        {
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+.footer
+{
+  // magic spacing from the comps
+  margin-top: 44px;
+  margin-bottom: 38px;
+
+  @include bplte(sm)
+  {
+    text-align: center;
+  }
+
+  @include bpgte(md)
+  {
+    &-top
+    {
+      display: table;
+      width: 100%;
+    }
+    &-logo-wrapper,
+    &-info-wrapper,
+    &-social-wrapper
+    {
+      display: table-cell;
+      vertical-align: middle;
+    }
+    &-social-wrapper
+    {
+      min-width: 165px;
+    }
+
+    &-logo-wrapper
+    {
+      width: 280px;
+    }
+  }
+
+  &-social-wrapper
+  {
+    @include bpgte(md)
+    {
+      text-align: right;
+
+      .social-links
+      {
+        margin-right: -$grid-gutter-width/2;
+      }
+    }
+    @include bp(sm, sm)
+    {
+      margin-top: 17px;
+      margin-bottom: 17px;
+    }
+    @include bplte(xs)
+    {
+      margin-top: 24px;
+      margin-bottom: 25px;
+    }
+  }
+
+  &-title
+  {
+    @include font-large;
+    text-transform: uppercase;
+    color: $brand-secondary;
+    font-weight: $font-weight-bold;
+
+    @include bplte(xs)
+    {
+      display: block;
+      margin-bottom: 9px;
+      margin-top: 9px;
+    }
+  }
+  &-info
+  {
+    @include font-large;
+
+    @include bpgte(sm)
+    {
+      margin-left: 12px;
+    }
+
+    &-wrapper
+    {
+      @include bpgte(sm)
+      {
+        padding-left: 12px; // magic comp number
+      }
+      @include bplte(xs)
+      {
+        display: block;
+      }
+    }
+
+    &-phone
+    {
+      font-weight: $font-weight-bold;
+
+      @include bpgte(sm)
+      {
+        margin-left: 1ex;
+      }
+
+      @include bplte(xs)
+      {
+        display: block;
+      }
+
+    }
+  }
+  &-nav
+  {
+    margin-top: 11px; // another magic number
+
+    &-links
+    {
+      @include clear-list-styling;
+
+      &-item
+      {
+        @include font-sizes(10px, 13px);
+        text-transform: uppercase;
+        font-weight: $font-weight-bold;
+        display: inline-block;
+
+        & + &
+        {
+          @include bpgte(md)
+          {
+            margin-left: 44px; // so many magic numbers
+          }
+          @include bp(sm, sm)
+          {
+            margin-left: 24px;
+          }
+
+          @include bplte(xs)
+          {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}

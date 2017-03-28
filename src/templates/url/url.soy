@@ -1,0 +1,68 @@
+{namespace url}
+/**
+ * @param locale
+ * @param custom
+ * @param isCollision
+ * @param id
+ */
+{template .locations}
+{call url.urlWithLocale data="all"}{param url}{$custom['5032']|casing:'lower'|latin:true|spaces:'-'|other:'-'}{if $isCollision}-{$id}{/if}{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ */
+{template .dir_808_country}
+{call url.urlWithLocale data="all"}{param url}index.html{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ * @param country
+ */
+{template .dir_808_state}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ * @param country
+ * @param state
+ */
+{template .dir_808_city}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$state|abbr:true|fullRegion:true,$country|casing:'lower'|latin:true|spaces:'-'|other:'-'}.html{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ * @param country
+ * @param state
+ * @param city
+ */
+{template .dir_808_locations}
+{call url.urlWithLocale data="all"}{param url}{$country|fullCountry:false|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$state|abbr:true|fullRegion:true,$country|casing:'lower'|latin:true|spaces:'-'|other:'-'}/{$city|casing:'lower'|latin:true|spaces:'-'|other:'-'}.html{/param}{/call}
+{/template}
+
+/**
+ * @param locale
+ */
+{template .store_locator}
+{call url.urlWithLocale data="all"}{param url}search.html{/param}{/call}
+{/template}
+
+/** */
+{template .xml_sitemap}
+sitemap.xml
+{/template}
+
+/**
+ * Helper template to insert locale for international pages
+ * @param url
+ * @param locale
+ */
+{template .urlWithLocale}
+	{if $locale != 'en'}
+		{$locale|casing:'lower'}/
+	{/if}
+	{$url |noAutoescape}
+{/template}

@@ -1,0 +1,129 @@
+//
+// Table Cell Component SCSS Stylesheet
+//
+
+.row
+{
+  .c-table-cell
+  {
+    @media (max-width: $screen-sm-min)
+    {
+      // This handles the case when the table cell has been embedded in a
+      // bootstrap .row
+      margin-right:-15px;
+      margin-left:-15px;
+    }
+  }
+}
+
+.c-table-cell
+{
+  position:relative;
+  margin:5px 0px;
+  padding:10px 15px;
+  background-color:#BBB;
+
+  &-link
+  {
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:100%;
+    width:100%;
+  }
+
+  &-table
+  {
+    width:100%;
+    min-height:35px;
+  }
+
+  &-row
+  {
+
+  }
+
+  &-cell
+  {
+    &:last-child
+    {
+      text-align:right;
+    }
+  }
+
+  &-title
+  {
+    font-size:14px;
+    font-weight:bold;
+    line-height:110%;
+  }
+
+  &-subtitle
+  {
+    margin-top:7px;
+    font-size:10px;
+    line-height:110%;
+  }
+
+  &-disclosure
+  {
+    &-text
+    {
+
+    }
+  }
+
+  @media (max-width: $screen-sm-min)
+  {
+  }
+
+  @media (max-width: $screen-md-min)
+  {
+  }
+
+  @media (max-width: $screen-lg-min)
+  {
+  }
+
+  @media (min-width: $screen-lg-min)
+  {
+  }
+
+  // Use this as a base template for when you have variations of the cell
+  // using the class_modifier parameter
+  // &-class-modifier
+  // {
+  //   .table-cell
+  //   {
+  //     &-table
+  //     {
+  //     }
+  //
+  //     &-row
+  //     {
+  //     }
+  //
+  //     &-cell
+  //     {
+  //       &:last-child
+  //       {
+  //       }
+  //     }
+  //
+  //     &-title
+  //     {
+  //     }
+  //
+  //     &-subtitle
+  //     {
+  //     }
+  //
+  //     &-disclosure
+  //     {
+  //       &-text
+  //       {
+  //       }
+  //     }
+  //   }
+  // }
+}

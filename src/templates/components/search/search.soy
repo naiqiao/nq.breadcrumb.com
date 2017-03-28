@@ -1,0 +1,122 @@
+{namespace components.search}
+
+/*
+{call components.search.simple_search_bar}
+  {param baseUrl: /}
+  {param searcherPath: /}
+
+  {param queryParameter: /}
+  {param formLabel: /}
+  {param submitLabel: /}
+  {param placeHolder: /}
+  {param optionalInputs: /}
+  {param defaultValue: /}
+{/call}
+*/
+
+/**
+ *  @param baseUrl
+ *  @param searcherPath
+ *  @param? queryParameter
+ *  @param? formLabel
+ *  @param? submitLabel
+ *  @param? placeHolder
+ *  @param? optionalInputs
+ *  @param? defaultValue
+ *  @param? locale
+ */
+{template .simple_search_bar}
+  {let $label: $formLabel ?: 'Find a location' /}
+  {let $button: $submitLabel ?: 'Go' /}
+  {let $localedSearch: $locale and $locale != 'en' ? $locale + '/' : '' /} // Default locale 'en' not part of url
+  <div class="search-wrapper">
+    <form method="get" class="search" action="{$baseUrl}{$localedSearch}{$searcherPath}">
+      <div class="search-input-row">
+        <div class="search-label-wrapper">
+          <label class="search-label">{$label |noAutoescape}</label>
+        </div>
+        <div class="search-input-wrapper">
+          {call .input data="all" /}
+        </div>
+        <div class="search-button-wrapper">
+          <button type="submit" class="search-button">{$button |noAutoescape}</button>
+        </div>
+      </div>
+      {if $optionalInputs}
+        <div class="search-optional-inputs">
+          {$optionalInputs | noAutoescape}
+        </div>
+      {/if}
+    </form>
+  </div>
+{/template}
+
+/*
+{call components.search.input}
+  {param queryParameter: /}
+  {param placeHolder: /}
+  {param defaultValue: /}
+{/call}
+*/
+
+/**
+ *  @param? queryParameter
+ *  @param? placeHolder
+ *  @param? defaultValue
+ */
+{template .input}
+  {let $placeHolderText}
+    {if $placeHolder}
+      {$placeHolder |noAutoescape}
+    {else}
+      {msg desc=""}
+        Search by City, State, Zip...
+      {/msg}
+    {/if}
+  {/let}
+  <input placeholder="{$placeHolderText}"
+         class="search-input"
+         type="text"
+         autocorrect="off"
+         name="{$queryParameter ?: 'q' |noAutoescape}"
+         value="{$defaultValue ?: '' |noAutoescape}"
+         onfocus="this.value='';">
+{/template}
+
+/*
+{call components.search.pretty_city_state_query}
+  {param query: /}
+  {param queryLocation: /}
+{/call}
+*/
+
+/**
+ *  @param query
+ *  @param? queryLocation
+ */
+{template .pretty_city_state_query}
+  {if isNonnull($queryLocation) and $queryLocation['geolocated']}
+    {$queryLocation['city']}, {$queryLocation['state']}
+  {else}
+    {$query}
+  {/if}
+{/template}
+
+/*
+{call components.search.pretty_zip_query}
+  {param query: /}
+  {param queryLocation: /}
+{/call}
+*/
+
+/**
+ *  @param query
+ *  @param? queryLocation
+ */
+{template .pretty_zip_query}
+  {if isNonnull($queryLocation) and $queryLocation['geolocated']}
+    {$queryLocation['zip']}
+  {else}
+    {$query}
+  {/if}
+{/template}

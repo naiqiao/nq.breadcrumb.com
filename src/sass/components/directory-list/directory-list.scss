@@ -1,0 +1,57 @@
+//
+// Directory list Component SCSS Stylesheet
+//
+
+.c-directory-list
+{
+  &-title
+  {
+
+  }
+
+  &-content
+  {
+    @include bpgte(sm)
+    {
+      column-count: 2;
+    }
+    @include bpgte(md)
+    {
+      column-count: 3;
+    }
+    list-style-type: none;
+    padding: 0px;
+    margin-top:0px;
+    margin-bottom:0px;
+
+    &-wrapper
+    {
+      margin-top:15px;
+      margin-bottom:15px;
+    }
+
+    &-item
+    {
+      text-transform: uppercase;
+
+      &-link
+      {
+        display: inline-block;
+
+        &:link
+        {
+
+        }
+        &:hover
+        {
+
+        }
+      }
+      &-count
+      {
+        margin-left: 6px;
+        display: inline-block;
+      }
+    }
+  }
+}

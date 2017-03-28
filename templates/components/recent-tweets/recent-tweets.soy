@@ -1,0 +1,49 @@
+{namespace components}
+
+/*
+{call components.recent_tweets}
+  {param twitterHandle: /}
+  {param widgetID: /}
+
+  {param tweetLimit: /}
+  {param followUsCTA: /}
+  {param dataChrome: /}
+{/call}
+*/
+
+/**
+ * Recent tweets component
+ * @param twitterHandle
+ * @param widgetID
+ * @param? tweetLimit
+ * @param? followUsCTA
+ * @param? dataChrome
+ */
+{template .recent_tweets}
+  {let $th: strContains($twitterHandle, '@') ? $twitterHandle : '@' + $twitterHandle /}
+  {let $nakedHandle: substring($th, 1) /}
+  <div class="c-recent-tweets">
+    <div class="c-recent-tweets-follow-us">
+      {if $followUsCTA}
+        {$followUsCTA |noAutoescape}
+      {else}
+        Follow us on Twitter
+      {/if}
+      {sp}
+      <a target="_blank"
+         href="http://www.twitter.com/{$twitterHandle}">
+        {$th}
+      </a>
+    </div>
+    <a class="twitter-timeline"
+       data-dnt="true"
+       href="https://twitter.com/{$nakedHandle}"
+       data-widget-id="{$widgetID}"
+       data-tweet-limit="{if $tweetLimit}{$tweetLimit}{else}3{/if}"
+       data-chrome="{$dataChrome ?: 'nofooter transparent noborders noheader'}"></a>
+    {literal}
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    {/literal}
+  </div>
+
+{/template}

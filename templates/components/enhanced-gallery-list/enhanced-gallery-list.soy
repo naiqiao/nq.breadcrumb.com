@@ -1,0 +1,466 @@
+{namespace components.enhanced_gallery_list}
+
+/*
+{call components.enhanced_gallery_list.wrapper}
+  {param productLists: /}
+  {param listName: /}
+
+  {param numberOfImagesToDisplay: /}
+  {param sectionName: /}
+  {param title: /}
+  {param showName: /}
+  {param showDescription: /}
+  {param showPrice: /}
+  {param showPriceCents: /}
+  {param gallerySizeIndex: /}
+  {param embedYouTube: /}
+  {param showVideoTitle: /}
+  {param hideVideoControls: /}
+  {param showYouTubeThumbnail: /}
+  {param thumbnailIndex: /}
+  {param linkItemName: /}
+  {param notLinkItemImage: /}
+  {param showExternalLink: /}
+  {param externalLinkText: /}
+  {param showOptions: /}
+  {param showOptionsCalories: /}
+  {param showOptionsCents: /}
+  {param showOptionsText: /}
+  {param hideSchema: /}
+{/call}
+*/
+
+/**
+ * Gallery list component
+ * @param productLists Must be in the form of productLists[x].sections[x].items[]
+ * @param listName Product List Name
+ * @param? numberOfImagesToDisplay Number of gallery images to display
+ * @param? sectionName Section Name
+ * @param? title
+ * @param? showName
+ * @param? showDescription
+ * @param? showPrice
+ * @param? showPriceCents
+ * @param? gallerySizeIndex
+ * @param? embedYouTube To use this, you MUST add the YouTube component
+ * @param? showVideoTitle
+ * @param? hideVideoControls
+ * @param? showYouTubeThumbnail
+ * @param? thumbnailIndex
+ * @param? linkItemName
+ * @param? notLinkItemImage True or false
+ * @param? showExternalLink
+ * @param? externalLinkText Actual text displayed
+ * @param? showOptions Optional text fields/pricing/etc
+ * @param? showOptionsCalories Optional text fields/pricing/etc
+ * @param? showOptionsCents Optional text fields/pricing/etc
+ * @param? showOptionsText Optional text fields/pricing/etc
+ * @param? hideSchema Optional Passthrough
+ */
+{template .wrapper}
+  {if $title and isNonnull($productLists) and length($productLists) > 0}
+    <h3 class="c-enhanced-gallery-list-title">
+      {$title}
+    </h3>
+  {/if}
+  {if isNonnull($productLists) and length($productLists) > 0}
+    {foreach $list in $productLists}
+      {if ($list.title == $listName or $list.name == $listName) and length($list.sections) > 0}
+        {if strlen($sectionName ?: '') >0}
+          {foreach $section in $list.sections}
+            {if (not isNonnull($sectionName) and $section.name == '') or $section.name == $sectionName}
+              {call .items data="all"}
+                {param items: $section.items /}
+                {param currency: $list.currency /}
+                {param numberOfImagesToDisplay: $numberOfImagesToDisplay ?: 10000 /}
+              {/call}
+            {/if}
+          {/foreach}
+        {else}
+          {call .items data="all"}
+            {param items: listItems($list.sections) /}
+            {param currency: $list.currency /}
+            {param numberOfImagesToDisplay: $numberOfImagesToDisplay ?: 10000 /}
+          {/call}
+        {/if}
+      {/if}
+    {/foreach}
+  {/if}
+{/template}
+
+/*
+{call components.enhanced_gallery_list.items}
+  {param items:  /}
+  {param showName: /}
+  {param showDescription: /}
+  {param showPrice: /}
+  {param showPriceCents: /}
+  {param gallerySizeIndex: /}
+  {param embedYouTube: /}
+  {param showVideoTitle: /}
+  {param hideVideoControls: /}
+  {param showYouTubeThumbnail: /}
+  {param thumbnailIndex: /}
+  {param linkItemName: /}
+  {param notLinkItemImage: /}
+  {param showExternalLink: /}
+  {param externalLinkText: /}
+  {param externalLinkText: /}
+  {param showOptions: /}
+  {param showOptionsCalories: /}
+  {param showOptionsCents: /}
+  {param showOptionsText: /}
+{/call}
+*/
+
+/**
+ * @param items
+ * @param numberOfImagesToDisplay
+ * @param currency Property on the list, passthrough
+ * @param? showName
+ * @param? showDescription
+ * @param? showPrice
+ * @param? showPriceCents
+ * @param? gallerySizeIndex
+ * @param? embedYouTube To use this, you MUST add the YouTube component
+ * @param? showVideoTitle
+ * @param? hideVideoControls
+ * @param? showYouTubeThumbnail
+ * @param? thumbnailIndex
+ * @param? linkItemName
+ * @param? notLinkItemImage True or false
+ * @param? showExternalLink
+ * @param? externalLinkText Actual text displayed
+ * @param? showOptions Optional text fields/pricing/etc
+ * @param? showOptionsCalories Optional text fields/pricing/etc
+ * @param? showOptionsCents Optional text fields/pricing/etc
+ * @param? showOptionsText Optional text fields/pricing/etc
+ * @param? hideSchema Optional Passthrough
+ */
+{template .items}
+  <div class="c-enhanced-gallery-list-item-list">
+    {foreach $item in $items}
+      {if index($item) < $numberOfImagesToDisplay}
+      <div class="c-enhanced-gallery-list-item-wrapper">
+        {call .item data="all"}
+          {param item: $item /}
+        {/call}
+      </div>
+      {/if}
+    {/foreach}
+  </div>
+{/template}
+
+
+/*
+{call components.enhanced_gallery_list.item}
+  {param item:  /}
+  {param currency: /}
+  {param showName: /}
+  {param showDescription: /}
+  {param showPrice: /}
+  {param showPriceCents: /}
+  {param gallerySizeIndex: /}
+  {param embedYouTube: /}
+  {param showVideoTitle: /}
+  {param hideVideoControls: /}
+  {param showYouTubeThumbnail: /}
+  {param thumbnailIndex: /}
+  {param linkItemName: /}
+  {param notLinkItemImage: /}
+  {param showExternalLink: /}
+  {param externalLinkText: /}
+  {param showOptions: /}
+  {param showOptionsCalories: /}
+  {param showOptionsCents: /}
+  {param showOptionsText: /}
+{/call}
+*/
+
+/**
+ * @param item
+ * @param currency Property on the list
+ * @param? showName
+ * @param? showDescription
+ * @param? showPrice
+ * @param? showPriceCents
+ * @param? gallerySizeIndex
+ * @param? embedYouTube To use this, you MUST add the YouTube component
+ * @param? showVideoTitle
+ * @param? hideVideoControls
+ * @param? showYouTubeThumbnail
+ * @param? thumbnailIndex
+ * @param? linkItemName
+ * @param? notLinkItemImage True or false
+ * @param? showExternalLink
+ * @param? externalLinkText Actual text displayed
+ * @param? showOptions Optional text fields/pricing/etc
+ * @param? showOptionsCalories Optional text fields/pricing/etc
+ * @param? showOptionsCents Optional text fields/pricing/etc
+ * @param? showOptionsText Optional text fields/pricing/etc
+ * @param? hideSchema
+ */
+{template .item}
+  {let $youtubeOnly: not $showName and not $showDescription and not $showPrice and not $showPriceCents and not $gallerySizeIndex /}
+  {let $itemScope}
+    {if not $hideSchema and not $youtubeOnly}
+      itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer"
+      {if $item.price.cents}
+        {let $strPrice}{$item.price.cents}{/let}
+        itemref="price-{$item.name |slugify}-{$strPrice |slugify}"
+      {/if}
+    {/if}
+  {/let}
+  <div {$itemScope|noAutoescape}>
+    <div class="c-enhanced-gallery-list-item" {if not $hideSchema and not $youtubeOnly} itemprop="itemOffered" itemscope itemtype="http://schema.org/Product"{/if}>
+      {call .image_or_video data="all" /}
+      {if $showName}
+        {call .item_name data="all" /}
+      {/if}
+      {if $showDescription}
+        {call .item_description data="all" /}
+      {/if}
+      {if $showPrice and $item.price.cents > 0}
+        {call .item_price data="all" /} // needs currency
+      {/if}
+      <div class="c-enhanced-gallery-list-item-options-button-wrapper">
+        {if $showOptions}
+          {call .item_options data="all" /}
+        {/if}
+        {if $showExternalLink and isNonnull($item.url) and strlen($item.url) > 0}
+          {call .item_link data="all" /}
+        {/if}
+      </div>
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * @param item
+ * @param? embedYouTube To use this, you MUST add the YouTube component
+ * @param? showVideoTitle
+ * @param? hideVideoControls
+ * @param? showYouTubeThumbnail
+ * @param? thumbnailIndex
+ * @param? notLinkItemImage True or false
+ * @param? gallerySizeIndex
+ * @param? hideSchema Passthrough
+ */
+{template .image_or_video}
+  {if $embedYouTube and strlen($item.videoUrl) > 0}
+    {call components.youtube_embed data="all"}
+      {param video}
+        {replace($item.videoUrl, 'http://www.youtube.com/watch?v=', '')}
+      {/param}
+      {param hideSchema: true /}
+    {/call}
+  {elseif $showYouTubeThumbnail and strlen($item.videoUrl) > 0}
+    {call .youtube_thumbnail data="all" /}
+  {else}
+    {call .image data="all" /}
+  {/if}
+{/template}
+
+/**
+ * @param item
+ * @param? thumbnailIndex
+ */
+{template .youtube_thumbnail}
+  <div class="c-enhanced-gallery-list-item-youtube-thumbnail-wrapper-outer">
+    <div class="c-enhanced-gallery-list-item-youtube-thumbnail-wrapper-inner">
+      <img class="c-enhanced-gallery-list-item-youtube-thumbnail-image" data-youtubeurl="{$item.videoUrl}" data-thumbnailindex="{$thumbnailIndex ?: 'mqdefault'}">
+      <div class="c-enhanced-gallery-list-item-youtube-thumbnail-play-table-wrapper">
+        <table class="c-enhanced-gallery-list-item-youtube-thumbnail-play-table">
+          <tr>
+            <td>
+              <a class="c-enhanced-gallery-list-item-youtube-thumbnail-play-button" href="{$item.videoUrl}" target="_blank" rel="nofollow"></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+{/template}
+
+/**
+ * @param item
+ * @param? notLinkItemImage
+ * @param? gallerySizeIndex
+ * @param? hideSchema
+ */
+{template .image}
+  {if not $notLinkItemImage and isNonnull($item.url) and strlen($item.url) > 0}
+      <a href="{$item.url}"
+         class="c-enhanced-gallery-list-item-link"
+         target="_blank"
+         rel="nofollow"
+         >
+    {/if}
+    {if length($item.gallery)>0}
+      {let $index: $gallerySizeIndex ?: 0 /}
+      {let $imageSrc}
+        {if length($item.gallery[0].sizes) > $index}
+          {$item.gallery[0].sizes[$index].url}
+        {elseif length($item.gallery[0].sizes) >0}
+          {$item.gallery[0].sizes[0].url}
+        {/if}
+      {/let}
+      {let $imageItemProp}
+        {if not $hideSchema}
+          itemprop="image"
+        {/if}
+      {/let}
+      <div class="c-enhanced-gallery-list-item-image-wrapper">
+        <img class="c-enhanced-gallery-list-item-image"
+             src="{$imageSrc}"
+             {$imageItemProp |noAutoescape}
+             >
+      </div>
+    {/if}
+    {if not $notLinkItemImage and isNonnull($item.url) and strlen($item.url) > 0}
+      </a>
+    {/if}
+{/template}
+
+/**
+ * @param item
+ * @param? linkItemName
+ * @param? hideSchema
+ */
+{template .item_name}
+  {if not $hideSchema}
+    <link itemprop="url" href="{$item.url}">
+  {/if}
+  <div class="c-enhanced-gallery-list-item-name">
+    {if $linkItemName and isNonnull($item.url) and strlen($item.url) > 0}
+      <a href="{$item.url}"
+         class="c-enhanced-gallery-list-item-name-link"
+         target="_blank"
+         rel="nofollow"
+         >
+    {/if}
+      {if not $hideSchema}
+        <span itemprop="name">
+      {/if}
+      {$item.name}
+      {if not $hideSchema}
+        </span>
+      {/if}
+    {if $linkItemName and isNonnull($item.url) and strlen($item.url) > 0}
+      </a>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * @param item
+ * @param? hideSchema
+ */
+{template .item_description}
+  {let $itemprop}
+    {if not $hideSchema}
+      itemprop="description"
+    {/if}
+  {/let}
+  <div class="c-enhanced-gallery-list-item-description" {$itemprop |noAutoescape}>
+    {$item.description |changeNewlineToBr}
+  </div>
+{/template}
+
+/**
+ * @param item
+ * @param showPriceCents
+ * @param currency
+ * @param? hideSchema
+ */
+{template .item_price}
+  // TODO: THIS DOES NOT WORK FOR ALL CURRENCIES
+  // for example, YEN don't have cents
+  {let $priceWithCents}
+    {floor($item.price.cents / 100)}.
+    {if $item.price.cents % 100 < 10}
+      0
+    {/if}
+    {$item.price.cents % 100}
+  {/let}
+  {let $strPrice}{$item.price.cents}{/let}
+  <div class="c-enhanced-gallery-list-item-price" {if not $hideSchema}itemprop="offers" itemscope itemtype="http://schema.org/Offer"{/if}>
+    <span id="price-{$item.name |slugify}-{$strPrice |slugify}">
+      {call .currency_indicator data="all" /}
+      {if not $hideSchema}
+        <span itemprop="price" content="{$priceWithCents}">
+      {/if}
+      {if $showPriceCents}
+        {$priceWithCents}
+      {else}
+        {round($item.price.cents / 100)}
+      {/if}
+      {if not $hideSchema}
+        </span>
+      {/if}
+    </span>
+  </div>
+{/template}
+
+/**
+ * @param currency
+ * @param? hideSchema
+ */
+{template .currency_indicator}
+  {let $currencyIndicators: [
+      'USD' : '$'
+    ]
+  /}
+  {if not $hideSchema}
+    <span itemprop="priceCurrency" content="{$currency}">
+  {/if}
+  {$currencyIndicators[$currency] ?: '$'}
+  {if not $hideSchema}
+    </span>
+  {/if}
+{/template}
+
+/**
+ * @param item
+ * @param? showOptionsCalories Optional text fields/pricing/etc
+ * @param? showOptionsCents Optional text fields/pricing/etc
+ * @param? showOptionsText Optional text fields/pricing/etc
+ */
+{template .item_options}
+  {foreach $option in $item.options ?: []}
+    <div class="c-enhanced-gallery-list-item-options c-enhanced-gallery-list-item-options-{$option.text |slugify}">
+      {if $showOptionsCalories}
+        <div class="c-enhanced-gallery-list-item-options-calories">
+          {$option.calories}
+        </div>
+      {/if}
+      {if $showOptionsCents}
+        <div class="c-enhanced-gallery-list-item-options-cents">
+          ${floor($option.cents / 100)}.
+          {if $option.cents % 100 < 10}
+            0
+          {/if}
+            {$option.cents % 100}
+        </div>
+      {/if}
+      {if $showOptionsText}
+        <div class="c-enhanced-gallery-list-item-options-text">
+          {$option.text}
+        </div>
+      {/if}
+    </div>
+  {/foreach}
+{/template}
+
+/**
+ * @param item
+ * @param externalLinkText
+ */
+{template .item_link}
+  <a href="{$item.url}"
+     class="c-enhanced-gallery-list-item-name-link"
+     target="_blank"
+     rel="nofollow">{$externalLinkText |noAutoescape}</a>
+  </a>
+{/template}

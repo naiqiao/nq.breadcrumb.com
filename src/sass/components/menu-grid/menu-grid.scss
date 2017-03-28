@@ -1,0 +1,41 @@
+//
+// Menu grid Component SCSS Stylesheet
+//
+
+.c-menu-grid
+{
+  &-section
+  {
+
+  }
+
+  &-item
+  {
+    border-top: 1px solid $gray-4;
+    &:last-child
+    {
+      border-bottom: 1px solid $gray-4;
+    }
+
+    padding-top: 12px;
+    padding-bottom: 20px;
+
+    &-header
+    {
+      &-text
+      {
+        @extend .h4;
+      }
+    }
+
+    &-name
+    {
+      @extend .h4;
+    }
+
+    &-description
+    {
+
+    }
+  }
+}

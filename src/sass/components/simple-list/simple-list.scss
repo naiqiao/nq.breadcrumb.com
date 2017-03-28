@@ -1,0 +1,72 @@
+//
+// Simple List Component SCSS Stylesheet
+//
+
+.c-simple-list
+{
+  &-title
+  {
+    @extend h3;
+  }
+
+  &-table
+  {
+    &.table
+    {
+      td, th
+      {
+        border-top: none;
+        border-bottom: none;
+        
+        &:first-child
+        {
+          @media (min-width: $screen-sm-min)
+          {
+            padding-left: 0px; 
+          }
+        }
+      }
+    }
+
+    &-section
+    {
+      &-header
+      {
+        &-title
+        {
+          @extend h4;
+        }
+        &-description
+        {
+          @extend .body-font
+        }
+      }
+      &-item
+      {
+        &-cell
+        {
+
+        }
+
+        &-name
+        {
+          @extend h4;
+        }
+
+        &-link
+        {
+          
+        }
+
+        &-youtube-link
+        {
+          &::after
+          {
+            content: "\00bb";
+            margin-left: 4px;
+          }
+        }        
+      }
+    }
+  }
+}

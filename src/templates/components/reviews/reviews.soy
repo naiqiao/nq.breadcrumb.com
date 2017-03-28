@@ -1,0 +1,64 @@
+{namespace components}
+
+/*
+{call components.reviews}
+  {param reviews: /}
+
+  {param title: /}
+  {param timeFormat: /}
+  {param numberOfReviewsToDisplay: /}
+  {param starsBootstrapColumnSize: /}
+  {param reviewBootstrapColumnSize: /}
+{/call}
+*/
+
+/**
+* @param? title
+* @param? timeFormat
+* @param reviews
+* @param? numberOfReviewsToDisplay default is 2
+* @param? starsBootstrapColumnSize default is col-md-4 col-lg-3
+* @param? reviewBootstrapColumnSize default is col-md-4 col-lg-3
+*/
+{template .reviews}
+  {let $limit: $numberOfReviewsToDisplay ?: 2 /}
+  <div class="c-reviews-wrapper">
+    <h3 class="c-reviews-title">
+      {let $t: $title ?: 'Customer Feedback & Reviews' /}
+      {$t}
+    </h3>
+    {if length($reviews) > 0}
+      {let $lastIndex: length($reviews) > $limit ? $limit : length($reviews) /}
+      {for $i in range(0, $lastIndex)}
+        {let $review: $reviews[$i] /}
+        {let $starColumnClass: $starsBootstrapColumnSize ?: 'col-md-4 col-lg-3' /}
+        {let $reviewColumnClass: $reviewBootstrapColumnSize ?: 'col-md-4 col-lg-3' /}
+        <div class="c-reviews-item">
+          <div class="row">
+            <div class="{$starColumnClass}">
+              {let $rated : $review.rating /}
+              {for $index in range(0, $review.maxRating)}
+                {if $index < $rated }
+                  <i class="fa fa-star c-review-star c-review-star-active"></i>
+                {else}
+                  <i class="fa fa-star c-review-star c-review-star-inactive"></i>
+                {/if}
+              {/for}
+              <div class="c-reviews-item-info">
+                {let $formatter: $timeFormat ?: 'January 2' /}
+                <p>{$review.author}<br>{timestampf($formatter, $review.dateReviewed)}</p>
+              </div>
+            </div>
+            <div class="{$reviewColumnClass}">
+              <div class="c-reviews-comment">
+                <p>{$review.message}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/for}
+    {else}
+      No reviews available
+    {/if}
+  </div>
+{/template}

@@ -1,0 +1,56 @@
+//
+// Bread crumbs Component SCSS Stylesheet
+//
+
+.c-bread-crumbs
+{
+
+  &-location
+  {
+
+    a
+    {
+      &.selected
+      {
+        &:visited
+        {
+
+        }
+      }
+
+      &:link
+      {
+
+      }
+      
+      &:visited
+      {
+
+      }
+
+      &:hover
+      {
+
+      }
+
+      &:active
+      {
+
+      }
+    }
+  }
+
+  &-directory
+  {
+
+    a:link
+    {
+
+    }
+
+    a:visited
+    {
+
+    }
+  }
+}

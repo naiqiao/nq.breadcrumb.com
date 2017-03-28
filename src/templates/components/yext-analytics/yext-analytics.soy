@@ -1,0 +1,246 @@
+{namespace components.yext_analytics}
+
+/*
+{call components.yext_analytics.location}
+  {param id: /}
+  {param businessId: /}
+  {param siteId: /}
+  {param locationPageSetId: /}
+
+  {param invokePageView: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Location component
+ * @param id Passthrough
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param locationPageSetId Passthrough
+ * @param? invokePageView Default: true. Put the code in to automatically trigger a page view
+ */
+{template .location}
+
+    <script type="text/javascript">
+    pages_data = {lb}
+        'product': 'storepages',
+        'ids': {$id},
+        'businessids': {$businessId},
+        'siteId': {$siteId},
+        'pageSetId': {call .javascriptize}{param object: $locationPageSetId /}{/call}
+    {rb};
+    yext_analytics = window.yext.analytics.getYextAnalytics(pages_data);
+    {if $invokePageView ?: true}{call .page_view }{param wrapInScriptTag:false /}{/call}{/if}
+    </script>
+{/template}
+
+/*
+{call components.yext_analytics.directory_default}
+  {param businessId: /}
+  {param siteId: /}
+  {param directoryId: /}
+  {param crumbNames: /}
+
+  {param invokePageView: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Default Directory component
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param directoryId Passthrough
+ * @param crumbNames Passthrough
+ * @param? invokePageView Default: true. Put the code in to automatically trigger a page view
+ */
+{template .directory_default}
+{call .directory data="all"}
+    {param path}{call .directory_path data="all"/}{/param}
+{/call}
+{/template}
+
+/*
+{call components.yext_analytics.directory}
+  {param businessId: /}
+  {param siteId: /}
+  {param directoryId: /}
+
+  {param path: /}
+  {param invokePageView: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Directory component
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param directoryId Passthrough
+ * @param path The path to the current directory page (use yext_analytics.directory_default template unless you want to override the path variable)
+ * @param? invokePageView Default: true. Put the code in to automatically trigger a page view
+ */
+{template .directory}
+
+    <script type="text/javascript">
+    pages_data = {lb}
+        'product': 'storepages',
+        'businessids': {$businessId},
+        'siteId': {$siteId},
+        'directoryId': {call .javascriptize}{param object: $directoryId /}{/call},
+        'directoryPath': "{$path}"
+    {rb};
+    yext_analytics = window.yext.analytics.getYextAnalytics(pages_data);
+    {if $invokePageView ?: true}{call .page_view }{param wrapInScriptTag:false /}{/call}{/if}
+    </script>
+
+{/template}
+
+/*
+{call components.yext_analytics.directory_path}
+  {param crumbNames: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Directory Path
+ * @param crumbNames Passthrough
+ */
+{template .directory_path}
+{foreach $crumbName in $crumbNames}{$crumbName}{if not isFirst($crumbName) and not isLast($crumbName)}/{/if}{/for}
+{/template}
+
+/*
+{call components.yext_analytics.search}
+  {param businessId: /}
+  {param siteId: /}
+  {param searchId: /}
+
+  {param invokePageView: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Search component
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param searchId Passthrough
+ * @param? invokePageView Default: true. Put the code in to automatically trigger a page view
+ */
+{template .search}
+
+    <script type="text/javascript">
+    pages_data = {lb}
+        'product': 'storepages',
+        'businessids': {$businessId},
+        'siteId': {$siteId},
+        'searchId': {call .javascriptize}{param object: $searchId /}{/call}
+    {rb};
+    yext_analytics = window.yext.analytics.getYextAnalytics(pages_data);
+    {if $invokePageView ?: true}{call .page_view }{param wrapInScriptTag:false /}{/call}{/if}
+    </script>
+
+{/template}
+
+/*
+{call components.yext_analytics.page_view}
+  {param wrapInScriptTag: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Page View Event
+ * @param? wrapInScriptTag Default: true
+ */
+{template .page_view}
+    {if $wrapInScriptTag ?: true}<script type="text/javascript">{/if}
+    yext_analytics('pageview');
+    {if $wrapInScriptTag ?: true}</script>{/if}
+{/template}
+
+/*
+{call components.yext_analytics.event}
+  {param selector: /}
+  {param eventType: /}
+  {param analyticsEventName: /}
+
+  {param callback: /}
+  {param wrapInScriptTag: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Event Binder - not for use on links
+ * @param selector The selector on which to watch for events. Use double quotes or escape single quotes.
+ * @param eventType The event to capture on the elements that match the selector
+ * @param analyticsEventName The name of the event to trigger in Yext Analytics
+ * @param? callback Javascript callback method after the pixel has been successfully returned
+ * @param? wrapInScriptTag Default: true
+ */
+{template .event}
+    {if $wrapInScriptTag ?: true}<script type="text/javascript">{/if}
+    (function() {lb}
+        var elts = document.querySelectorAll('{$selector |noAutoescape}');
+        if (elts.length > 0)
+        {lb}
+          for (var i = 0; i < elts.length; i++)
+          {lb}
+              elts[i].addEventListener('{$eventType}', function() {lb}
+                  yext_analytics('{$analyticsEventName}', {if isNonnull($callback)}{$callback}{else}null{/if});
+              {rb}, false);
+          {rb}
+        {rb}
+        else
+        {lb}
+          if (console)
+          {lb}
+            if (console.error)
+            {lb}
+              console.error("No elements found for selector: {$selector |noAutoescape}");
+            {rb}
+            else if (console.log)
+            {lb}
+              console.log("No elements found for selector: {$selector |noAutoescape}");
+            {rb}
+          {rb}
+        {rb}
+    {rb})();
+    {if $wrapInScriptTag ?: true}</script>{/if}
+{/template}
+
+/*
+{call components.yext_analytics.search}
+  {param selector: /}
+  {param analyticsEventName: /}
+
+  {param wrapInScriptTag: /}
+{/call}
+*/
+
+/**
+ * Yext Analytics Click Binder
+ * @param selector The selector on which to watch for events. Use double quotes or escape single quotes.
+ * @param analyticsEventName The name of the event to trigger in Yext Analytics
+ * @param? wrapInScriptTag Default: true
+ * @param? isStaging
+ * @param? optional
+ */
+{template .click}
+    {if $wrapInScriptTag ?: true}<script type="text/javascript">{/if}
+    Yext.Analytics.Helpers.checkSelectorExists = {$isStaging ?: true};
+    Yext.Analytics.Helpers.trackLink('{$selector |noAutoescape}', '{$analyticsEventName}', {$optional ?: false});
+    {if $wrapInScriptTag ?: true}</script>{/if}
+{/template}
+
+/**
+ * Parses an id of an unknown type and returns a proper string or integer
+ * @param object Either string or integer value
+ */
+{template .javascriptize}
+  (function() {lb}
+    var idString = '{$object}';
+    var id = parseInt(idString);
+    if (isNaN(id)) {lb}
+      id = idString;
+    {rb}
+    return id;
+  {rb})()
+{/template}

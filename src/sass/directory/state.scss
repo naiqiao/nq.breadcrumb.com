@@ -1,0 +1,31 @@
+//
+// State.scss
+//
+// This file should include styles for adding state to elements. For
+// example, it would have selectors like .is-hidden .is-expanded .is-collapsed,
+// .is-active, .is-inactive, .is-homepage
+
+.is-hidden
+{
+  display:none;
+}
+
+.is-collapsed
+{
+  height:0px;
+}
+
+.is-expanded
+{
+  height:auto;
+}
+
+.is-active
+{
+  color:#000;
+}
+
+.is-inactive
+{
+  color:#CCC;
+}

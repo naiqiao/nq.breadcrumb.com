@@ -1,0 +1,147 @@
+{namespace components}
+
+/*
+{call components.nearby_locations}
+  {param base: /}
+  {param nearbyLocations: /}
+
+  {param title: /}
+  {param maxNumberOfLocationsToDisplay: /}
+  {param linkItemName: /}
+  {param hideDirectionsLink: /}
+  {param hideDetailsLink: /}
+  {param showTodayHours: /}
+  {param todayHoursTitle: /}
+  {param linkAddressToGetDirections: /}
+{/call}
+*/
+
+/**
+ * Nearby locations component
+ * @param base Passthrough
+ * @param nearbyLocations Passthrough
+ * @param? title Title to show
+ * @param? maxNumberOfLocationsToDisplay The number of nearby locations to display. If it is not specified, display 2
+ * @param? linkItemName set to true if you want to wrap the title in a link
+ * @param? hideDirectionsLink
+ * @param? directionsLinkTitle
+ * @param? hideDetailsLink
+ * @param? detailsLinkTitle
+ * @param? showTodayHours
+ * @param? todayHoursTitle
+ * @param? linkAddressToGetDirections
+ * @param? linkTelephone
+ * @param? provider
+ * @param? campaign
+ * @param? pagesUrlCustomFieldName
+ */
+{template .nearby_locations}
+  {let $locNum: isNonnull($maxNumberOfLocationsToDisplay) ? $maxNumberOfLocationsToDisplay : 2 /}
+  {if $locNum > 0 and length($nearbyLocations) > 0}
+    <div class="c-nearby-locations">
+      <h3 class="c-nearby-locations-header">
+        {if $title}
+          {$title |noAutoescape}
+        {else}
+          {msg desc=""}
+            Nearby Locations
+          {/msg}
+        {/if}
+      </h3>
+      <div class="c-nearby-locations-list">
+        {for $i in range($locNum)}
+          {let $l : $nearbyLocations[$i]/}
+          {if $l}
+            {let $pagesUrl: $pagesUrlCustomFieldName ?: 'Pages Url' /}
+            {let $url : $campaign ? $l.customByName[$pagesUrl] : $base + $l.url /}
+            <div class="c-nearby-locations-item">
+              <div class="c-nearby-locations-item-name">
+                {if $linkItemName}
+                  <a class="c-nearby-locations-item-name-link" href="{$url}">
+                {/if}
+                {call common.helpers.location_name data="$l" /}
+                {if $linkItemName}
+                  </a>
+                {/if}
+              </div>
+              {call components.address data="$l"}
+                {param includeCountry: 'no' /}
+                {param stateAbbr: true /}
+                {param schemaOrg: false /}
+                {param linkToGetDirections: $linkAddressToGetDirections /}
+                {param provider: $provider /}
+              {/call}
+              {if $linkTelephone ?: true}
+                <div class="c-nearby-locations-item-phone visible-xs visible-sm">
+                  <a href="tel:{stripOutPhoneDigits($l.phone)}">{$l.phone}</a>
+                </div>
+                <div class="c-nearby-locations-item-phone hidden-xs hidden-sm">
+                  {$l.phone}
+                </div>
+              {else}
+                <div class="c-nearby-locations-item-phone">
+                  {$l.phone}
+                </div>
+              {/if}
+              {if not $hideDetailsLink or not $hideDirectionsLink}
+              <div class="c-nearby-locations-item-link-wrapper">
+                {if not $hideDetailsLink}
+                  <a class="c-nearby-locations-item-link" href="{$url}">
+                    {if $detailsLinkTitle}
+                      {$detailsLinkTitle}
+                    {else}
+                      {msg desc="Visit webpage."}
+                        Go to Site
+                      {/msg}
+                    {/if}
+                  </a>
+                {/if}
+                {if not $hideDirectionsLink}
+                  {let $directionsUrl}
+                    {call components.maps.get_directions_url data="$l"}
+                      {param provider: $provider /}
+                    {/call}
+                  {/let}
+                  <a class="c-nearby-locations-item-link" target="_blank" href="{$directionsUrl}">
+                    {if $directionsLinkTitle}
+                      {$directionsLinkTitle}
+                    {else}
+                      {msg desc=""}
+                        Get Directions
+                      {/msg}
+                    {/if}
+                  </a>
+                {/if}
+              </div>
+              {/if}
+              {if $showTodayHours}
+                <div class="c-nearby-locations-item-hours">
+                  <div class="c-nearby-locations-item-hours-title">
+                    {if $todayHoursTitle}
+                      {$todayHoursTitle}
+                    {else}
+                      {msg desc=""}
+                        Today's Hours:
+                      {/msg}
+                    {/if}
+                  </div>
+                  <div class="c-nearby-locations-item-hours-details">
+                    {call components.hours.location_hours_today}
+                      {param hours: $l.hours /}
+                      {param hideSchemaOrg: true /}
+                    {/call}
+                  </div>
+                </div>
+              {/if}
+              {if not $campaign}
+                <div class="c-nearby-locations-item-distance">
+                  {$l.distance}
+                </div>
+              {/if}
+            </div>
+          {/if}
+        {/for}
+      </div>
+    </div>
+  {/if}
+{/template}

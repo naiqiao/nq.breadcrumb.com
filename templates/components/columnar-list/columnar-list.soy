@@ -1,0 +1,47 @@
+{namespace components}
+
+/*
+{call components.columnar_list}
+  {param array_of_strings: /}
+
+  {param title: /}
+  {param rows: /}
+  {param columns: /}
+{/call}
+*/
+
+/**
+ * Columnar List component
+ * @param? columns Maximum number of columns
+ * @param? rows Maximum number of rows per column
+ * @param array_of_strings Passthrough, must be simple array of strings, e.g. brands or services
+ * @param? title
+ */
+{template .columnar_list}
+  {let $r: $rows ?: 10 /}
+  {let $c: $columns ?: 2 /}
+  <div class="c-columnar-list">
+    {if isNonnull($title)}
+      <h3 class="c-columnar-list-title">
+        {$title}
+      </h3>
+    {/if}
+    <table class="c-columnar-list-table">
+      <tr class="c-columnar-list-table-row">
+        {for $col in range(0, $c)}
+        <td class="c-columnar-list-table-cell">
+          {for $row in range($col * $r, ($col+1) * $r)}
+            {if $row < length($array_of_strings)}
+              <div class="c-columnar-list-entry">
+                {$array_of_strings[$row]}
+              </div>
+            {elseif length($array_of_strings) < ($r * $c)}
+              <div class="c-columnar-list-entry-empty">&nbsp;</div>
+            {/if}
+          {/for}
+        </td>
+        {/for}
+      </tr>
+    </table>
+  </div>
+{/template}
