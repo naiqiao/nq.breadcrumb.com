@@ -1,0 +1,72 @@
+{
+Error: Parse error on line 1:
+{namespace desktop.di
+-^
+Expecting 'STRING', '}'
+namespace desktop.directory}
+
+/**
+ * Template that displays all locations in the directory in a list view with a dynamic map.
+ // * @param logo The business logo that is displayed in the header
+ * @param base Object: {url (the base url of current directory page),
+ *                      count (number of locations on the current directory page)}
+ * @param keys List of Objects: {key (name of this next directory level),
+ *                               loc (location information of a location in this directory),
+ *                               url (url of this directory level),
+ *                               count(number of locations in this directory level)}
+ * @param crumbNames Sorted list of breadcrumb names
+ * @param crumbUrls Sorted list of breadcrumb urls
+ * @param? isStaging
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param directoryId Passthrough
+ * @param? siteDomain
+ * @param locale
+ * @param customByName
+ */
+{template .locationList}
+
+  {let $exampleLoc: $keys[0].loc /}
+  {let $stateName: lregionName($locale, $exampleLoc.city, $exampleLoc.state) /}
+
+  {call .layout data="all"}
+    {param pageTitle}
+      School of Rock Locations in {$exampleLoc.city}, {$stateName}
+      {if $exampleLoc.country != 'US'}
+        {sp}{lcountryName($locale, $exampleLoc.country)}
+      {/if}
+    {/param}
+
+    {param metaDescription}  // TODO: These should be customized
+    {/param}
+    {param metaKeywords}
+      {call common.helpers.keywords /}
+    {/param}
+
+    {param pageContent}
+      <div class="location-list-container">
+        <h1 class="location-list-title">
+          Locations in {$exampleLoc.city}
+        </h1>
+
+        <div class="row row-vertical-margin-bottom">
+          {call components.location_grid data="all"}
+            {param linkTitle: true /}
+            {param visitLinkText: 'Visit Local Page' /}
+            {param directionsLinkText: 'Get Directions' /}
+            {param bootstrapColumnClass: ' '/}
+          {/call}
+        </div>
+      </div>
+    {/param}
+
+    {param useminFooter}
+      {call usemin.locationList_js data="all" /}
+    {/param}
+    {param pageLevel: 'city' /}
+    {param state: $stateName /}
+    {param city: $exampleLoc.city /}
+    {param country: $exampleLoc.country /}
+
+  {/call}
+{/template}
