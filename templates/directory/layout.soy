@@ -1,0 +1,50 @@
+{
+Error: Parse error on line 1:
+{namespace desktop.di
+-^
+Expecting 'STRING', '}'
+namespace desktop.directory}
+
+/**
+ * directory_layout
+ * @param base
+ * @param crumbNames
+ * @param crumbUrls
+ * @param? isStaging
+ * @param locale
+ * @param siteDomain
+ // content params:
+ * @param pageTitle
+ * @param? useminFooter
+ * @param? schemaScope
+ * @param metaDescription
+ * @param metaKeywords
+ * @param pageContent
+ *
+ * @param businessId Passthrough
+ * @param siteId Passthrough
+ * @param directoryId Passthrough
+ // passthrough to google analytics
+ * @param pageLevel
+ * @param customByName
+ * @param? address1
+ * @param? city
+ * @param? state
+ * @param? postalCode
+ * @param? country
+ */
+{template .layout}
+  {call common.layout data="all"}
+
+    {param baseUrl: $base.url /}
+
+    {param useminHeader}
+      {call usemin.directory_styles data="all" /}
+    {/param}
+
+    {param analytics}
+      {call components.yext_analytics.directory_default data="all" /}
+    {/param}
+
+  {/call}
+{/template}
