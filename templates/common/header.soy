@@ -1,0 +1,122 @@
+{
+Error: Parse error on line 1:
+{namespace common}/
+-^
+Expecting 'STRING', '}'
+namespace common}
+
+/*
+{call common.header}
+  {param logo: /}
+  {param logoLink: /}
+
+  {param useBackgroundImage: /}
+  {param alignWithGutter: /}
+{/call}
+*/
+
+ /**
+  * @param baseUrl
+  * @param? campUrl
+  * @param? isLocationPage
+  * @param? isCompanyLocation
+ */
+{template .header}
+  {let $index}
+    {$baseUrl}{call common.helpers.searcherPath /}
+  {/let}
+  {let $why_sor_msg}
+    {msg desc=""}Why <abbr title="School of Rock">SOR</abbr>{/msg}
+  {/let}
+  {let $programs_msg}
+    {msg desc=""}Programs{/msg}
+  {/let}
+  {let $camps_msg}
+    {msg desc=""}Camps{/msg}
+  {/let}
+  {let $whats_new_msg}
+    {msg desc=""}What's New{/msg}
+  {/let}
+  {let $locations_msg}
+    {msg desc=""}Locations{/msg}
+  {/let}
+  {let $franchising_msg}
+    {msg desc=""}Franchising{/msg}
+  {/let}
+  {let $navLinks: [
+      [ 'url': $isLocationPage ? '#whySOR' :'http://www.schoolofrock.com/about',
+        'title': $why_sor_msg],
+      [ 'url': $isLocationPage ? '#programs' : 'http://www.schoolofrock.com/programs/performance-national',
+        'title': $programs_msg],
+      [ 'url': $campUrl ?: 'http://www.schoolofrock.com/seasonal-camps',
+        'title': $camps_msg],
+      [ 'url': $isLocationPage ? '#other-content' : 'http://www.schoolofrock.com/news',
+        'title': $whats_new_msg],
+      [ 'url': $index,
+        'title': $locations_msg],
+      [ 'url': 'http://franchising.schoolofrock.com/',
+        'title': $franchising_msg]
+    ] /}
+  <header class="header">
+    <div class="header-info-row">
+      <div class="header-logo-wrapper">
+        <a href="{call common.helpers.brand_url /}">
+          <img class="header-logo"
+               src="{$baseUrl}images/logo-lrg.png"
+               alt="School of Rock (logo)"
+               srcset="{$baseUrl}images/logo-lrg.png 448w,
+                        {$baseUrl}images/logo-s.png 353w,
+                        {$baseUrl}images/logo-xs.png 225w"
+               sizes="(min-width: 992px) 448px,
+                      (min-width: 768px) and (max-width: 991px) 353px,
+                      (max-width: 767px) 225px"
+          />
+        </a>
+        <button type="button"
+                class="header-toggle navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#header-nav"
+                aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+
+      <nav id="header-nav"
+           class="header-nav navbar-collapse collapse"
+           role="navigation">
+        <ul class="header-nav-links-list" id="header-nav">
+          {foreach $link in $navLinks}
+            <li class="header-nav-links-list-item {if $isCompanyLocation}{$link.title |slugify}-company{/if}">
+              <a class="header-nav-link"
+                 href="{$link.url}">
+                {$link.title |noAutoescape}
+              </a>
+            </li>
+          {/foreach}
+        </ul>
+      </nav>
+      <div class="header-search-wrapper">
+        <div class="header-search">
+          {call components.search.simple_search_bar data="all"}
+            {param searcherPath}
+              {call common.helpers.searcherPath /}
+            {/param}
+            {param placeHolder}
+              {msg desc=""}Search by City, State/Region or Postal Code{/msg}
+            {/param}
+            {param formLabel}
+              {msg desc=""}Search by City, State/Region or Postal Code{/msg}
+            {/param}
+            {param submitLabel}
+              <i class="fa fa-search"></i>
+            {/param}
+          {/call}
+        </div>
+      </div>
+      <div class="header-social-wrapper">
+        {call common.helpers.social_links /}
+      </div>
+    </div>
+  </header>
+{/template}
